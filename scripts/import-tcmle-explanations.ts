@@ -43,7 +43,7 @@ function isAnswerKey(value: unknown): value is AnswerKey {
 }
 
 export function normalizeExamText(value: string): string {
-  return value.normalize('NFKC').replace(/\s/gu, '').replace(AGREED_PUNCTUATION, '');
+  return value.normalize('NFKC').replace(/[\s\p{White_Space}]/gu, '').replace(AGREED_PUNCTUATION, '');
 }
 
 export function strictQuestionMatch(cmb: ExamQuestion, candidate: TcmleQuestion): boolean {

@@ -5,6 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import * as knowledgeReview from '../app/tcm/knowledge-review.ts';
 
 import type { Part } from '../app/anatomy.ts';
+import { ACUPOINTS, MERIDIANS } from '../app/tcm/data.ts';
+import { placementRecord } from '../app/tcm/placement-quality.ts';
 import type { Acupoint, Meridian, Source } from '../app/tcm/types.ts';
 import {
   buildAnatomyCards,
@@ -105,6 +107,24 @@ test('point cards honor location, meridian, verified classification, and current
   assert.equal(cards[0].back.answer, '犊鼻下3寸。');
   assert.equal(cards[1].back.answer, '足阳明胃经');
   assert.equal(cards[2].back.answer, '下合穴');
+});
+
+test('include-pending adds exactly the 39 pending-derived identify cards', () => {
+  const defaultCards = buildPointCards(ACUPOINTS, MERIDIANS);
+  const cards = buildPointCards(ACUPOINTS, MERIDIANS, 'include-pending');
+  const identifyCards = cards.filter((card) => card.meta.type === 'identify');
+  const expectedPointIds = [
+    'LU1', 'LU5', 'LU7', 'LU9', 'LI4', 'LI10', 'LI11', 'LI20', 'ST25', 'ST36', 'ST40', 'ST44',
+    'SP6', 'SP9', 'SP10', 'HT7', 'SI3', 'SI11', 'BL13', 'BL20', 'BL23', 'BL40', 'BL60',
+    'KI1', 'KI3', 'PC6', 'PC7', 'TE5', 'TE14', 'GB20', 'GB21', 'GB34', 'LR3', 'GV14', 'GV20',
+    'CV4', 'CV6', 'CV12', 'CV17',
+  ];
+  assert.equal(defaultCards.filter((card) => card.meta.type === 'identify').length, 0);
+  assert.equal(identifyCards.length, 39);
+  assert.deepEqual(identifyCards.map((card) => card.id).sort(), expectedPointIds.map((id) => `point:${id}:identify`).sort());
+  assert.ok(identifyCards.every((card) => placementRecord(card.meta.pointId).status === 'pending-review'));
+  assert.deepEqual(cards.filter((card) => card.meta.type !== 'identify'), defaultCards);
+  assert.equal(identifyCards.find((card) => card.id === 'point:ST36:identify')?.back.answer, '足三里 · ST36');
 });
 
 test('effect cards require explicit traditional evidence rather than descriptive wording', () => {

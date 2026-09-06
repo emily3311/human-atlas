@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { ACUPOINTS } from '../app/tcm/data.ts';
 import {
@@ -70,4 +71,16 @@ test('placement state validation rejects unknown IDs and does not duplicate mark
     'pending-review': 1,
     calibrated: 0,
   });
+});
+
+test('placement registry rejects a point registered in both pending and calibrated status maps', () => {
+  // A fresh process exercises initialization without mutating this suite's registry.
+  const result = spawnSync(process.execPath, ['--experimental-strip-types', '--input-type=module', '-e', `
+    import { PENDING_PLACEMENTS, CALIBRATED_PLACEMENTS } from ${JSON.stringify(new URL('../app/tcm/placements.ts', import.meta.url).href)};
+    CALIBRATED_PLACEMENTS.ST36 = { ...PENDING_PLACEMENTS.ST36, status: 'calibrated' };
+    await import(${JSON.stringify(new URL('../app/tcm/placement-quality.ts', import.meta.url).href)});
+  `], { encoding: 'utf8' });
+  assert.ifError(result.error);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Placement record is duplicated for point ID: ST36/);
 });
