@@ -204,6 +204,34 @@ test('draft exports persist only current values after actual undo history exists
   assert.deepEqual(undoCalibrationDraft(store, draft.id).drafts[0].position, draft.position);
 });
 
+test('undo restores position and normal from the same surface pick before export', () => {
+  let store = parseCalibrationDrafts(null, context);
+  store = upsertCalibrationDraft(store, draft, { position: [0, 0, 1], normal: [0, 0, 1], surfaceDistance: 0 }, context);
+  store = upsertCalibrationDraft(store, store.drafts[0], { position: [0, 1, 0], normal: [0, 1, 0], surfaceDistance: 0 }, context);
+
+  const restored = undoCalibrationDraft(store, draft.id);
+  assert.deepEqual(restored.drafts[0].position, [0, 0, 1]);
+  assert.deepEqual(restored.drafts[0].normal, [0, 0, 1]);
+  const exported = JSON.parse(exportCalibrationDraftPackage(restored, context, { requireReviewDetails: true }));
+  assert.deepEqual(exported.drafts[0].position, [0, 0, 1]);
+  assert.deepEqual(exported.drafts[0].normal, [0, 0, 1]);
+  assert.equal(exported.drafts[0].status, 'pending-review');
+  assert.deepEqual(store.drafts[0].normal, [0, 1, 0]);
+});
+
+test('normal-only surface edits are undoable without treating metadata as geometry', () => {
+  let store = parseCalibrationDrafts(null, context);
+  store = upsertCalibrationDraft(store, draft, { position: [0, 0, 1], normal: [0, 0, 1], surfaceDistance: 0 }, context);
+  store = upsertCalibrationDraft(store, store.drafts[0], { position: [0, 0, 1], normal: [0, 1, 0], surfaceDistance: 0 }, context);
+  for (let i = 0; i < 12; i++) {
+    store = upsertCalibrationDraft(store, { ...store.drafts[0], evidence: `Updated evidence ${i}` }, { position: [0, 0, 1], normal: [0, 1, 0], surfaceDistance: 0 }, context);
+  }
+  const restored = undoCalibrationDraft(store, draft.id);
+  assert.deepEqual(restored.drafts[0].position, [0, 0, 1]);
+  assert.deepEqual(restored.drafts[0].normal, [0, 0, 1]);
+  assert.equal(restored.drafts[0].evidence, 'Updated evidence 11');
+});
+
 test('formal package accepts both left and right placements for bilateral points', () => {
   const accepted = validateCalibrationPackage(validPackage, context);
   assert.deepEqual(accepted, { ok: true, errors: [], records: [validRecord] });

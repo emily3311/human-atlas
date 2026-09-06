@@ -107,6 +107,19 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
       await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
       await panel.getByLabel('定位依据', { exact: true }).waitFor();
       assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('jingwei-calibration-drafts:v1')).drafts[0].status), 'pending-review');
+      const initialVectors = await panel.locator('.calibration-vector').textContent();
+      const initialNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('jingwei-calibration-drafts:v1')).drafts[0].normal);
+      await panel.getByRole('button', { name: '开始表面拾取', exact: true }).click();
+      await canvas.scrollIntoViewIfNeeded();
+      const repickBounds = await canvas.boundingBox();
+      await page.mouse.click(repickBounds.x + repickBounds.width / 2, repickBounds.y + repickBounds.height * .4);
+      await page.waitForFunction(previous => {
+        const next = JSON.parse(localStorage.getItem('jingwei-calibration-drafts:v1')).drafts[0].normal;
+        return next.some((value, axis) => value !== previous[axis]);
+      }, initialNormal);
+      await panel.getByRole('button', { name: '撤销坐标编辑（最多十步）', exact: true }).click();
+      assert.equal(await panel.locator('.calibration-vector').textContent(), initialVectors, 'undo must restore both preview vectors after repicking another surface');
+      assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('jingwei-calibration-drafts:v1')).drafts[0].normal), initialNormal);
       await panel.getByRole('button', { name: /导出校准草稿 JSON/ }).click();
       assert.match(await panel.getByRole('alert').textContent(), /evidence/);
       await page.evaluate(() => { Storage.prototype.setItem = () => { throw new Error('Simulated quota failure'); }; });

@@ -42,3 +42,57 @@ node scripts/validate-interactions.mjs
 新增 `calibration-pick.ts` 与 `calibration-ui.ts` 为可运行的生产策略边界，便于无浏览器时执行确定性验证。`StudyPanel` 仅新增 `placementDisplayMode` prop 与当前显示范围说明；后续 Task 7 重构须保留该策略入口。
 
 正式资料文件未改变。39 表示可选穴位 ID 数，不把左右侧 DOM 标记数或单视角可见数量混为一谈。浏览器自动化只验证交互与几何机制，不宣称医学定位已通过专业复核。
+
+## 审查修复 Round 1 / 5 — 拾取快照原子撤销
+
+审查 Important：原历史只保存 position。重新拾取顶面后撤销会回到正面位置却保留顶面 normal，导出形成不匹配的向量。
+
+RED（先补真实调用测试，再修改实现）：
+
+```text
+node --experimental-strip-types --test tests/calibration.test.ts
+not ok 13 - undo restores position and normal from the same surface pick before export
+  expected normal: [0, 0, 1]
+  actual normal:   [0, 1, 0]
+not ok 14 - normal-only surface edits are undoable without treating metadata as geometry
+# tests 27
+# pass 25
+# fail 2
+exit 1
+```
+
+最小修复：将历史从位置数组改为 `{ position, normal }` 几何快照数组，入栈、历史复制和撤销都复制两组向量。位置或法线变化时入栈，仍只保留最后十步；仅修改依据/复核人不入栈。导出 API 与草稿 schema 不变，继续只能导出 pending-review。
+
+新增用例覆盖连续 upsert 正面 `[0,0,1] / [0,0,1]`、顶面 `[0,1,0] / [0,1,0]`，撤销后两组向量同时恢复正面，且导出的两组向量一致；额外覆盖位置不变但 normal 改变、随后十二次元数据编辑，仍能撤销几何变化且保留最新依据。
+
+GREEN 与最终命令输出：
+
+```text
+node --experimental-strip-types --test tests/calibration.test.ts
+# tests 27 / pass 27 / fail 0 / exit 0
+
+node --experimental-strip-types --test tests/placement-quality.test.ts tests/content.test.ts
+# tests 20 / pass 20 / fail 0 / exit 0
+
+npm test
+# tests 128 / pass 128 / fail 0 / exit 0
+
+npm run check
+> tsc --noEmit
+exit 0
+
+npm run build
+✓ 2516 modules transformed.
+✓ built in 592ms
+exit 0（原有 bundle >500kB 提示仍存在）
+
+INTERACTION_BROWSER_URL=http://127.0.0.1:3026/ PLAYWRIGHT_MODULE=<上文现有运行时路径> node scripts/validate-interactions.mjs
+Browser 1440px: default and opt-in rendering, panel lifecycle, surface pick, undo, Blob download and layout passed.
+Browser 390px: default and opt-in rendering, panel lifecycle, surface pick, undo, Blob download and layout passed.
+exit 0
+
+git diff --check
+exit 0
+```
+
+真实浏览器新增验证：先点击人体中心、再点击另一表面，确认两次 normal 不同；点击撤销后断言完整坐标/法线文本恢复第一次的内容，且本地保存 normal 恢复第一次的值。面板预览从恢复后的 current draft 读取 position 和 normal，不另存旧法线，无须改 UI 状态逻辑。本轮未修改正式坐标资料。

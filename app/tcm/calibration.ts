@@ -61,7 +61,8 @@ const MAX_EVIDENCE_LENGTH = 2000;
 const MAX_REVIEWER_LENGTH = 100;
 const DANGEROUS_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
 
-type DraftHistory = Map<string, Vec3[]>;
+type DraftGeometry = Pick<CalibrationDraft, 'position' | 'normal'>;
+type DraftHistory = Map<string, DraftGeometry[]>;
 const histories = new WeakMap<CalibrationDraftStore, DraftHistory>();
 
 const emptyStore = (): CalibrationDraftStore => ({ version: 1, drafts: [] });
@@ -166,8 +167,13 @@ const cloneDraft = (draft: CalibrationDraft): CalibrationDraft => ({
   normal: cloneVec3(draft.normal),
 });
 
+const cloneGeometry = (geometry: DraftGeometry): DraftGeometry => ({
+  position: cloneVec3(geometry.position),
+  normal: cloneVec3(geometry.normal),
+});
+
 const cloneHistory = (history: DraftHistory | undefined): DraftHistory =>
-  new Map([...history ?? []].map(([id, positions]) => [id, positions.map(cloneVec3)]));
+  new Map([...history ?? []].map(([id, snapshots]) => [id, snapshots.map(cloneGeometry)]));
 
 const setHistory = (store: CalibrationDraftStore, history: DraftHistory): CalibrationDraftStore => {
   histories.set(store, history);
@@ -262,9 +268,10 @@ export function upsertCalibrationDraft(
   }
   const history = cloneHistory(histories.get(store));
   const existing = store.drafts.find((item) => item.id === draft.id);
-  if (existing && existing.position.some((value, axis) => value !== hit.position[axis])) {
-    const positions = history.get(draft.id) ?? [];
-    history.set(draft.id, [...positions, cloneVec3(existing.position)].slice(-10));
+  if (existing && (existing.position.some((value, axis) => value !== hit.position[axis])
+    || existing.normal.some((value, axis) => value !== hit.normal[axis]))) {
+    const snapshots = history.get(draft.id) ?? [];
+    history.set(draft.id, [...snapshots, cloneGeometry(existing)].slice(-10));
   } else if (!existing) {
     history.delete(draft.id);
   }
@@ -281,15 +288,15 @@ export function upsertCalibrationDraft(
 
 export function undoCalibrationDraft(store: CalibrationDraftStore, draftId: string): CalibrationDraftStore {
   const history = cloneHistory(histories.get(store));
-  const positions = history.get(draftId);
-  if (!positions?.length) return setHistory({ version: 1, drafts: store.drafts.map(cloneDraft) }, history);
-  const previous = positions[positions.length - 1];
-  const remaining = positions.slice(0, -1);
+  const snapshots = history.get(draftId);
+  if (!snapshots?.length) return setHistory({ version: 1, drafts: store.drafts.map(cloneDraft) }, history);
+  const previous = snapshots[snapshots.length - 1];
+  const remaining = snapshots.slice(0, -1);
   if (remaining.length) history.set(draftId, remaining);
   else history.delete(draftId);
   return setHistory({
     version: 1,
-    drafts: store.drafts.map((draft) => draft.id === draftId ? { ...cloneDraft(draft), position: cloneVec3(previous) } : cloneDraft(draft)),
+    drafts: store.drafts.map((draft) => draft.id === draftId ? { ...cloneDraft(draft), ...cloneGeometry(previous) } : cloneDraft(draft)),
   }, history);
 }
 
