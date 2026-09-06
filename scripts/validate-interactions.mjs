@@ -3,7 +3,8 @@ import {readFile} from 'node:fs/promises';
 import {createExplosionLayout} from '../app/explosion-layout.ts';
 import {PointerTap} from '../app/pointer-tap.ts';
 import {atlasTools} from '../app/agent-tools.ts';
-import { ACUPOINTS } from '../app/tcm/data.ts';
+import { ACUPOINTS, MERIDIANS } from '../app/tcm/data.ts';
+import { buildPointCards, buildAnatomyCards, buildPointEffectCards } from '../app/tcm/knowledge-cards.ts';
 import { placementDisplayControl, markerPresentation, placementRecord, placementCounts } from '../app/tcm/placement-quality.ts';
 import { calibrationEscape, persistCalibrationDrafts } from '../app/tcm/calibration-ui.ts';
 import { parseCalibrationDrafts, upsertCalibrationDraft, undoCalibrationDraft, exportCalibrationDraftPackage } from '../app/tcm/calibration.ts';
@@ -76,6 +77,92 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
   const browser = await chromium.launch({ headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   try {
+    for (const [width, height] of [[1440, 1000], [390, 844], [320, 568]]) {
+      const page = await browser.newPage({ viewport: { width, height } });
+      const questionId = 'a'.repeat(64);
+      // Each page owns a temporary context. Progress exists only in this in-memory fixture.
+      await page.addInitScript(({ questionId }) => {
+        const memory = new Map([['jingwei-cmb-progress-v1', JSON.stringify({ [questionId]: { answer: 'B', correct: false, attempts: 3 } })]]);
+        Storage.prototype.getItem = key => memory.get(key) ?? null;
+        Storage.prototype.setItem = (key, value) => { memory.set(key, String(value)); };
+        Storage.prototype.removeItem = key => { memory.delete(key); };
+      }, { questionId });
+      await page.route('**/data/cmb-tcm.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'CMB', sourceSha256: 'b'.repeat(64), questions: [{ id: questionId, sourceIndex: 0, question: '卡片隔离测试题干', options: { A: '正确答案唯一文本', B: '错误选项', C: '丙', D: '丁', E: '戊' }, answer: 'A' }] } }));
+      await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'TCMLE', sourceCommit: 'c'.repeat(40), explanations: [{ questionId, answer: 'A', text: '独立解析唯一文本。'.repeat(70), provenance: { dataset: 'TCMLE', sourceFile: 'Licensed/Test.json', sourceQuestionIndex: 1, sourceCommit: 'c'.repeat(40) } }] } }));
+      await page.goto(process.env.INTERACTION_BROWSER_URL);
+      await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
+      const decks = page.getByRole('group', { name: '知识卡组' });
+      await decks.waitFor({ timeout: 5000 });
+      const expectedCounts = [buildPointCards(ACUPOINTS.filter(p => p.location), MERIDIANS).length, buildAnatomyCards(atlas.parts).length, 1, buildPointEffectCards(ACUPOINTS.filter(p => p.location)).length];
+      await page.waitForFunction(counts => JSON.stringify([...document.querySelectorAll('.knowledge-decks button span')].map(el => Number(el.textContent))) === JSON.stringify(counts), expectedCounts);
+      const card = page.locator('.flip-card');
+      for (const label of ['穴位', '解剖', '执医错题', '穴位作用']) {
+        await decks.getByRole('button', { name: new RegExp(`^${label} \\d+$`) }).click();
+        await card.waitFor();
+        assert.equal(await card.locator('.back').count(), 0);
+        const front = await card.textContent();
+        await page.locator('#learning-content').focus();
+        await page.keyboard.press('Space');
+        await page.keyboard.press('Enter');
+        assert.equal(await card.getAttribute('aria-pressed'), 'false', 'keyboard outside card must not flip');
+        if (label === '执医错题') assert.doesNotMatch(await page.locator('#learning-content').textContent(), /正确答案唯一文本|独立解析唯一文本/);
+        await card.click();
+        assert.equal(await card.getAttribute('aria-pressed'), 'true');
+        assert.equal(await card.locator('.front').count(), 0);
+        assert.ok(await card.evaluate(el => el.getBoundingClientRect().bottom >= el.querySelector('.card-face').getBoundingClientRect().bottom), 'long back stays within the flip target');
+        if (label === '执医错题') assert.match(await card.textContent(), /正确答案唯一文本.*独立解析唯一文本/);
+        if (label === '穴位作用') {
+          assert.match(await card.textContent(), /传统功用提要.*请勿自行针刺/);
+          assert.doesNotMatch(await card.textContent(), /治疗保证|疗效|针刺深度|个人处方/);
+        }
+        assert.ok((await page.locator('.rating-buttons button').evaluateAll(els => els.map(el => el.getBoundingClientRect().height))).every(value => value >= 44));
+        if (width <= 680) assert.ok((await page.locator('.knowledge-cards-panel a').evaluateAll(els => els.map(el => el.getBoundingClientRect().height))).every(value => value >= 44), 'mobile source links have 44px tap targets');
+        await card.press('Enter');
+        assert.equal(await card.textContent(), front);
+        await card.press('Space');
+        assert.equal(await card.getAttribute('aria-pressed'), 'true');
+        const next = page.getByRole('button', { name: '下一张', exact: true });
+        await next.focus();
+        await page.keyboard.press('Enter');
+        assert.equal(await card.getAttribute('aria-pressed'), 'false');
+        await card.click();
+        await page.getByRole('button', { name: /记住了/ }).click();
+        assert.equal(await card.getAttribute('aria-pressed'), 'false');
+        if (label === '解剖' || label === '穴位作用') assert.equal(await card.textContent(), front, 'rating chooses first currently due card');
+        if (label === '穴位') assert.match(await card.textContent(), /中府在哪里/, 'legacy rating chooses first currently due point');
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px ${label} must not overflow`);
+        assert.ok((await card.boundingBox()).height >= 280);
+        assert.ok((await decks.getByRole('button').evaluateAll(els => els.map(el => el.getBoundingClientRect().height))).every(value => value >= 44));
+      }
+      assert.ok(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('jingwei-knowledge-cards:v1')).reviews).some(id => id.startsWith('exam:'))));
+      assert.ok(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('human-atlas-tcm:v1')).reviews).length > 0), 'point ratings use the legacy store');
+      assert.equal(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('jingwei-knowledge-cards:v1')).reviews).some(id => /^point:.*:(location|meridian|tags|identify)$/.test(id))), false);
+      await page.getByRole('button', { name: '经穴图谱', exact: true }).click();
+      await page.evaluate(questionId => localStorage.setItem('jingwei-cmb-progress-v1', JSON.stringify({ [questionId]: { answer: 'A', correct: true, attempts: 4 } })), questionId);
+      await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
+      await decks.getByRole('button', { name: '执医错题 0', exact: true }).click();
+      await page.getByText('本机当前没有未改正的 CMB 错题。', { exact: true }).waitFor();
+      assert.equal(await page.evaluate(questionId => JSON.parse(localStorage.getItem('jingwei-cmb-progress-v1'))[questionId].attempts, questionId), 4);
+      await page.getByRole('button', { name: '经穴图谱', exact: true }).click();
+      await page.route('**/data/cmb-tcm.json', route => route.fulfill({ status: 503, body: 'offline' }));
+      await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
+      await page.getByText('执医错题题库暂时无法加载，请重新进入记忆卡重试。', { exact: true }).waitFor();
+      for (const label of ['穴位', '解剖', '穴位作用']) {
+        await decks.getByRole('button', { name: new RegExp(`^${label} \\d+$`) }).click();
+        assert.equal(await card.isVisible(), true, `${label} survives CMB failure`);
+      }
+      await page.getByRole('button', { name: '经穴图谱', exact: true }).click();
+      if (width <= 680) await page.getByRole('button', { name: '目录', exact: true }).click();
+      await page.getByRole('button', { name: '筛选条件', exact: true }).click();
+      await page.getByLabel('学习范围', { exact: true }).selectOption('model');
+      await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
+      await decks.getByRole('button', { name: '穴位 0', exact: true }).click();
+      await page.getByText('当前筛选范围没有可用穴位卡。', { exact: true }).waitFor();
+      await decks.getByRole('button', { name: /^解剖 \d+$/ }).click();
+      assert.equal(await card.isVisible(), true, 'empty point filter must not block anatomy deck');
+      await page.close();
+      console.log(`Cards browser ${width}×${height}: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.`);
+    }
     for (const width of [1440, 390]) {
       const page = await browser.newPage({ viewport: { width, height: 1000 }, acceptDownloads: true });
       const errors = []; page.on('pageerror', error => errors.push(error.message));

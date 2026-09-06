@@ -1273,7 +1273,8 @@
 .flip-card {
   display: block;
   width: 100%;
-  height: 342px;
+  min-height: 342px;
+  height: auto;
   padding: 0;
   perspective: 1300px;
   border-radius: 12px !important;
@@ -1283,17 +1284,15 @@
 }
 .flip-inner {
   display: block;
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+  position: relative;
 }
 .flip-card.flipped .flip-inner {
-  transform: rotateY(180deg);
+  transform: none;
 }
 .card-face {
-  position: absolute;
-  inset: 0;
+  min-height: 342px;
+  overflow-wrap: anywhere;
+  position: relative;
   backface-visibility: hidden;
   border: 1px solid #e4d7cd;
   border-radius: 12px;
@@ -1314,7 +1313,7 @@
   pointer-events: none;
 }
 .card-face.back {
-  transform: rotateY(180deg);
+  transform: none;
   background: linear-gradient(145deg, #ece2da, #f6f2ee);
   justify-content: center;
 }
@@ -1380,6 +1379,13 @@
   display: flex;
   gap: 7px;
 }
+.knowledge-cards-panel { min-width: 0; }
+.knowledge-decks { display: flex; gap: 6px; overflow-x: auto; padding: 6px 3px 12px; margin-bottom: 14px; }
+.knowledge-decks button { flex: 0 0 auto; min-height: 44px; padding: 8px 12px; border: 1px solid #d8c8ba; border-radius: 8px; color: #765e4d; }
+.knowledge-decks button[aria-pressed="true"] { background: #765e4d; color: white; }
+.knowledge-decks button:focus-visible, .flip-card:focus-visible { outline: 3px solid #956944; outline-offset: 2px; }
+.knowledge-empty { padding: 32px 0; line-height: 1.8; }
+.knowledge-cards-panel .rating-buttons button, .knowledge-cards-panel .study-actions button { min-height: 44px; }
 .rating-buttons button {
   display: flex;
   flex-direction: column;

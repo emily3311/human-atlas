@@ -35,6 +35,8 @@ import { placementDisplayControl, visiblePlacementIds } from './placement-qualit
 import { calibrationEscape } from './calibration-ui';
 import type { CalibrationPick, CalibrationSelection } from './calibration-pick';
 import StudyPanel, { type CardType } from "./StudyPanel";
+import KnowledgeCardsPanel from './KnowledgeCardsPanel';
+import type { KnowledgeDeck } from './knowledge-cards';
 import CoursePanel from "./CoursePanel";
 import CasesPanel from "./CasesPanel";
 import { anatomyZh, anatomyLabel, SYSTEM_ZH } from "./anatomy-zh";
@@ -157,6 +159,7 @@ export default function TcmApp() {
     [sidebarOpen, setSidebarOpen] = useState(false),
     [notice, setNotice] = useState(""),
     [storageError, setStorageError] = useState("");
+  const [knowledgeDeck, setKnowledgeDeck] = useState<KnowledgeDeck>('point');
   const [filtersOpen,setFiltersOpen]=useState(false),
     [catalogueExpanded,setCatalogueExpanded]=useState(false),
     [sidebarWidth,setSidebarWidth]=useState(320);
@@ -299,7 +302,7 @@ export default function TcmApp() {
     }
   }, [displayedIds]);
   const concealed =
-    mode === "cards" && (cardType === "identify" || cardType === "meridian") && !revealed;
+    mode === "cards" && knowledgeDeck === 'point' && (cardType === "identify" || cardType === "meridian") && !revealed;
   useEffect(()=>{if(concealed){setFocus(v=>v+1);setRotate(false);}},[concealed,activeId]);
   const quizPending = mode === "quiz" && !quizAnswer;
   const selectPoint = (id: string) => {
@@ -341,7 +344,8 @@ export default function TcmApp() {
     else if (mode === "quiz") setQuizAnswer(null);
   };
   const rate = (rating: Rating) => {
-    setStore((s) => ratePoint(s, activeId, rating));
+    const updated = ratePoint(store, activeId, rating);
+    setStore(updated);
     setNotice(
       rating === "again"
         ? "已加入复习 · 10 分钟后再练"
@@ -349,7 +353,8 @@ export default function TcmApp() {
           ? "已安排明天复习"
           : "已记录掌握程度",
     );
-    showNext();
+    const next = reviewQueue(filteredIds, updated.reviews)[0] ?? nextId(filteredIds, activeId);
+    if (next) selectPoint(next);
   };
   const changeMode = (next: Mode) => {
     setCalibrationOpen(false);
@@ -749,7 +754,7 @@ export default function TcmApp() {
         <aside key="task" ref={taskRef} tabIndex={-1} id="learning-content" className={`detail-panel ${mode==='anatomy'&&anatomyDetailsOpen?'anatomy-panel-open':''}`} aria-label="学习内容">
           {policy.taskFirst && <button className="outline-button model-expand-button" aria-expanded={modelExpanded} onClick={()=>{setModelExpanded(v=>!v);if(!modelExpanded)requestAnimationFrame(()=>document.getElementById('model-workspace')?.focus());}}>{modelExpanded?"收起三维模型":"展开三维模型"}</button>}
           {mode==='anatomy'&&<button className="anatomy-detail-close icon-button" aria-label="关闭结构详情" onClick={()=>setAnatomyDetailsOpen(false)}><X size={18}/></button>}
-          {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
+          {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'cards' && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
               <BookOpen size={32} />
               <h2>{mode === "quiz" && scope === "review" ? "本轮待复习已完成" : "调整筛选，开始学习"}</h2>
@@ -767,6 +772,7 @@ export default function TcmApp() {
               )}
             </div>
           ) : mode === "cards" ? (
+            <KnowledgeCardsPanel points={filtered} meridians={MERIDIANS} parts={atlas?.parts ?? []} placementDisplayMode={placementDisplayMode} deck={knowledgeDeck} onDeck={deck => { setKnowledgeDeck(deck); setRevealed(false); }} pointPanel={
             <StudyPanel
               placementDisplayMode={placementDisplayMode}
               key={point.id}
@@ -782,6 +788,7 @@ export default function TcmApp() {
               onReveal={setRevealed}
               onExplore={() => changeMode("explore")}
             />
+            } />
           ) : mode === "course" ? (
             <CoursePanel
               store={store}

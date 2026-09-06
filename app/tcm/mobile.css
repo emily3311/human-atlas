@@ -113,3 +113,12 @@
   .tcm-app .calibration-panel button, .tcm-app .calibration-panel input, .tcm-app .calibration-panel select { min-height:44px; }
   .tcm-app.calibration-open .model-workspace { min-height:0; height:auto; overflow:visible; }
 }
+@media (max-width: 680px) {
+  .knowledge-cards-panel, .knowledge-cards-panel .study-panel { min-width: 0; max-width: 100%; }
+  .knowledge-cards-panel .knowledge-decks { max-width: 100%; }
+  .knowledge-cards-panel .flip-card { width: 100%; height: auto; min-height: 280px; }
+  .knowledge-cards-panel .card-face { min-height: 280px; padding: 24px 16px; overflow-wrap: anywhere; }
+  .knowledge-cards-panel .card-face strong, .knowledge-cards-panel .card-hint { max-width: 100%; white-space: normal; }
+  .knowledge-cards-panel .card-types button, .knowledge-cards-panel .rating-buttons button { min-height: 44px; }
+  .knowledge-cards-panel .small-source { min-height: 44px; display: flex; align-items: center; font-size: 12px; overflow-wrap: anywhere; }
+}

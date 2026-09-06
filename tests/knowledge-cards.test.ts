@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import type { Part } from '../app/anatomy.ts';
 import type { Acupoint, Meridian, Source } from '../app/tcm/types.ts';
@@ -37,6 +39,27 @@ const question = {
   id: 'q-card', sourceIndex: 1, question: '哪项正确？',
   options: { A: '正确答案文本', B: '错误选项文本', C: '丙', D: '丁', E: '戊' }, answer: 'A' as const,
 };
+
+test('view model derives four real counts and renders only the selected face', async () => {
+  const ui = await import('../app/tcm/knowledge-card-ui.ts');
+  assert.equal(typeof ui.knowledgeDeckOptions, 'function', 'deck view model must exist');
+  const card = { id: 'point:ST36:effects', deck: 'point-effects' as const, title: '传统功用提要', front: { eyebrow: '传统功用', prompt: '请回忆' }, back: { answer: '健脾和胃', caution: '仅作理论学习。' }, sourceLinks: [], meta: {} };
+  assert.deepEqual(ui.knowledgeDeckOptions({ point: [card, card], anatomy: [], 'exam-wrong': [card], 'point-effects': [card] }).map(({ label, count }) => [label, count]), [['穴位', 2], ['解剖', 0], ['执医错题', 1], ['穴位作用', 1]]);
+  assert.deepEqual(ui.visibleCardFace(card, false), { side: 'front', ...card.front });
+  const front = renderToStaticMarkup(createElement(ui.KnowledgeCardFace, { face: ui.visibleCardFace(card, false) }));
+  assert.doesNotMatch(front, /健脾和胃|仅作理论学习/);
+  const back = renderToStaticMarkup(createElement(ui.KnowledgeCardFace, { face: ui.visibleCardFace(card, true) }));
+  assert.match(back, /传统功用提要/);
+  assert.match(back, /健脾和胃/);
+  assert.match(back, /仅作理论学习/);
+  assert.doesNotMatch(back, /治疗保证|疗效|针刺深度|处方|请回忆/);
+});
+
+test('flip keys act only while the card itself has focus', async () => {
+  const ui = await import('../app/tcm/knowledge-card-ui.ts');
+  assert.equal(typeof ui.flipKeyAction, 'function');
+  for (const [key, focused, expected] of [['Enter', true, true], [' ', true, true], ['Enter', false, false], [' ', false, false], ['Escape', true, false], ['ArrowRight', true, false]] as const) assert.equal(ui.flipKeyAction(key, focused), expected);
+});
 
 test('point cards honor location, meridian, verified classification, and current placement gates', () => {
   const cards = buildPointCards([

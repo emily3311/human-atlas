@@ -7,6 +7,38 @@ import { ExamAbout } from '../app/tcm/exam-about.ts';
 import { CURATED_ACUPOINTS as ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
 import * as calibration from '../app/tcm/calibration.ts';
 import * as T from 'three';
+import { buildPointEffectCards } from '../app/tcm/knowledge-cards.ts';
+import { KnowledgeCardFace, visibleCardFace } from '../app/tcm/knowledge-card-ui.ts';
+
+test('real effect-card backs retain teaching cautions without procedural or outcome language', () => {
+  for (const card of buildPointEffectCards(ACUPOINTS)) {
+    const markup = renderToStaticMarkup(createElement(KnowledgeCardFace, { face: visibleCardFace(card, true) }));
+    assert.match(markup, /传统功用提要/);
+    assert.match(markup, /请勿自行针刺/);
+    assert.doesNotMatch(markup, /治疗保证|疗效|针刺深度|为你开方|个人处方/);
+  }
+});
+
+test('card resource loader isolates failed banks and rereads progress without changing attempts', async () => {
+  const ui = await import('../app/tcm/knowledge-card-resources.ts');
+  assert.equal(typeof ui.loadWrongCardResources, 'function');
+  const id = 'a'.repeat(64);
+  const q = { id, sourceIndex: 0, question: '题干', options: { A: '甲', B: '乙', C: '丙', D: '丁', E: '戊' }, answer: 'A' };
+  const bank = { schemaVersion: 1, source: 'CMB', sourceSha256: 'b'.repeat(64), questions: [q] };
+  let raw = JSON.stringify({ [id]: { answer: 'B', correct: false, attempts: 3 } });
+  const storage = { getItem: () => raw };
+  const fetcher = async (url: string) => ({ ok: true, json: async () => url.includes('explanations') ? {} : bank });
+  const first = await ui.loadWrongCardResources(fetcher, storage);
+  assert.equal(first.cards.length, 1);
+  assert.match(first.warning, /解析/);
+  assert.equal(first.cards[0].meta.attempts, '3');
+  raw = JSON.stringify({ [id]: { answer: 'A', correct: true, attempts: 4 } });
+  assert.equal((await ui.loadWrongCardResources(fetcher, storage)).cards.length, 0);
+  assert.equal(JSON.parse(raw)[id].attempts, 4);
+  const failed = await ui.loadWrongCardResources(async () => { throw Error('offline'); }, storage);
+  assert.deepEqual(failed.cards, []);
+  assert.match(failed.warning, /错题.*题库/);
+});
 
 test('surface picking returns model coordinates and a front-facing normal, without anatomy selection', async () => {
   const pick = await import('../app/tcm/calibration-pick.ts');

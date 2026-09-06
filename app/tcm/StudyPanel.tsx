@@ -3,6 +3,7 @@ import { ArrowRight, RotateCcw, Check, Eye, BookOpen, Brain } from "lucide-react
 import type { Acupoint, Meridian, PlacementDisplayMode } from "./types";
 import type { Rating, Review } from "./study";
 import { questionAvailable } from './catalogue';
+import { flipKeyAction } from './knowledge-card-ui';
 export type CardType = "location" | "meridian" | "tags" | "identify";
 export default function StudyPanel({
   point,
@@ -90,9 +91,10 @@ export default function StudyPanel({
         onClick={flip}
         aria-label={flipped ? "翻回题目" : "翻面查看答案"}
         aria-pressed={flipped}
+        onKeyDown={event => { if (flipKeyAction(event.key, event.currentTarget === event.target)) { event.preventDefault(); flip(); } }}
       >
         <span className="flip-inner">
-          <span className="card-face front" aria-hidden={flipped}>
+          {!flipped ? <span className="card-face front">
             <span className="flashcard-eyebrow">
               {type === "identify"
                 ? "辨认练习"
@@ -110,15 +112,14 @@ export default function StudyPanel({
             <span className="flip-instruction">
               <RotateCcw size={14} /> 点击翻面 · Enter / 空格
             </span>
-          </span>
-          <span className="card-face back" aria-hidden={!flipped}>
+          </span> : <span className="card-face back">
             <span className="flashcard-eyebrow">参考答案</span>
             <strong>{answer}</strong>
             <span className="card-hint">
               {type === "identify" ? point.location : point.landmarks[0]}
             </span>
             <span className="flip-instruction">点击返回题目</span>
-          </span>
+          </span>}
         </span>
       </button>
       {flipped ? (
