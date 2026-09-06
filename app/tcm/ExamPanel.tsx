@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Check, ChevronLeft, ChevronRight, Info, RotateCcw, Search, Trash2, X } from 'lucide-react';
 import { parseExamBank, type AnswerKey, type ExamBank } from './exam-bank';
+import { examFeedback, loadExamExplanations, type ExplanationState } from './exam-feedback';
+import type { ExamExplanation } from './exam-explanations';
 import {
   EXAM_PROGRESS_KEY,
   createExamSession,
@@ -30,6 +32,8 @@ function sessionIds(bank: ExamBank, progress: ExamProgress, query: string, scope
 
 export default function ExamPanel({ onAbout }: { onAbout: () => void }) {
   const [bank, setBank] = useState<ExamBank | null>(null);
+  const [explanations, setExplanations] = useState<ReadonlyMap<string, ExamExplanation>>(new Map());
+  const [explanationState, setExplanationState] = useState<ExplanationState>('loading');
   const [loadError, setLoadError] = useState('');
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [progress, setProgress] = useState<ExamProgress>({});
@@ -46,6 +50,8 @@ export default function ExamPanel({ onAbout }: { onAbout: () => void }) {
     setLoadError('');
     setBank(null);
     setHydrated(false);
+    setExplanations(new Map());
+    setExplanationState('loading');
     fetch('/data/cmb-tcm.json', { signal: controller.signal })
       .then((response) => {
         if (!response.ok) throw new Error('题库加载失败');
@@ -66,6 +72,11 @@ export default function ExamPanel({ onAbout }: { onAbout: () => void }) {
         setSession(createExamSession(parsed.questions.map((item) => item.id)));
         setBank(parsed);
         setHydrated(true);
+        loadExamExplanations(fetch, parsed.questions, controller.signal).then((result) => {
+          if (controller.signal.aborted) return;
+          setExplanations(result.explanations);
+          setExplanationState(result.state);
+        });
       })
       .catch((error: Error) => {
         if (error.name !== 'AbortError') setLoadError(error.message || '题库加载失败');
@@ -78,6 +89,7 @@ export default function ExamPanel({ onAbout }: { onAbout: () => void }) {
     [bank],
   );
   const question = questionsById.get(session.ids[session.index]);
+  const feedback = question ? examFeedback(question, explanationState, explanations.get(question.id)) : null;
   const completed = Object.keys(progress).length;
   const wrong = Object.values(progress).filter((item) => !item.correct).length;
 
@@ -164,7 +176,15 @@ export default function ExamPanel({ onAbout }: { onAbout: () => void }) {
                 return <button key={answer} className={`${chosen ? 'selected' : ''} ${correct ? 'correct' : ''} ${incorrect ? 'incorrect' : ''}`} aria-pressed={chosen} disabled={session.submitted} onClick={() => setSession((current) => selectExamAnswer(current, answer))}><strong>{answer}</strong><span>{question.options[answer]}</span>{correct && <em><Check size={15}/>正确答案</em>}{incorrect && <em><X size={15}/>你的选择</em>}</button>;
               })}
             </div>
-            {session.submitted && <div className="exam-feedback" role="status"><strong>答案：{question.answer}</strong><span>暂无解析</span></div>}
+            {session.submitted && feedback && (
+              <div className="exam-feedback" role="status">
+                <strong>答案：{feedback.answer}</strong>
+                <div className="exam-feedback-explanation">
+                  <strong>{feedback.heading}</strong>
+                  {'text' in feedback && <span>{feedback.text}</span>}
+                </div>
+              </div>
+            )}
             <div className="exam-actions">
               <button className="exam-nav" disabled={session.index === 0} onClick={() => setSession((current) => moveExamSession(current, -1))}><ChevronLeft size={16}/>上一题</button>
               <button className="exam-primary" disabled={!session.selected || session.submitted} onClick={submit}>提交答案</button>

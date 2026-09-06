@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 import { test } from 'node:test';
 
 import { explanationIndex, parseExamExplanationBank } from '../app/tcm/exam-explanations.ts';
+import { examFeedback, loadExamExplanations } from '../app/tcm/exam-feedback.ts';
 import { assertCleanTcmleCheckout, classifyMatch, normalizeExamText, readLicensedQuestions, strictQuestionMatch } from '../scripts/import-tcmle-explanations.ts';
 
 const cmbFixture = {
@@ -79,6 +80,40 @@ test('same strict question with different answers is isolated', () => {
 test('runtime parser accepts linked explanations and returns a lookup index', () => {
   const bank = parseExamExplanationBank(validPayload, [cmbFixture]);
   assert.equal(explanationIndex(bank).get('a'.repeat(64))?.text, '血虚不能上荣，故见面色淡白。');
+});
+
+test('reference explanation feedback shows only the verified explanation text', () => {
+  const explanation = parseExamExplanationBank(validPayload, [cmbFixture]).explanations[0];
+  assert.deepEqual(
+    examFeedback(cmbFixture, 'ready', explanation),
+    { answer: 'A', heading: '参考解析', text: '血虚不能上荣，故见面色淡白。' },
+  );
+});
+
+test('reference explanation feedback distinguishes unmatched and unavailable explanations', () => {
+  assert.deepEqual(examFeedback(cmbFixture, 'ready', undefined), { answer: 'A', heading: '暂无解析' });
+  assert.deepEqual(examFeedback(cmbFixture, 'unavailable', undefined), { answer: 'A', heading: '解析暂不可用' });
+});
+
+test('reference explanation loading validates fetched data against the supplied CMB questions', async () => {
+  const ready = await loadExamExplanations(
+    async () => ({ ok: true, json: async () => validPayload }),
+    [cmbFixture],
+  );
+  assert.equal(ready.state, 'ready');
+  assert.equal(ready.explanations.get(cmbFixture.id)?.text, '血虚不能上荣，故见面色淡白。');
+
+  const unavailable = await loadExamExplanations(
+    async () => ({ ok: true, json: async () => validPayload }),
+    [],
+  );
+  assert.deepEqual(unavailable, { state: 'unavailable', explanations: new Map() });
+
+  const failedFetch = await loadExamExplanations(
+    async () => { throw new Error('offline'); },
+    [cmbFixture],
+  );
+  assert.deepEqual(failedFetch, { state: 'unavailable', explanations: new Map() });
 });
 
 test('runtime parser rejects IDs or answers that do not match CMB', () => {
