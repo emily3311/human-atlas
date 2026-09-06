@@ -66,3 +66,11 @@ GREEN:
 - Confirmed all new keys occur in the current model and all evidence URLs are HTTPS.
 - Confirmed user-facing text does not claim professional review and unresolved counts remain explicit.
 - No remaining correctness concern identified within the selected evidence set; further coverage requires additional primary-source resolution rather than inference.
+
+## Fix round 1 (review of `4e54724`)
+
+- Added a failing literal regression for all three fibularis outputs. RED showed `左第三腫骨肌` instead of `左腓骨第三肌`; corrected the three outputs to the cited NAER rows 624/623/622: `腓骨第三肌`, `腓骨长肌`, and `腓骨短肌`.
+- Audited all 158 records by rendering `core`, runtime `zh`, and runtime `sourceTerm` side by side, then reviewing every line for source-character transcription, side/direction, ordinal, anatomy component, and documented Simplified Chinese/mainland word-order normalization. For TA2-bridged entries, the stored NAER row Chinese was also mechanically compared with `/tmp/atlas-anatomy-naer.csv`.
+- The audit found two additional output defects: `plantaris` had `跛肌` instead of source-normalized `跖肌`, and `middle colic artery` had inverted `结肠中动脉` instead of the cited `中结肠动脉`. A second failing literal regression captured these before correction.
+- No terms were added or removed. Coverage remains exactly 490 / 2,234 translated and 1,744 unresolved; 158 source-backed cores cover 305 mesh entries.
+- Verification: focused anatomy tests 12/12 passing; full suite, TypeScript check, production build, and integrity/coverage checks were rerun after the corrections. The build retains the non-fatal main-chunk-size advisory.

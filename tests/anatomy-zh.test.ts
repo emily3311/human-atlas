@@ -47,6 +47,15 @@ test('source-backed expansion covers unambiguous muscle, bone, sensory, and nerv
   assert.equal(anatomyZh('Left trochlear nerve'),'\u5de6\u6ed1\u8f66\u795e\u7ecf');
   assert.equal(anatomyZh('Right subclavian artery'),'\u53f3\u9501\u9aa8\u4e0b\u52a8\u8109');
 });
+test('fibularis source terms preserve the fibula character and muscle distinctions',()=>{
+  assert.equal(anatomyZh('Left fibularis tertius'),'\u5de6\u8153\u9aa8\u7b2c\u4e09\u808c');
+  assert.equal(anatomyZh('Right fibularis longus'),'\u53f3\u8153\u9aa8\u957f\u808c');
+  assert.equal(anatomyZh('Left fibularis brevis'),'\u5de6\u8153\u9aa8\u77ed\u808c');
+});
+test('audited source terms preserve the plantar character and middle-colic word order',()=>{
+  assert.equal(anatomyZh('Right plantaris'),'\u53f3\u8dd6\u808c');
+  assert.equal(anatomyZh('Left middle colic artery'),'\u5de6\u4e2d\u7ed3\u80a0\u52a8\u8109');
+});
 test('every sourced mapping has usable provenance and occurs as an exact model-name core',()=>{
   const cores=new Set(atlas.parts.map(part=>part.name.toLowerCase().replace(/^(left|right) /,'')));
   for(const [core,term] of Object.entries(ANATOMY_TERMS)){
