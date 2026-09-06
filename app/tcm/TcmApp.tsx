@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   SlidersHorizontal,
@@ -56,8 +56,10 @@ import type { Acupoint } from "./types";
 import ExamPanel from "./ExamPanel";
 import { EmilyAboutSection, EmilyProjectLink } from "./EmilyLinks";
 import "./tcm.css";
+import "./mobile.css";
+import { workspacePolicy, type LearningMode } from "./mobile-layout";
 
-type Mode = "anatomy" | "explore" | "cards" | "quiz" | "course" | "cases" | "exam";
+type Mode = LearningMode;
 type Scope = "all" | "favorites" | "review" | "course";
 const ids = ACUPOINTS.map((p) => p.id);
 const studyIds=ACUPOINTS.filter(p=>!!p.location).map(p=>p.id);
@@ -100,6 +102,27 @@ function Sources({ point }: { point: Acupoint }) {
   );
 }
 export default function TcmApp() {
+  const taskRef = useRef<HTMLElement>(null);
+  const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 680px)").matches);
+  const [modelExpanded, setModelExpanded] = useState(false);
+  const [modelFocus, setModelFocus] = useState(false);
+  const [controlsOpen, setControlsOpen] = useState(true);
+  const [sceneError, setSceneError] = useState("");
+  const [sceneAttempt, setSceneAttempt] = useState(0);
+  const [metadataAttempt, setMetadataAttempt] = useState(0);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 680px)");
+    const update = () => setMobile(media.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  useEffect(() => {
+    if (!modelFocus) return;
+    const x = window.scrollX, y = window.scrollY;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = overflow; window.scrollTo(x, y); };
+  }, [modelFocus]);
   const [atlas, setAtlas] = useState<Atlas | null>(null),
     [progress, setProgress] = useState(0),
     [error, setError] = useState("");
@@ -151,6 +174,7 @@ export default function TcmApp() {
   }, []);
   useEffect(() => {
     const abort = new AbortController();
+    setError("");
     fetch("/models/atlas.json", { signal: abort.signal })
       .then((r) => {
         if (!r.ok) throw new Error("人体模型目录加载失败");
@@ -161,7 +185,7 @@ export default function TcmApp() {
         if (e.name !== "AbortError") setError(e.message);
       });
     return () => abort.abort();
-  }, []);
+  }, [metadataAttempt]);
   useEffect(() => {
     try {
       localStorage.setItem(STORE_KEY, JSON.stringify(store));
@@ -187,6 +211,7 @@ export default function TcmApp() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        setModelFocus(false);
         setAnatomyDetailsOpen(false);
         setComparisonOpen(false);
         setAbout(false);
@@ -319,7 +344,12 @@ export default function TcmApp() {
     showNext();
   };
   const changeMode = (next: Mode) => {
+    setModelExpanded(false);
+    setModelFocus(false);
+    setControlsOpen(true);
+    setFiltersOpen(false);
     setMode(next);
+    requestAnimationFrame(() => { taskRef.current?.scrollTo(0, 0); window.scrollTo(0, 0); });
     setRevealed(false);
     setQuizAnswer(null);
     setGuide(false);
@@ -389,6 +419,7 @@ export default function TcmApp() {
       explosionAmount,anatomySystems,
     ],
   );
+  const policy = workspacePolicy(mode, mobile, modelExpanded);
   const reportProgress = useCallback((n: number) => setProgress(n), []);
   const partResults = useMemo(
     () =>
@@ -424,286 +455,9 @@ export default function TcmApp() {
       ),
     [],
   );
-  return (
-    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
-      <header className="app-header">
-        <a className="brand" href="/">
-          <span className="brand-seal">经</span>
-          <span>
-            <strong>
-              经纬<span> · </span>人体图谱
-            </strong>
-            <small>解剖 · 经穴 · 执医针灸专项</small>
-          </span>
-        </a>
-        <nav className="main-nav" aria-label="学习模式">
-          {nav.map((n) => (
-            <button
-              key={n.id}
-              className={mode === n.id ? "active" : ""}
-              onClick={() => changeMode(n.id)}
-              aria-current={mode === n.id ? "page" : undefined}
-            >
-              <n.icon size={17} />
-              <span>{n.label}</span>
-            </button>
-          ))}
-        </nav>
-        <EmilyProjectLink placement="header" />
-        <button
-          className="header-progress"
-          onClick={() => {
-            setScope("review");
-            changeMode("cards");
-          }}
-        >
-          <span
-            className="progress-ring"
-            style={
-              {
-                "--progress": `${(masteredCount / studyIds.length) * 100}%`,
-              } as React.CSSProperties
-            }
-          >
-            <Check size={12} />
-          </span>
-          <span>
-            我的学习
-            <small>
-              {reviewedCount} / {studyIds.length} 可练
-            </small>
-          </span>
-        </button>
-      </header>
-      <div hidden={mode === 'exam'} className="workspace" style={{"--catalogue-width":`${sidebarWidth}px`, display: mode === 'exam' ? 'none' : undefined} as React.CSSProperties}>
-        <aside
-          className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
-          aria-label="穴位目录"
-        >
-          {mode==='anatomy'&&atlas?<AnatomyCatalogue atlas={atlas} visible={anatomySystems} onVisible={systems=>{setAnatomySystems(systems);setChosenPart(null);setIsolate(false);}} onSelect={part=>{setChosenPart(part);setIsolate(false);setSidebarOpen(false);}} onClose={()=>setSidebarOpen(false)} selected={chosenPart?.id??''}/>:<>
-          <div className="sidebar-title">
-            <span>经络与腧穴</span>
-            <button
-              className="mobile-close icon-button"
-              aria-label="关闭目录"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X size={18} />
-            </button>
-            <span className="count-badge">{ACUPOINTS.length}</span>
-          </div>
-          {concealed || quizPending ? (
-            <div className="quiet-study">
-              <Target size={30} />
-              <h3>{concealed ? "先观察，再回忆" : "在模型上寻找答案"}</h3>
-              <p>
-                {concealed
-                  ? cardType === "meridian"
-                    ? "归经名称与编码提示暂时隐藏。请先回答右侧问题，再翻面核对。"
-                    : "穴位名称暂时隐藏。翻面后，名称与定位会一起显示。"
-                  : "点击人体上的候选穴位圆点。可以旋转、缩放，或切换正面与背面。"}
-              </p>
-              <p className="quiet-note">本练习辨认的是模型上的示意点，不评估真人取穴精度。</p>
-              <button className="outline-button" onClick={() => changeMode("explore")}>
-                返回经穴目录
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="search-field">
-                <Search size={16} />
-                <input
-                  id="point-search"
-                  placeholder="搜索穴名、拼音或编码"
-                  value={query}
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                    setQuizAnswer(null);
-                    setRevealed(false);
-                  }}
-                  aria-label="搜索穴位"
-                />
-                {query ? <button aria-label="清空搜索" onClick={()=>setQuery("")}><X size={13}/></button> : <kbd>/</kbd>}
-              </div>
-              <div className="catalogue-toolbar">
-                <span>{filtered.length} 个条目</span>
-                <button aria-expanded={filtersOpen} onClick={()=>setFiltersOpen(v=>!v)}><SlidersHorizontal size={13}/>筛选条件</button>
-                <button className="catalogue-expand" aria-pressed={catalogueExpanded} onClick={()=>setCatalogueExpanded(current=>nextCatalogueExpansion(current,'toggle'))}>{catalogueExpanded?'退出放大':'放大目录'}</button>
-              </div>
-              {!filtersOpen&&<div className="active-filter-summary">
-                {[catalogueScope!=='all'&&'考纲范围',scope!=='all'&&'学习状态',region!=='all'&&region,tag!=='all'&&tag,meridian!=='all'&&MERIDIANS.find(m=>m.id===meridian)?.shortName].filter(Boolean).join(' · ')||'全部穴位'}
-              </div>}
-              {filtersOpen&&<div className="catalogue-filters">
-              <div className="exam-catalogue-control">
-                <label htmlFor="catalogue-scope">学习范围</label>
-                <select id="catalogue-scope" value={catalogueScope} onChange={e=>{setCatalogueScope(e.target.value as CatalogueScope);setQuizAnswer(null);setRevealed(false);}}>
-                  <option value="all">全部学习条目 · {ACUPOINTS.length}</option>
-                  <option value="standard">十四经穴 · 362</option>
-                  <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
-                  <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
-                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
-                </select>
-                <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
-                <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
-              </div>
-              <div className="scope-tabs">
-                {(
-                  [
-                    ["all", "全部"],
-                    ["favorites", "收藏"],
-                    ["review", "待复习"],
-                    ["course", "课程"],
-                  ] as const
-                ).map(([id, name]) => (
-                  <button
-                    key={id}
-                    className={scope === id ? "active" : ""}
-                    onClick={() => {
-                      setScope(id);
-                      setQuizAnswer(null);
-                      setRevealed(false);
-                    }}
-                  >
-                    {name}
-                    {id === "review" && <sup>{dueIds.length}</sup>}
-                  </button>
-                ))}
-              </div>
-              <div className="filters">
-                <label>
-                  <span>身体部位</span>
-                  <select
-                    aria-label="身体部位"
-                    value={region}
-                    onChange={(e) => {
-                      setRegion(e.target.value);
-                      setQuizAnswer(null);
-                      setRevealed(false);
-                    }}
-                  >
-                    <option value="all">全部部位</option>
-                    {["头颈", "胸腹", "背腰", "上肢", "下肢"].map((r) => (
-                      <option key={r}>{r}</option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  <span>特定穴分类</span>
-                  <select
-                    aria-label="特定穴分类"
-                    value={tag}
-                    onChange={(e) => {
-                      setTag(e.target.value);
-                      setQuizAnswer(null);
-                      setRevealed(false);
-                    }}
-                  >
-                    <option value="all">全部分类</option>
-                    {tags.map((t) => (
-                      <option key={t}>{t}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div className="meridian-filter">
-                <label htmlFor="meridian-select">
-                  <SlidersHorizontal size={14} />
-                  经脉
-                </label>
-                <select
-                  id="meridian-select"
-                  value={meridian}
-                  onChange={(e) => {
-                    setMeridian(e.target.value);
-                    setQuizAnswer(null);
-                    setRevealed(false);
-                  }}
-                >
-                  <option value="all">全部经脉与奇穴</option>
-                  {MERIDIANS.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              </div>}
-              <div className="catalogue-summary">
-                <span>名称 / 编码</span>
-              </div>
-              <div className="point-list">
-                {filtered.length ? (
-                  filtered.map((p) => {
-                    const m = MERIDIANS.find((m) => m.id === p.meridian)!;
-                    return (
-                      <button
-                        className={`point-list-item ${p.id === activeId ? "active" : ""}`}
-                        key={p.id}
-                        onClick={() => selectPoint(p.id)}
-                      >
-                        <span
-                          className="point-symbol"
-                          style={{ "--meridian-color": m.color } as React.CSSProperties}
-                        >
-                          {p.id === activeId ? (
-                            <span />
-                          ) : store.reviews[p.id]?.lastRating === "good" ? (
-                            <Check size={11} />
-                          ) : (
-                            <i />
-                          )}
-                        </span>
-                        <span className="point-list-name">
-                          {p.name}
-                          <small>
-                            {m.shortName} · {p.region}
-                          </small>
-                        </span>
-                        <span className="point-code">{p.displayCode??p.id}</span>
-                        <ChevronRight size={13} />
-                      </button>
-                    );
-                  })
-                ) : (
-                  <div className="empty-list">
-                    <Search size={24} />
-                    <strong>{scope === "review" ? "当前没有到期卡片" : "没有匹配穴位"}</strong>
-                    <p>
-                      {scope === "course"
-                        ? "可在「我的课堂」加入穴位。"
-                        : "试试其他关键词或筛选条件。"}
-                    </p>
-                    <button
-                      className="text-button"
-                      onClick={() => {
-                        setQuery("");
-                        setRegion("all");
-                        setMeridian("all");
-                        setTag("all");
-                        setScope("all");
-                        setCatalogueScope('all');
-                      }}
-                    >
-                      显示全部穴位
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-          <div className="sidebar-footer">
-            <span className="tiny-dot" />
-            362 经穴 · 考纲分组学习
-            <button onClick={() => setAbout(true)} aria-label="了解数据范围">
-              <Info size={14} />
-            </button>
-          </div>
-          </>}
-        </aside>
-        {mode!=='anatomy'&&(
-          <CatalogueResizeHandle width={sidebarWidth} onWidth={setSidebarWidth}/>
-        )}
-        <main className="model-workspace">
+  const modelPanel = (
+        <main key="model" id="model-workspace" tabIndex={-1} className="model-workspace" hidden={!policy.showModel}>
+          {policy.taskFirst && <button className="outline-button model-expand-button" onClick={()=>{setModelExpanded(false);setModelFocus(false);taskRef.current?.focus();}}>收起模型，返回学习</button>}
           <div className="model-topbar">
             <div>
               <span className="section-kicker">
@@ -731,10 +485,12 @@ export default function TcmApp() {
               <Info size={18} />
             </button>
           </div>
+          <button className="outline-button model-focus-button" aria-pressed={modelFocus} onClick={()=>{setModelFocus(v=>!v);setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>{modelFocus?"退出模型专注":"专注模型"}</button>
+          {mode==="explore" && mobile && <button className="outline-button" onClick={()=>{taskRef.current?.scrollIntoView({block:"start"});taskRef.current?.focus({preventScroll:true});}}>查看「{point.name}」详情 ↓</button>}
           <div className="model-controls">
             {mode==='anatomy'?<div className="anatomy-explode-controls">
-              <button className="outline-button" aria-expanded={sidebarOpen} onClick={()=>setSidebarOpen(v=>!v)}><Layers size={16}/>{sidebarOpen?'收起目录':'结构目录'}</button>
-              <button className="outline-button" aria-expanded={anatomyDetailsOpen} onClick={()=>setAnatomyDetailsOpen(v=>!v)}><BookOpen size={16}/>{anatomyDetailsOpen?'收起详情':'结构详情'}</button>
+              <button className="outline-button" aria-expanded={sidebarOpen} onClick={()=>{setSidebarOpen(v=>!v);if(mobile)setAnatomyDetailsOpen(false);}}><Layers size={16}/>{sidebarOpen?'收起目录':'结构目录'}</button>
+              <button className="outline-button" aria-expanded={anatomyDetailsOpen} onClick={()=>{setAnatomyDetailsOpen(v=>!v);if(mobile)setSidebarOpen(false);}}><BookOpen size={16}/>{anatomyDetailsOpen?'收起详情':'结构详情'}</button>
               {(sidebarOpen||anatomyDetailsOpen)&&<button className="text-button" onClick={()=>{setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>隐藏全部面板</button>}
             </div>:
             <div className="layer-switch" role="group" aria-label="人体图层">
@@ -760,9 +516,11 @@ export default function TcmApp() {
               目录
             </button>}
           </div>
+          {mode==="quiz" && mobile && <p className="mobile-quiz-prompt">找到「{point.name}」· 点击候选点作答</p>}
           <div className="model-stage">
-            {atlas && (
+            {atlas && policy.showModel && (
               <AtlasScene
+                key={sceneAttempt}
                 atlas={atlas}
                 points={ACUPOINTS}
                 options={sceneOptions}
@@ -772,7 +530,7 @@ export default function TcmApp() {
                   setIsolate(false);
                 }}
                 onProgress={reportProgress}
-                onError={setError}
+                onError={setSceneError}
               />
             )}
             <div className="stage-label">
@@ -808,7 +566,7 @@ export default function TcmApp() {
                 </button>
               </div>
             )}
-            {!hasModel && mode!=='anatomy' && mode!=='quiz' && filtered.length>0 && <div className="unmapped-caption" role="status">
+            {!concealed && !hasModel && mode!=='anatomy' && mode!=='quiz' && filtered.length>0 && <div className="unmapped-caption" role="status">
               <span className="section-kicker">{point.location?'定位资料已收录 · 三维定位待校准':'考纲已收录 · 定位资料待核验'}</span>
               <strong>{point.name}</strong><p>{point.location?'此穴暂不显示三维标记，避免误导定位。可在右侧查看文字来源、练习记忆卡。':'已核实考纲包含此条目，尚未开放定位练习。不会用猜测的位置补点。'}</p>
             </div>}
@@ -819,7 +577,7 @@ export default function TcmApp() {
                 <small>文字对照与比例示意，三维坐标待专业校准</small>
               </div>
             )}
-            {progress < 100 && !error && (
+            {progress < 100 && !error && !sceneError && (
               <div className="model-loading" role="status">
                 <div className="loading-logo">经</div>
                 <strong>正在准备人体模型</strong>
@@ -829,10 +587,10 @@ export default function TcmApp() {
                 </div>
               </div>
             )}
-            {error && (
+            {(error || sceneError) && (
               <div className="model-loading" role="alert">
-                <p>{error}</p>
-                <button className="primary-button" onClick={() => location.reload()}>
+                <p>{error || sceneError}</p>
+                <button className="primary-button" onClick={() => { setSceneError(""); setProgress(0); if(error)setMetadataAttempt(v=>v+1);else setSceneAttempt(v=>v+1); }}>
                   重新加载
                 </button>
               </div>
@@ -880,7 +638,8 @@ export default function TcmApp() {
             </div>
           </div>
           <div className="model-bottom">
-            {mode==='anatomy'?<div className="anatomy-slider-dock">
+            {mode==="anatomy" && <button className="outline-button controls-toggle" aria-expanded={controlsOpen} onClick={()=>setControlsOpen(v=>!v)}>{controlsOpen?"收起散开控制":"展开散开控制"}</button>}
+            {mode==='anatomy'?<div className="anatomy-slider-dock" hidden={!controlsOpen}>
               <div className="explode-label"><label id="tcm-explode-label">结构散开</label><output>{Math.round(explosionAmount*100)}%</output></div>
               <Slider aria-labelledby="tcm-explode-label" min={0} max={100} step={1} value={[explosionAmount*100]} onValueChange={value=>{setExplosionAmount((Array.isArray(value)?value[0]:value)/100);setIsolate(false);setRotate(false);}}/>
               <div className="slider-endpoints"><span>完整人体</span><span>逐个结构</span></div>
@@ -919,6 +678,29 @@ export default function TcmApp() {
             <button className="text-button anatomy-entry" onClick={()=>changeMode('anatomy')}><Layers size={14}/>解剖结构浏览</button>
             </>}
           </div>
+      {mode !== 'exam' && chosenPart && (
+        <div className="anatomy-selection">
+          <div>
+            <span>{SYSTEM_ZH[chosenPart.system]} · 解剖结构</span>
+            <strong>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
+          </div>
+          {mode==='anatomy'&&<button className="outline-button" onClick={()=>setAnatomyDetailsOpen(v=>!v)}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
+          {canIsolateTeachingPart(chosenPart.system)&&<button className="outline-button" onClick={() => setIsolate((v) => !v)}>
+            {isolate ? "显示周围" : "单独查看"}
+          </button>}
+          <button
+            className="icon-button"
+            aria-label="关闭解剖结构"
+            onClick={() => {
+              setChosenPart(null);
+              setIsolate(false);
+            }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
           <div className="model-scope">
             <Info size={12} />
             <span>穴位标记为教学示意 · 尚未逐点专业校准</span>
@@ -928,7 +710,10 @@ export default function TcmApp() {
             </button>
           </div>
         </main>
-        <aside className={`detail-panel ${mode==='anatomy'&&anatomyDetailsOpen?'anatomy-panel-open':''}`} aria-label="学习内容">
+  );
+  const taskPanel = (
+        <aside key="task" ref={taskRef} tabIndex={-1} id="learning-content" className={`detail-panel ${mode==='anatomy'&&anatomyDetailsOpen?'anatomy-panel-open':''}`} aria-label="学习内容">
+          {policy.taskFirst && <button className="outline-button model-expand-button" aria-expanded={modelExpanded} onClick={()=>{setModelExpanded(v=>!v);if(!modelExpanded)requestAnimationFrame(()=>document.getElementById('model-workspace')?.focus());}}>{modelExpanded?"收起三维模型":"展开三维模型"}</button>}
           {mode==='anatomy'&&<button className="anatomy-detail-close icon-button" aria-label="关闭结构详情" onClick={()=>setAnatomyDetailsOpen(false)}><X size={18}/></button>}
           {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
@@ -1231,6 +1016,288 @@ export default function TcmApp() {
             </>
           )}
         </aside>
+  );
+  return (
+    <div className={`tcm-app ${modelFocus?'model-focus':''} ${policy.taskFirst?'task-first':''} ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
+      <header className="app-header">
+        <a className="brand" href="/">
+          <span className="brand-seal">经</span>
+          <span>
+            <strong>
+              经纬<span> · </span>人体图谱
+            </strong>
+            <small>解剖 · 经穴 · 执医针灸专项</small>
+          </span>
+        </a>
+        <nav className="main-nav" aria-label="学习模式">
+          {nav.map((n) => (
+            <button
+              key={n.id}
+              className={mode === n.id ? "active" : ""}
+              onClick={() => changeMode(n.id)}
+              aria-current={mode === n.id ? "page" : undefined}
+            >
+              <n.icon size={17} />
+              <span>{n.label}</span>
+            </button>
+          ))}
+        </nav>
+        <EmilyProjectLink placement="header" />
+        <button
+          className="header-progress"
+          onClick={() => {
+            setScope("review");
+            changeMode("cards");
+          }}
+        >
+          <span
+            className="progress-ring"
+            style={
+              {
+                "--progress": `${(masteredCount / studyIds.length) * 100}%`,
+              } as React.CSSProperties
+            }
+          >
+            <Check size={12} />
+          </span>
+          <span>
+            我的学习
+            <small>
+              {reviewedCount} / {studyIds.length} 可练
+            </small>
+          </span>
+        </button>
+      </header>
+      <div hidden={mode === 'exam'} className="workspace" style={{"--catalogue-width":`${sidebarWidth}px`, display: mode === 'exam' ? 'none' : undefined} as React.CSSProperties}>
+        <aside
+          className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
+          aria-label="穴位目录"
+        >
+          {mode==='anatomy'&&atlas?<AnatomyCatalogue atlas={atlas} visible={anatomySystems} onVisible={systems=>{setAnatomySystems(systems);setChosenPart(null);setIsolate(false);}} onSelect={part=>{setChosenPart(part);setIsolate(false);setSidebarOpen(false);}} onClose={()=>setSidebarOpen(false)} selected={chosenPart?.id??''}/>:<>
+          <div className="sidebar-title">
+            <span>经络与腧穴</span>
+            <button
+              className="mobile-close icon-button"
+              aria-label="关闭目录"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X size={18} />
+            </button>
+            <span className="count-badge">{ACUPOINTS.length}</span>
+          </div>
+          {concealed || quizPending ? (
+            <div className="quiet-study">
+              <Target size={30} />
+              <h3>{concealed ? "先观察，再回忆" : "在模型上寻找答案"}</h3>
+              <p>
+                {concealed
+                  ? cardType === "meridian"
+                    ? "归经名称与编码提示暂时隐藏。请先回答右侧问题，再翻面核对。"
+                    : "穴位名称暂时隐藏。翻面后，名称与定位会一起显示。"
+                  : "点击人体上的候选穴位圆点。可以旋转、缩放，或切换正面与背面。"}
+              </p>
+              <p className="quiet-note">本练习辨认的是模型上的示意点，不评估真人取穴精度。</p>
+              <button className="outline-button" onClick={() => changeMode("explore")}>
+                返回经穴目录
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="search-field">
+                <Search size={16} />
+                <input
+                  id="point-search"
+                  placeholder="搜索穴名、拼音或编码"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setQuizAnswer(null);
+                    setRevealed(false);
+                  }}
+                  aria-label="搜索穴位"
+                />
+                {query ? <button aria-label="清空搜索" onClick={()=>setQuery("")}><X size={13}/></button> : <kbd>/</kbd>}
+              </div>
+              <div className="catalogue-toolbar">
+                <span>{filtered.length} 个条目</span>
+                <button aria-expanded={filtersOpen} onClick={()=>setFiltersOpen(v=>!v)}><SlidersHorizontal size={13}/>筛选条件</button>
+                <button className="catalogue-expand" aria-pressed={catalogueExpanded} onClick={()=>setCatalogueExpanded(current=>nextCatalogueExpansion(current,'toggle'))}>{catalogueExpanded?'退出放大':'放大目录'}</button>
+              </div>
+              {!filtersOpen&&<div className="active-filter-summary">
+                {[catalogueScope!=='all'&&'考纲范围',scope!=='all'&&'学习状态',region!=='all'&&region,tag!=='all'&&tag,meridian!=='all'&&MERIDIANS.find(m=>m.id===meridian)?.shortName].filter(Boolean).join(' · ')||'全部穴位'}
+              </div>}
+              {filtersOpen&&<div className="catalogue-filters">
+              <div className="exam-catalogue-control">
+                <label htmlFor="catalogue-scope">学习范围</label>
+                <select id="catalogue-scope" value={catalogueScope} onChange={e=>{setCatalogueScope(e.target.value as CatalogueScope);setQuizAnswer(null);setRevealed(false);}}>
+                  <option value="all">全部学习条目 · {ACUPOINTS.length}</option>
+                  <option value="standard">十四经穴 · 362</option>
+                  <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
+                  <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
+                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
+                </select>
+                <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
+                <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
+              </div>
+              <div className="scope-tabs">
+                {(
+                  [
+                    ["all", "全部"],
+                    ["favorites", "收藏"],
+                    ["review", "待复习"],
+                    ["course", "课程"],
+                  ] as const
+                ).map(([id, name]) => (
+                  <button
+                    key={id}
+                    className={scope === id ? "active" : ""}
+                    onClick={() => {
+                      setScope(id);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
+                  >
+                    {name}
+                    {id === "review" && <sup>{dueIds.length}</sup>}
+                  </button>
+                ))}
+              </div>
+              <div className="filters">
+                <label>
+                  <span>身体部位</span>
+                  <select
+                    aria-label="身体部位"
+                    value={region}
+                    onChange={(e) => {
+                      setRegion(e.target.value);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
+                  >
+                    <option value="all">全部部位</option>
+                    {["头颈", "胸腹", "背腰", "上肢", "下肢"].map((r) => (
+                      <option key={r}>{r}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>特定穴分类</span>
+                  <select
+                    aria-label="特定穴分类"
+                    value={tag}
+                    onChange={(e) => {
+                      setTag(e.target.value);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
+                  >
+                    <option value="all">全部分类</option>
+                    {tags.map((t) => (
+                      <option key={t}>{t}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <div className="meridian-filter">
+                <label htmlFor="meridian-select">
+                  <SlidersHorizontal size={14} />
+                  经脉
+                </label>
+                <select
+                  id="meridian-select"
+                  value={meridian}
+                  onChange={(e) => {
+                    setMeridian(e.target.value);
+                    setQuizAnswer(null);
+                    setRevealed(false);
+                  }}
+                >
+                  <option value="all">全部经脉与奇穴</option>
+                  {MERIDIANS.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              </div>}
+              <div className="catalogue-summary">
+                <span>名称 / 编码</span>
+              </div>
+              <div className="point-list">
+                {filtered.length ? (
+                  filtered.map((p) => {
+                    const m = MERIDIANS.find((m) => m.id === p.meridian)!;
+                    return (
+                      <button
+                        className={`point-list-item ${p.id === activeId ? "active" : ""}`}
+                        key={p.id}
+                        onClick={() => selectPoint(p.id)}
+                      >
+                        <span
+                          className="point-symbol"
+                          style={{ "--meridian-color": m.color } as React.CSSProperties}
+                        >
+                          {p.id === activeId ? (
+                            <span />
+                          ) : store.reviews[p.id]?.lastRating === "good" ? (
+                            <Check size={11} />
+                          ) : (
+                            <i />
+                          )}
+                        </span>
+                        <span className="point-list-name">
+                          {p.name}
+                          <small>
+                            {m.shortName} · {p.region}
+                          </small>
+                        </span>
+                        <span className="point-code">{p.displayCode??p.id}</span>
+                        <ChevronRight size={13} />
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div className="empty-list">
+                    <Search size={24} />
+                    <strong>{scope === "review" ? "当前没有到期卡片" : "没有匹配穴位"}</strong>
+                    <p>
+                      {scope === "course"
+                        ? "可在「我的课堂」加入穴位。"
+                        : "试试其他关键词或筛选条件。"}
+                    </p>
+                    <button
+                      className="text-button"
+                      onClick={() => {
+                        setQuery("");
+                        setRegion("all");
+                        setMeridian("all");
+                        setTag("all");
+                        setScope("all");
+                        setCatalogueScope('all');
+                      }}
+                    >
+                      显示全部穴位
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+          <div className="sidebar-footer">
+            <span className="tiny-dot" />
+            362 经穴 · 考纲分组学习
+            <button onClick={() => setAbout(true)} aria-label="了解数据范围">
+              <Info size={14} />
+            </button>
+          </div>
+          </>}
+        </aside>
+        {mode!=='anatomy'&&(
+          <CatalogueResizeHandle width={sidebarWidth} onWidth={setSidebarWidth}/>
+        )}
+        {policy.taskFirst ? [taskPanel, modelPanel] : [modelPanel, taskPanel]}
+
       </div>
       {mode === 'exam' && <ExamPanel onAbout={() => setAbout(true)} />}
       <footer className="app-footer">
@@ -1264,28 +1331,6 @@ export default function TcmApp() {
           >
             开始对比
             <ArrowRight size={14} />
-          </button>
-        </div>
-      )}
-      {mode !== 'exam' && chosenPart && (
-        <div className="anatomy-selection">
-          <div>
-            <span>{SYSTEM_ZH[chosenPart.system]} · 解剖结构</span>
-            <strong>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
-          </div>
-          {mode==='anatomy'&&<button className="outline-button" onClick={()=>setAnatomyDetailsOpen(v=>!v)}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
-          {canIsolateTeachingPart(chosenPart.system)&&<button className="outline-button" onClick={() => setIsolate((v) => !v)}>
-            {isolate ? "显示周围" : "单独查看"}
-          </button>}
-          <button
-            className="icon-button"
-            aria-label="关闭解剖结构"
-            onClick={() => {
-              setChosenPart(null);
-              setIsolate(false);
-            }}
-          >
-            <X size={16} />
           </button>
         </div>
       )}

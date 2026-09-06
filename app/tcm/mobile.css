@@ -1,0 +1,83 @@
+/* Stable keyed siblings follow the reading order; desktop assigns their columns. */
+.workspace > .model-workspace, .workspace > .detail-panel,
+.workspace > .atlas-sidebar, .workspace > .catalogue-resize-handle { grid-row:1; }
+.model-workspace[hidden], .anatomy-slider-dock[hidden] { display:none!important; }
+.model-focus-button { align-self:flex-start; margin:8px 18px; }
+.controls-toggle { display:none; }
+.model-expand-button { margin:0 0 16px; width:100%; }
+.anatomy-system-filters { margin-block:12px; }
+.anatomy-system-filters summary { cursor:pointer; padding:10px 0; }
+.tcm-app.anatomy-focus .anatomy-catalogue { display:flex; flex-direction:column; height:100%; overflow:hidden; }
+.tcm-app.anatomy-focus .anatomy-result-list { flex:1 1 0; min-height:60px; overflow:auto; }
+.anatomy-system-filters[open] { max-height:36%; overflow:auto; }
+.tcm-app.anatomy-focus .model-focus-button { position:absolute; z-index:13; left:18px; top:60px; }
+.tcm-app.model-focus .model-workspace { position:fixed!important; inset:0; z-index:80; width:100%; height:100dvh!important; background:#f7f3ed; overflow:auto; }
+.tcm-app.model-focus .app-header, .tcm-app.model-focus .app-footer,
+.tcm-app.model-focus .atlas-sidebar, .tcm-app.model-focus .detail-panel,
+.tcm-app.model-focus .catalogue-resize-handle { display:none!important; }
+.tcm-app.model-focus .model-topbar, .tcm-app.model-focus .model-scope { display:none; }
+.tcm-app.model-focus .model-focus-button { position:relative; inset:auto; z-index:14; flex-shrink:0; }
+.tcm-app.model-focus:not(.anatomy-focus) .model-stage { flex:1; min-height:260px; }
+
+@media(max-width:680px) {
+  .tcm-app, .tcm-app.anatomy-focus { height:auto; min-height:100dvh; overflow:visible; font-size:14px; }
+  .tcm-app .app-header { padding-inline:10px; column-gap:6px; }
+  .tcm-app .brand { gap:6px; white-space:nowrap; }
+  .tcm-app .brand strong { font-size:14px; letter-spacing:0; }
+  .tcm-app .brand small { display:none; }
+  .tcm-app .brand-seal { flex-shrink:0; width:24px; height:27px; }
+  .tcm-app .emily-project-link--header { font-size:12px; min-height:44px; padding:6px; }
+  .tcm-app .main-nav button { height:44px; min-height:44px; font-size:14px; }
+  .tcm-app button, .tcm-app select, .tcm-app input:not([type=checkbox]) { min-height:44px; }
+  .tcm-app .icon-button { min-width:44px; }
+  .tcm-app p, .tcm-app input, .tcm-app select, .tcm-app label,
+  .tcm-app .outline-button, .tcm-app .primary-button, .tcm-app .point-list-name,
+  .tcm-app .anatomy-result-list button, .tcm-app .detail-section { font-size:14px; }
+  .tcm-app small, .tcm-app .mini-note, .tcm-app .quiet-note, .tcm-app .section-kicker,
+  .tcm-app .text-button, .tcm-app .catalogue-summary, .tcm-app .catalogue-toolbar,
+  .tcm-app .active-filter-summary, .tcm-app .sidebar-footer, .tcm-app .slider-endpoints,
+  .tcm-app .model-scope, .tcm-app .emily-project-link--footer { font-size:12px; }
+  .tcm-app .workspace, .tcm-app.anatomy-focus .workspace { display:flex; flex-direction:column; flex:initial; }
+  .tcm-app .model-workspace, .tcm-app.anatomy-focus .model-workspace { display:flex; flex-direction:column; width:100%; height:auto; min-height:0; overflow:visible; }
+  .tcm-app .model-topbar, .tcm-app.anatomy-focus .model-topbar { position:static; padding:14px 16px 8px; }
+  .tcm-app .model-controls, .tcm-app.anatomy-focus .model-controls { position:static; padding:8px 16px; gap:8px; flex-wrap:wrap; }
+  .tcm-app .mobile-catalogue { position:static; font-size:14px!important; }
+  .tcm-app .model-focus-button, .tcm-app.anatomy-focus .model-focus-button { position:static; margin:4px 16px; }
+  .tcm-app .anatomy-explode-controls { flex-wrap:wrap; }
+  .tcm-app.anatomy-focus .anatomy-explode-controls button { font-size:14px; }
+  .tcm-app .model-stage, .tcm-app.anatomy-focus .model-stage { position:relative; inset:auto; height:clamp(300px,52dvh,460px); min-height:300px; flex:none; margin:0; }
+  .tcm-app .stage-label { top:12px; left:16px; font-size:12px; }
+  .tcm-app .stage-side-label { display:none; }
+  .tcm-app .view-bar, .tcm-app.anatomy-focus .view-bar { inset:auto auto 10px 50%; transform:translateX(-50%); flex-direction:row; max-width:calc(100% - 20px); }
+  .tcm-app .view-bar button { min-width:44px; padding:6px; }
+  .tcm-app.anatomy-focus .view-bar > span { width:1px; height:22px; margin:0 2px; }
+  .tcm-app .model-bottom, .tcm-app.anatomy-focus .model-bottom { position:static; transform:none; width:auto; margin:0; padding:12px 16px; }
+  .tcm-app .controls-toggle { display:flex; margin-bottom:8px; }
+  .tcm-app .anatomy-slider-dock { padding:12px 16px; }
+  .tcm-app .anatomy-slider-dock [data-slot=slider] { min-height:44px; }
+  .tcm-app .anatomy-selection, .tcm-app.anatomy-focus .anatomy-selection { position:static; transform:none; width:auto; max-width:none; margin:0 16px 12px; flex-wrap:wrap; }
+  .tcm-app .anatomy-selection strong { overflow-wrap:anywhere; }
+  .tcm-app .detail-panel { scroll-margin-top:125px; }
+  .tcm-app .mobile-quiz-prompt { padding:10px 16px; margin:0; background:#f8eee1; font-weight:600; }
+  .tcm-app .atlas-sidebar.mobile-open, .tcm-app.anatomy-focus .atlas-sidebar.mobile-open,
+  .tcm-app.anatomy-focus .detail-panel.anatomy-panel-open { position:fixed; z-index:70; inset:0; width:100%; max-width:none; height:100dvh; border-radius:0; margin:0; padding:calc(12px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom)); overflow:auto; }
+  .tcm-app.anatomy-focus .atlas-sidebar.mobile-open { overflow:hidden; }
+  .tcm-app .anatomy-catalogue > h3 { margin:4px 0; font-size:18px; }
+  .tcm-app .anatomy-catalogue > p { margin:4px 0; }
+  .tcm-app .anatomy-catalogue .search-field { flex-shrink:0; margin-top:10px; }
+  .tcm-app .anatomy-system-list label { min-height:44px; }
+  .tcm-app .anatomy-pagination button { flex:1; }
+  .tcm-app.model-focus .model-workspace { overflow:auto; }
+  .tcm-app.model-focus .model-stage { height:calc(100dvh - 190px); min-height:220px; }
+  .tcm-app.model-focus .model-bottom, .tcm-app.model-focus .anatomy-selection { display:none; }
+  .tcm-app .exam-main { min-width:0; }
+  .tcm-app .exam-kicker, .tcm-app .exam-card-meta, .tcm-app .exam-options button em,
+  .tcm-app .exam-progress-actions, .tcm-app .exam-catalogue-control a,
+  .tcm-app .point-code, .tcm-app .card-types button { font-size:12px; }
+  .tcm-app .exam-options button span { font-size:14px; }
+  .tcm-app .display-toggles { gap:8px; flex-wrap:wrap; }
+  .tcm-app .display-toggles button, .tcm-app .layer-switch button { font-size:12px; }
+  .tcm-app .stage-label small, .tcm-app .model-scope button,
+  .tcm-app .point-list-name small, .tcm-app .anatomy-slider-dock .text-button { font-size:12px; }
+  .tcm-app .anatomy-catalogue { gap:6px; }
+}

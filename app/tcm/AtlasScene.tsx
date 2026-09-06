@@ -3,7 +3,7 @@ import * as T from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { decodeModelResponse } from "../model-download";
+import { decodeModelResponse, loadModelChunks } from "../model-download";
 import { SYSTEMS, type Atlas, type Part, type SystemId } from "../anatomy";
 import { PointerTap } from "../pointer-tap";
 import { createExplosionLayout } from "../explosion-layout";
@@ -66,6 +66,8 @@ export default function AtlasScene(props: Props) {
   latest.current = props;
   useEffect(() => {
     const el = host.current!;
+    latest.current.onProgress(0);
+    latest.current.onError("");
     let stopped = false,
       frame = 0,
       dirty = true,
@@ -338,8 +340,7 @@ export default function AtlasScene(props: Props) {
     resize();
     (async () => {
       try {
-        let loaded = 0,
-          cursor = 0;
+        let loaded = 0;
         const load = async (ci: number) => {
           const chunk = props.atlas.chunks[ci],
             gzip = !!chunk.gzip && typeof DecompressionStream !== "undefined";
@@ -347,7 +348,7 @@ export default function AtlasScene(props: Props) {
             signal: controller.signal,
           });
           const buffer = await decodeModelResponse(response, chunk.bytes, gzip);
-          if (stopped) return;
+          if (stopped || controller.signal.aborted) return;
           const groups = new Map<SystemId, T.BufferGeometry[]>();
           for (let partIndex = 0; partIndex < props.atlas.parts.length; partIndex++) {
             const part = props.atlas.parts[partIndex];
@@ -397,11 +398,7 @@ export default function AtlasScene(props: Props) {
           latest.current.onProgress(Math.round((loaded / props.atlas.chunks.length) * 100));
           dirty = true;
         };
-        await Promise.all(
-          Array.from({ length: 3 }, async () => {
-            while (cursor < props.atlas.chunks.length) await load(cursor++);
-          }),
-        );
+        await loadModelChunks(props.atlas.chunks.length, controller, load);
         if (!stopped) {
           placeMarkers();
           ready = true;
@@ -409,6 +406,7 @@ export default function AtlasScene(props: Props) {
           dirty = true;
         }
       } catch (e) {
+        controller.abort();
         if (!stopped)
           latest.current.onError(e instanceof Error ? e.message : "人体模型加载失败，请重试。");
       }

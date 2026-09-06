@@ -1,3 +1,16 @@
+/** Bounded chunk workers owned by one scene session. */
+export async function loadModelChunks(count: number, controller: AbortController, load: (index: number) => Promise<void>): Promise<void> {
+  let cursor = 0;
+  await Promise.all(Array.from({ length: 3 }, async () => {
+    try {
+      while (!controller.signal.aborted && cursor < count) await load(cursor++);
+    } catch (error) {
+      controller.abort();
+      throw error;
+    }
+  }));
+}
+
 /** Static hosts may serve .gz as a compressed response or as a gzip file.
  * Fetch already decodes Content-Encoding; inspect the payload to avoid decoding twice.
  */

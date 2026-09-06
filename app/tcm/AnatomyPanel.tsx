@@ -22,6 +22,11 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
     <h3>从整体，到每一处。</h3>
     <p className="mini-note">{atlas.parts.length.toLocaleString()} 个可选结构 · 可散开、缩放与单独查看</p>
     <p className="mini-note">已提供中文名称 {coverage.translated} / {coverage.total}；待核对 {coverage.unresolved}。名称对照不等同于专业审校。</p>
+    <div className="search-field">
+      <Search size={15}/><input aria-label="搜索全部解剖结构" placeholder="结构名称 / 中文或英文" value={query} onChange={e=>setQuery(e.target.value)}/>
+    </div>
+    <details className="anatomy-system-filters">
+    <summary>系统筛选 · 已选 {visible.length} 个</summary>
     <div className="anatomy-system-actions">
       <button onClick={()=>onVisible(SYSTEMS.filter(s=>s.id!=='integumentary').map(s=>s.id))}>显示内部系统</button>
       <button onClick={()=>onVisible([])}>清空图层</button>
@@ -33,9 +38,7 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
       </label>)}
     </div>
     <p className="mini-note">体表仅查目录，教学视图隐藏。</p>
-    <div className="search-field">
-      <Search size={15}/><input aria-label="搜索全部解剖结构" placeholder="结构名称 / 中文或英文" value={query} onChange={e=>setQuery(e.target.value)}/>
-    </div>
+    </details>
     <div className="catalogue-summary">{matches.length} 个匹配结构 <span>第 {Math.min(page+1,totalPages)} / {totalPages} 页</span></div>
     <div className="anatomy-result-list">
       {matches.slice(page*40,(page+1)*40).map(p=><button key={p.id} className={p.id===selected?'selected':''} onClick={()=>onSelect(p)}>
