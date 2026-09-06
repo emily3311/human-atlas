@@ -8,6 +8,7 @@ import { buildPointCards, buildAnatomyCards, buildPointEffectCards } from '../ap
 import { placementDisplayControl, markerPresentation, placementRecord, placementCounts } from '../app/tcm/placement-quality.ts';
 import { calibrationEscape, persistCalibrationDrafts } from '../app/tcm/calibration-ui.ts';
 import { parseCalibrationDrafts, upsertCalibrationDraft, undoCalibrationDraft, exportCalibrationDraftPackage } from '../app/tcm/calibration.ts';
+import { startValidationServer, launchValidationBrowser, isolateStorage } from './validate-server.mjs';
 
 for (const file of ['atlas.json']) {
   const atlas=JSON.parse(await readFile(new URL(`../public/models/${file}`,import.meta.url)));
@@ -72,10 +73,12 @@ assert.equal(JSON.stringify(pointIds.map(placementRecord)), formalBefore);
 assert.deepEqual(placementCounts(pointIds), { unregistered: 344, 'pending-review': 39, calibrated: 0 });
 console.log('Deterministic production contracts: default 0 / opt-in 39 point IDs, pending labels, Escape lifecycle, persisted/undoable draft Blob export, and immutable formal data passed.');
 
-// Browser checks use an existing Playwright runtime and running app; no production test hooks.
-if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
-  const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
-  const browser = await chromium.launch({ headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+// Browser checks are a required release gate. Every page has a fresh temporary context.
+const server = process.env.INTERACTION_BROWSER_URL ? null : await startValidationServer();
+const origin = process.env.INTERACTION_BROWSER_URL || server.origin;
+let browser;
+try {
+  browser = await launchValidationBrowser();
   try {
     const hydrationFailures = [];
     for (const scenario of ['delayed', 'offline']) {
@@ -99,7 +102,7 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
           await route.fulfill({ json: { schemaVersion: 1, source: 'CMB', sourceSha256: 'b'.repeat(64), questions: [{ id: questionId, sourceIndex: 0, question: '延迟加载题干', options: { A: '正确', B: '错误', C: '丙', D: '丁', E: '戊' }, answer: 'A' }] } });
         });
         await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'TCMLE', sourceCommit: 'c'.repeat(40), explanations: [] } }));
-        await page.goto(process.env.INTERACTION_BROWSER_URL);
+        await page.goto(origin);
         await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
         const decks = page.getByRole('group', { name: '知识卡组' });
         if (scenario === 'offline') {
@@ -126,7 +129,7 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
     }
     assert.deepEqual(hydrationFailures, [], 'partial hydration and empty-state regression');
     console.log('Cards hydration: delayed and failed CMB preserve exam repetitions=7; loading/error never claim an empty deck.');
-    for (const [width, height] of [[1440, 1000], [390, 844], [320, 568]]) {
+    for (const [width, height] of [[1440, 900], [390, 844], [320, 568]]) {
       const page = await browser.newPage({ viewport: { width, height } });
       const questionId = 'a'.repeat(64);
       // Each page owns a temporary context. Progress exists only in this in-memory fixture.
@@ -138,7 +141,7 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
       }, { questionId });
       await page.route('**/data/cmb-tcm.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'CMB', sourceSha256: 'b'.repeat(64), questions: [{ id: questionId, sourceIndex: 0, question: '卡片隔离测试题干', options: { A: '正确答案唯一文本', B: '错误选项', C: '丙', D: '丁', E: '戊' }, answer: 'A' }] } }));
       await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'TCMLE', sourceCommit: 'c'.repeat(40), explanations: [{ questionId, answer: 'A', text: '独立解析唯一文本。'.repeat(70), provenance: { dataset: 'TCMLE', sourceFile: 'Licensed/Test.json', sourceQuestionIndex: 1, sourceCommit: 'c'.repeat(40) } }] } }));
-      await page.goto(process.env.INTERACTION_BROWSER_URL);
+      await page.goto(origin);
       await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
       const decks = page.getByRole('group', { name: '知识卡组' });
       await decks.waitFor({ timeout: 5000 });
@@ -213,16 +216,20 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
       await page.close();
       console.log(`Cards browser ${width}×${height}: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.`);
     }
-    for (const width of [1440, 390]) {
-      const page = await browser.newPage({ viewport: { width, height: 1000 }, acceptDownloads: true });
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      const page = await browser.newPage({ viewport: { width, height }, acceptDownloads: true });
       const errors = []; page.on('pageerror', error => errors.push(error.message));
-      await page.goto(process.env.INTERACTION_BROWSER_URL);
+      await isolateStorage(page);
+      await page.goto(origin);
       await page.getByRole('button', { name: '坐标校准工具', exact: true }).waitFor();
       await page.locator('.model-loading').waitFor({ state: 'hidden', timeout: 90000 });
       assert.equal(await page.locator('.acu-marker:not([hidden])').count(), 0);
+      await page.getByText('已校准 0 · 待专业校准 39 · 未登记 344', { exact: true }).waitFor();
       await page.getByLabel('显示教学示意（39）', { exact: true }).check();
       await page.waitForFunction(() => document.querySelectorAll('.acu-marker--pending:not([hidden])').length > 0);
       assert.equal(await page.locator('.acu-marker--calibrated').count(), 0);
+      assert.equal(await page.locator('.acu-marker--pending').evaluateAll(elements => new Set(elements.map(el => el.dataset.point)).size), 39, '39 seed IDs, with bilateral markers and visibility determined by camera');
+      assert.ok(await page.locator('.acu-marker--pending > i').evaluateAll(elements => elements.every(el => { const style = getComputedStyle(el); return style.borderTopStyle === 'dashed' && style.backgroundColor === 'rgba(0, 0, 0, 0)'; })), 'pending markers use hollow dashed dots');
       for (const label of await page.locator('.acu-marker--pending').evaluateAll(elements => elements.map(el => el.getAttribute('aria-label')))) assert.match(label, /待专业校准·教学示意/);
       await page.getByLabel('显示教学示意（39）', { exact: true }).uncheck();
       await page.getByRole('button', { name: '坐标校准工具', exact: true }).click();
@@ -294,7 +301,66 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
       }
       assert.deepEqual(errors, []);
       await page.close();
-      console.log(`Browser ${width}px: default and opt-in rendering, panel lifecycle, surface pick, undo, Blob download and layout passed.`);
+      console.log(`Browser ${width}×${height}: default 0 / opt-in 39 seeds, truthful 0/39/344 counts, dashed hollow markers, surface pick, nudge/undo and pending-only Blob export passed.`);
+    }
+    const bank = JSON.parse(await readFile(new URL('../public/data/cmb-tcm.json', import.meta.url), 'utf8'));
+    const explanations = JSON.parse(await readFile(new URL('../public/data/cmb-tcmle-explanations.json', import.meta.url), 'utf8'));
+    const matched = bank.questions.find(question => question.id === explanations.explanations[0].questionId);
+    const unmatched = bank.questions.find(question => !explanations.explanations.some(item => item.questionId === question.id));
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      const page = await browser.newPage({ viewport: { width, height } });
+      const errors = []; page.on('pageerror', error => errors.push(error.message));
+      await isolateStorage(page);
+      await page.route('**/data/cmb-tcm.json', route => route.fulfill({ json: { ...bank, questions: [matched, unmatched] } }));
+      await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { ...explanations, explanations: [explanations.explanations[0]] } }));
+      await page.goto(origin);
+      await page.getByRole('button', { name: '执医题库', exact: true }).click();
+      for (const heading of ['参考解析', '暂无解析']) {
+        await page.getByRole('group', { name: '选择答案' }).getByRole('button').first().click();
+        await page.getByRole('button', { name: '提交答案', exact: true }).click();
+        await page.getByText(heading, { exact: true }).waitFor();
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px submitted exam overflow`);
+        if (heading === '参考解析') await page.getByRole('button', { name: '下一题', exact: true }).click();
+      }
+      await page.getByRole('button', { name: '解剖图谱', exact: true }).click();
+      await page.locator('.model-loading').waitFor({ state: 'hidden', timeout: 90000 });
+      const controls = page.locator('.anatomy-explode-controls');
+      if (await controls.getByRole('button', { name: '隐藏全部面板', exact: true }).isVisible()) await controls.getByRole('button', { name: '隐藏全部面板', exact: true }).click();
+      assert.equal(await page.locator('.anatomy-detail-content').isVisible(), false, 'detail card is optional');
+      await controls.getByRole('button', { name: '结构目录', exact: true }).click();
+      await page.getByRole('textbox', { name: '搜索全部解剖结构', exact: true }).fill('左颈阔肌');
+      await page.locator('.anatomy-result-list').getByRole('button', { name: /左颈阔肌/ }).click();
+      assert.match(await page.locator('.anatomy-selection').textContent(), /左颈阔肌/);
+      await controls.getByRole('button', { name: '结构详情', exact: true }).click();
+      await page.locator('.anatomy-detail-content').getByRole('heading', { name: '左颈阔肌', exact: true }).waitFor();
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px anatomy details overflow`);
+      await page.getByRole('button', { name: '关闭结构详情', exact: true }).click();
+      const slider = page.getByRole('slider', { name: '结构散开', exact: true });
+      if (!(await slider.isVisible())) await page.locator('.anatomy-slider-dock').getByRole('button', { name: '展开', exact: true }).click();
+      await slider.focus();
+      await slider.press('End');
+      await page.waitForFunction(() => document.querySelector('.anatomy-slider-dock output')?.textContent === '100%');
+      assert.equal(await slider.getAttribute('aria-valuenow'), '100');
+      // Mobile intentionally hides the separate reset button; exercise both slider endpoints.
+      if (width <= 680) await slider.press('Home');
+      else await page.getByRole('button', { name: '复原模型', exact: true }).click();
+      assert.equal(await slider.getAttribute('aria-valuenow'), '0');
+      const project = page.getByRole('link', { name: '更多 AI 项目 ↗', exact: true });
+      assert.equal(await project.getAttribute('href'), 'https://emilyailab.com/');
+      await page.context().route('https://emilyailab.com/', route => route.fulfill({ contentType: 'text/html', body: '<title>Project destination fixture</title>' }));
+      const popupPromise = page.waitForEvent('popup');
+      await project.click();
+      const popup = await popupPromise;
+      await popup.waitForLoadState();
+      assert.equal(popup.url(), 'https://emilyailab.com/');
+      await popup.close();
+      for (const mode of ['经穴图谱', '取穴自测', '我的课堂', '情境练习']) {
+        await page.getByRole('button', { name: mode, exact: true }).click();
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px ${mode} panel overflow`);
+      }
+      assert.deepEqual(errors, []);
+      await page.close();
+      console.log(`Acceptance ${width}×${height}: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, 0–100% explosion/reset, Emily AI popup and all mode layouts passed.`);
     }
   } finally { await browser.close(); }
-} else console.log('Browser layout/pointer checks not run; set INTERACTION_BROWSER_URL and PLAYWRIGHT_MODULE to run the real UI checks.');
+} finally { if (server) await server.close(); }

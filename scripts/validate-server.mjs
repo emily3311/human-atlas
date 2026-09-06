@@ -3,25 +3,86 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
-// Exercise the actual built app server; catch path normalization rejecting valid assets.
-const probe = net.createServer();
-probe.listen(0, '127.0.0.1');
-await once(probe, 'listening');
-const port = probe.address().port;
-await new Promise(resolve => probe.close(resolve));
-const child = spawn(process.execPath, ['server.mjs'], {
-  cwd: fileURLToPath(new URL('../', import.meta.url)),
-  env: { ...process.env, TCM_PORT: String(port) },
-  stdio: ['ignore', 'pipe', 'pipe'],
-});
-const timeout = setTimeout(() => child.kill(), 10000);
-try {
-  await Promise.race([
-    once(child.stdout, 'data'),
-    once(child, 'exit').then(() => { throw new Error('Server exited before startup'); }),
-  ]);
-  const origin = `http://127.0.0.1:${port}`;
+export async function validateStaticArtifacts(origin) {
+  const paths = ['/data/cmb-tcm.json', '/data/cmb-tcmle-explanations.json', '/data/cmb-tcmle-match-report.json', '/data/anatomy-term-import-report.json', '/models/atlas.json'];
+  for (const path of paths) {
+    const response = await fetch(origin + path);
+    assert.equal(response.status, 200, `${path}: HTTP 200 required`);
+    assert.match(response.headers.get('content-type') ?? '', /^application\/json\b/i, `${path}: JSON content type required`);
+    await response.json();
+  }
+  return paths;
+}
+
+export async function launchValidationBrowser() {
+  let runtime;
+  try { runtime = await import(process.env.PLAYWRIGHT_MODULE || 'playwright'); }
+  catch { throw new Error('Release browser checks require Playwright. Set PLAYWRIGHT_MODULE to an installed playwright/index.mjs; checks must not be skipped.'); }
+  return runtime.chromium.launch({ headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+}
+
+export async function isolateStorage(page) {
+  await page.addInitScript(() => {
+    const memory = new Map();
+    Storage.prototype.getItem = key => memory.get(String(key)) ?? null;
+    Storage.prototype.setItem = (key, value) => { memory.set(String(key), String(value)); };
+    Storage.prototype.removeItem = key => { memory.delete(String(key)); };
+    Storage.prototype.clear = () => memory.clear();
+  });
+}
+
+export async function validateExplanation404(browser, origin) {
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    const page = await browser.newPage({ viewport: { width, height } });
+    try {
+      await isolateStorage(page);
+      await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ status: 404, contentType: 'text/plain', body: 'Not found' }));
+      await page.goto(origin);
+      await page.getByRole('button', { name: '执医题库', exact: true }).click();
+      await page.locator('.exam-card').waitFor();
+      assert.equal(await page.getByRole('group', { name: '选择答案' }).getByRole('button').count(), 5);
+      await page.getByRole('group', { name: '选择答案' }).getByRole('button').first().click();
+      await page.getByRole('button', { name: '提交答案', exact: true }).click();
+      await page.getByText('解析暂不可用', { exact: true }).waitFor();
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px explanation 404 shell overflow`);
+      console.log(`Explanations 404 ${width}×${height}: real 4086-question shell, five options and submitted 解析暂不可用 passed.`);
+    } finally { await page.close(); }
+  }
+}
+
+export async function startValidationServer() {
+  const probe = net.createServer();
+  probe.listen(0, '127.0.0.1');
+  await once(probe, 'listening');
+  const port = probe.address().port;
+  await new Promise(resolve => probe.close(resolve));
+  const child = spawn(process.execPath, ['server.mjs'], {
+    cwd: fileURLToPath(new URL('../', import.meta.url)),
+    env: { ...process.env, TCM_PORT: String(port) },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const timeout = setTimeout(() => child.kill(), 10000);
+  try {
+    await Promise.race([
+      once(child.stdout, 'data'),
+      once(child, 'exit').then(() => { throw new Error('Server exited before startup'); }),
+    ]);
+  } catch (error) { child.kill(); throw error; }
+  finally { clearTimeout(timeout); }
+  return { origin: `http://127.0.0.1:${port}`, close: async () => {
+    child.kill();
+    if (child.exitCode === null) await once(child, 'exit');
+  } };
+}
+
+// Exercise the actual built app server; imports do not start servers or browsers.
+async function main() {
+ const server = await startValidationServer();
+ let browser;
+ try {
+  const { origin } = server;
   const page = await fetch(origin);
   assert.equal(page.status, 200, 'homepage must not be mistaken for an escaping path');
   const html = await page.text();
@@ -30,9 +91,9 @@ try {
   const js = await fetch(origin + script, { method: 'HEAD' });
   assert.equal(js.status, 200);
   assert.match(js.headers.get('content-type'), /javascript/);
+  const artifacts = await validateStaticArtifacts(origin);
   const atlas = await fetch(origin + '/models/atlas.json');
-  assert.equal(atlas.status, 200);
-  assert.ok((await atlas.json()).parts.length > 2000);
+  assert.ok((await atlas.json()).parts.length > 2000, 'the served atlas retains the complete structure catalogue');
   const model = await fetch(origin + '/models/body-0.bin.gz', { method: 'HEAD' });
   assert.equal(model.status, 200);
   assert.equal(model.headers.get('content-encoding'), null, 'client performs gzip decoding');
@@ -40,9 +101,13 @@ try {
   assert.equal(traversal.status, 403, 'files outside dist stay inaccessible');
   assert.equal((await fetch(origin + '/missing-file')).status, 404);
   assert.equal((await fetch(origin, { method: 'POST' })).status, 405);
-  console.log('Static server homepage, assets, model headers, and path/method boundaries passed.');
-} finally {
-  clearTimeout(timeout);
-  child.kill();
-  if (child.exitCode === null) await once(child, 'exit');
+  console.log(`Static server: ${artifacts.length} JSON artifacts HTTP 200 / application/json / parse passed; homepage, assets, model headers, path/method boundaries passed.`);
+  browser = await launchValidationBrowser();
+  await validateExplanation404(browser, origin);
+ } finally {
+  if (browser) await browser.close();
+  await server.close();
+ }
 }
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
