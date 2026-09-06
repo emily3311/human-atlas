@@ -56,5 +56,5 @@ test('near matches stay untranslated while adjacent gyri remain distinct', () =>
 });
 
 test('the complete atlas reports the source-backed coverage increase', () => {
-  assert.deepEqual(anatomyNameCoverage(atlas.parts), {total:2234, translated:592, unresolved:1642});
+  assert.deepEqual(anatomyNameCoverage(atlas.parts), {total:2234, translated:877, unresolved:1357});
 });
