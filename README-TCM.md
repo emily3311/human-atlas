@@ -37,7 +37,7 @@ Human Atlas 的中文教学扩展，保留原始 BodyParts3D 人体模型。在�
 
 ## 验证
 
-`npm run check`、`npm test`、`node scripts/validate-atlas.mjs`、`node scripts/validate-interactions.mjs`、`npm run build`。
+`npm run check`、`npm test`、`node scripts/validate-atlas.mjs`、`node scripts/validate-interactions.mjs`、`npm run build`，构建后运行 `node scripts/validate-server.mjs`。
 
 界面实测记录另见 `docs/verification.md`。这些验证只能证明程序交互及数据结构的一致性，不能证明医学定位或疗效。
 

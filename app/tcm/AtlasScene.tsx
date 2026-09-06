@@ -272,11 +272,23 @@ export default function AtlasScene(props: Props) {
       controls.update();
       dirty = true;
     };
+    const focusPart = () => {
+      const box = pickers.get(latest.current.options.selectedPart)?.geometry.boundingBox;
+      if (!box) return;
+      const center = box.getCenter(new T.Vector3());
+      const size = box.getSize(new T.Vector3());
+      const distance = Math.max(0.18, Math.max(size.y, size.x / camera.aspect, size.z) * 2.8);
+      controls.target.copy(center);
+      camera.position.copy(center).add(new T.Vector3(0.2, 0.1, 1).normalize().multiplyScalar(distance));
+      controls.update();
+      dirty = true;
+    };
     const resize = () => {
       camera.aspect = el.clientWidth / Math.max(1, el.clientHeight);
       camera.updateProjectionMatrix();
       renderer.setSize(el.clientWidth, el.clientHeight);
-      fit();
+      if (latest.current.options.isolate) focusPart();
+      else fit();
     };
     const observer = new ResizeObserver(resize);
     observer.observe(el);
@@ -416,11 +428,7 @@ export default function AtlasScene(props: Props) {
         if (!lastOptions || o.reset !== lastOptions.reset || o.view !== lastOptions.view) fit();
         if (lastOptions && o.focus !== lastOptions.focus) focusPoint();
         if (o.isolate && (!lastOptions || !lastOptions.isolate || o.selectedPart!==lastOptions.selectedPart)) {
-          const target=pickers.get(o.selectedPart);
-          if(target?.geometry.boundingBox){const box=target.geometry.boundingBox,center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
-            const distance=Math.max(.18,Math.max(size.y,size.x/camera.aspect,size.z)*2.8);
-            controls.target.copy(center);camera.position.copy(center).add(new T.Vector3(.2,.1,1).normalize().multiplyScalar(distance));controls.update();
-          }
+          focusPart();
         } else if(lastOptions?.isolate&&!o.isolate)fit();
         for (const marker of markers) {
           const active = marker.id === o.activeId;

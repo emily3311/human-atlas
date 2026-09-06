@@ -448,7 +448,9 @@ export default function TcmApp() {
               <h3>{concealed ? "先观察，再回忆" : "在模型上寻找答案"}</h3>
               <p>
                 {concealed
-                  ? "穴位名称暂时隐藏。翻面后，名称与定位会一起显示。"
+                  ? cardType === "meridian"
+                    ? "归经名称与编码提示暂时隐藏。请先回答右侧问题，再翻面核对。"
+                    : "穴位名称暂时隐藏。翻面后，名称与定位会一起显示。"
                   : "点击人体上的候选穴位圆点。可以旋转、缩放，或切换正面与背面。"}
               </p>
               <p className="quiet-note">本练习辨认的是模型上的示意点，不评估真人取穴精度。</p>
@@ -650,7 +652,9 @@ export default function TcmApp() {
               </span>
               <h1>
                 {concealed
-                  ? "这个穴位，你认识吗？"
+                  ? cardType === "meridian"
+                    ? "循其所归，忆其经脉。"
+                    : "这个穴位，你认识吗？"
                   : mode === "quiz"
                     ? "把知识，放回人体。"
                     : "循经识穴，知其所以。"}

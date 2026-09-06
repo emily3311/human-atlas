@@ -22,8 +22,13 @@
 .proportion-guide { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:7; }
 .proportion-guide line { stroke:#849563; stroke-width:1; stroke-dasharray:3 3; opacity:.85; }
 .proportion-guide text { font-size:9px; fill:#6f8150; paint-order:stroke; stroke:#f7faee; stroke-width:3px; stroke-linejoin:round; }
+.tcm-app .detail-section p { color:#647357; }
+.tcm-app .detail-section .location-text { color:#4f6543; }
+.tcm-app .muted,.tcm-app .card-hint,.tcm-app .case-question { color:#718261; }
+.tcm-app .landmark-section li button { color:#70835d; }
 @media(max-width:680px) {
   html:has(.tcm-app),body:has(.tcm-app),#root:has(.tcm-app) { height:auto; overflow:visible; }
+  body .tcm-app { overflow:visible; }
 }
 .tcm-app * {
   box-sizing: border-box;
