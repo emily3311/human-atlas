@@ -6,7 +6,9 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "vite --host 0.0.0.0 --port 3016",
+    "dev": "vite --host 127.0.0.1 --port 3016",
+    "start": "node server.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
     "build": "vite build",
     "build:vercel": "vite build",
     "check": "tsc --noEmit"
