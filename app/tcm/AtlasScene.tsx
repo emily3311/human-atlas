@@ -11,6 +11,7 @@ import { PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
 import { anatomyLabel } from "./anatomy-zh";
+import { teachingSystems } from "./teaching-display";
 import { explosionOffset, explosionCameraPose, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
 
@@ -52,8 +53,8 @@ type Marker = {
   point: Acupoint;
 };
 const layers: Record<Layer, SystemId[]> = {
-  surface: ["integumentary"],
-  transparent: ["integumentary", "skeletal", "muscular"],
+  surface: ["muscular", "skeletal"],
+  transparent: ["muscular", "skeletal"],
   muscle: ["muscular", "skeletal"],
   skeleton: ["skeletal"],
   neuro: ["skeletal", "nervous", "arterial", "venous"],
@@ -385,7 +386,7 @@ export default function AtlasScene(props: Props) {
             if (!geometry) continue;
             geometries.push(geometry);
             const mesh = new T.Mesh(geometry, materials.get(system));
-            mesh.visible = layers[latest.current.options.layer].includes(system);
+            mesh.visible = teachingSystems(layers[latest.current.options.layer]).includes(system);
             batches.get(system)!.push(mesh);
             scene.add(mesh);
           }
@@ -455,12 +456,14 @@ export default function AtlasScene(props: Props) {
         ),
         camera,
       );
-      const systems = new Set(o.visibleSystems ?? layers[o.layer]);
+      const systems = new Set(teachingSystems(o.visibleSystems ?? layers[o.layer]));
       const hasSolid = props.atlas.parts.some((part, index) => part.system !== "integumentary" && partData[index * 4 + 3] > 0.5);
       const meshes = [...pickers.values()].filter((mesh) => {
         const part = mesh.userData.part as Part, index = props.atlas.parts.indexOf(part);
         return partData[index * 4 + 3] > 0.5 && !(hasSolid && part.system === "integumentary") &&
-          (o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart);
+          (o.isolate
+            ? part.id === o.selectedPart && part.system !== "integumentary"
+            : systems.has(part.system) || (part.id === o.selectedPart && part.system !== "integumentary"));
       });
       const hit = ray.intersectObjects(meshes, false)[0];
       const fallback = amount > 0.45 ? findTarget(e.clientX - rect.left, e.clientY - rect.top, e.pointerType === "touch" ? 24 : 16) : undefined;
@@ -486,9 +489,9 @@ export default function AtlasScene(props: Props) {
       const previousAmount = amount;
       amount = reducedMotion.matches ? targetAmount : T.MathUtils.damp(amount, targetAmount, 8, Math.min(clock.getDelta(), 0.05));
       if (Math.abs(amount - targetAmount) < 0.0001) amount = targetAmount;
-      const systems = new Set(o.visibleSystems ?? layers[o.layer]);
+      const systems = new Set(teachingSystems(o.visibleSystems ?? layers[o.layer]));
       const visibleParts = props.atlas.parts.filter((part) =>
-        o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart,
+        o.isolate ? part.id === o.selectedPart && part.system !== "integumentary" : systems.has(part.system) || (part.id === o.selectedPart && part.system !== "integumentary"),
       );
       const nextLayoutKey = visibleParts.map((part) => part.id).join(",") + ":" + camera.aspect.toFixed(3);
       const layoutChanged = nextLayoutKey !== layoutKey;
@@ -509,7 +512,9 @@ export default function AtlasScene(props: Props) {
           const cell = layoutCells.get(part.id);
           const offset = cell ? explosionOffset(part, cell, amount) : [0, 0, 0] as Vec3Tuple;
           offsets[index] = offset;
-          const visible = o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart;
+          const visible = o.isolate
+            ? part.id === o.selectedPart && part.system !== "integumentary"
+            : systems.has(part.system) || (part.id === o.selectedPart && part.system !== "integumentary");
           partData.set([offset[0], offset[1], offset[2], visible ? 1 : 0], index * 4);
           const picker = pickers.get(part.id);
           if (picker) { picker.position.fromArray(offset); picker.updateMatrix(); picker.updateMatrixWorld(true); }
@@ -535,8 +540,8 @@ export default function AtlasScene(props: Props) {
             for (const mesh of meshes)
               mesh.visible =
                 !o.isolate &&
-                ((o.visibleSystems ?? layers[o.layer]).includes(system) ||
-                  props.atlas.parts.some((part) => part.id === o.selectedPart && part.system === system));
+                (teachingSystems(o.visibleSystems ?? layers[o.layer]).includes(system) ||
+                  props.atlas.parts.some((part) => part.id === o.selectedPart && part.system === system && system !== "integumentary"));
           const skin = materials.get("integumentary")!;
           skin.transparent = o.layer === "transparent";
           skin.opacity = o.layer === "transparent" ? 0.12 : 1;
@@ -547,7 +552,7 @@ export default function AtlasScene(props: Props) {
           if (highlight) scene.remove(highlight);
           highlight = undefined;
           const target = pickers.get(o.selectedPart);
-          if (target) {
+          if (target && (target.userData.part as Part).system !== "integumentary") {
             highlight = new T.Mesh(target.geometry, highlightMaterial);
             highlight.position.copy(target.position);
             scene.add(highlight);

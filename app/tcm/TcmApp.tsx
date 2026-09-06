@@ -36,6 +36,9 @@ import { anatomyZh, anatomyLabel, SYSTEM_ZH } from "./anatomy-zh";
 import { Slider } from '@/components/ui/slider';
 import { AnatomyCatalogue, AnatomyDetails } from './AnatomyPanel';
 import { hasPlacement, questionAvailable } from './catalogue';
+import CatalogueResizeHandle from './CatalogueResizeHandle';
+import { catalogueWidth } from './catalogue-layout';
+import { teachingSystems } from './teaching-display';
 import { inCatalogue, examBadges, EXAM_SOURCE, PRACTICAL_NAMES, WRITTEN_NAMES, type CatalogueScope } from './exam-scope';
 import {
   STORE_KEY,
@@ -68,8 +71,6 @@ const normalize = (text: string) =>
     .replace(/[\u0300-\u036f\s]/g, "")
     .toLowerCase();
 const layerChoices: [Layer, string][] = [
-  ["surface", "体表"],
-  ["transparent", "透视"],
   ["muscle", "肌肉"],
   ["skeleton", "骨骼"],
   ["neuro", "神经血管"],
@@ -105,9 +106,9 @@ export default function TcmApp() {
     [tag, setTag] = useState("all"),
     [scope, setScope] = useState<Scope>("all");
   const [catalogueScope,setCatalogueScope]=useState<CatalogueScope>('all');
-  const [explosionAmount,setExplosionAmount]=useState(0),[anatomySystems,setAnatomySystems]=useState<SystemId[]>(DEFAULT_VISIBLE);
+  const [explosionAmount,setExplosionAmount]=useState(0),[anatomySystems,setAnatomySystems]=useState<SystemId[]>(DEFAULT_VISIBLE.filter(id=>id!=="integumentary"&&id!=="reproductive"));
   const [anatomyDetailsOpen,setAnatomyDetailsOpen]=useState(false);
-  const [layer, setLayer] = useState<Layer>("surface"),
+  const [layer, setLayer] = useState<Layer>("muscle"),
     [labels, setLabels] = useState(true),
     [routes, setRoutes] = useState(false),
     [guide, setGuide] = useState(false),
@@ -125,6 +126,9 @@ export default function TcmApp() {
     [sidebarOpen, setSidebarOpen] = useState(false),
     [notice, setNotice] = useState(""),
     [storageError, setStorageError] = useState("");
+  const [filtersOpen,setFiltersOpen]=useState(false),
+    [catalogueExpanded,setCatalogueExpanded]=useState(false),
+    [sidebarWidth,setSidebarWidth]=useState(320);
   const [chosenPart, setChosenPart] = useState<Part | null>(null),
     [isolate, setIsolate] = useState(false),
     [anatomyQuery, setAnatomyQuery] = useState("");
@@ -182,6 +186,7 @@ export default function TcmApp() {
         setComparisonOpen(false);
         setAbout(false);
         setSidebarOpen(false);
+        setCatalogueExpanded(false);
       }
       if (
         e.key === "/" &&
@@ -195,6 +200,15 @@ export default function TcmApp() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, []);
+  useEffect(()=>{
+    const clamp=()=>setSidebarWidth(width=>catalogueWidth(width,window.innerWidth));
+    clamp();
+    window.addEventListener('resize',clamp);
+    return()=>window.removeEventListener('resize',clamp);
+  },[]);
+  useEffect(()=>{
+    if(layer==='surface'||layer==='transparent')setLayer('muscle');
+  },[layer]);
   const point = ACUPOINTS.find((p) => p.id === activeId) ?? ACUPOINTS[0],
     currentMeridian = MERIDIANS.find((m) => m.id === point.meridian)!;
   const hasModel=hasPlacement(point.id);
@@ -259,6 +273,7 @@ export default function TcmApp() {
     setRotate(false);
     setGuideStep(0);
     setSidebarOpen(false);
+    setCatalogueExpanded(false);
   };
   const chooseGlobal = (id: string) => {
     setCatalogueScope('all');
@@ -312,7 +327,7 @@ export default function TcmApp() {
     setReset(v=>v+1);
     if (next === "quiz") {
       setLabels(false);
-      setLayer("surface");
+      setLayer("muscle");
       setReset((v) => v + 1);
     } else setLabels(true);
   };
@@ -403,7 +418,7 @@ export default function TcmApp() {
     [],
   );
   return (
-    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''}`}>
+    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
       <header className="app-header">
         <a className="brand" href="/">
           <span className="brand-seal">经</span>
@@ -452,7 +467,7 @@ export default function TcmApp() {
           </span>
         </button>
       </header>
-      <div className="workspace">
+      <div className="workspace" style={{"--catalogue-width":`${sidebarWidth}px`} as React.CSSProperties}>
         <aside
           className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
           aria-label="穴位目录"
@@ -487,18 +502,6 @@ export default function TcmApp() {
             </div>
           ) : (
             <>
-              <div className="exam-catalogue-control">
-                <label htmlFor="catalogue-scope">学习范围</label>
-                <select id="catalogue-scope" value={catalogueScope} onChange={e=>{setCatalogueScope(e.target.value as CatalogueScope);setQuizAnswer(null);setRevealed(false);}}>
-                  <option value="all">全部学习条目 · {ACUPOINTS.length}</option>
-                  <option value="standard">十四经穴 · 362</option>
-                  <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
-                  <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
-                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
-                </select>
-                <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
-                <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
-              </div>
               <div className="search-field">
                 <Search size={16} />
                 <input
@@ -512,20 +515,28 @@ export default function TcmApp() {
                   }}
                   aria-label="搜索穴位"
                 />
-                {query ? (
-                  <button
-                    aria-label="清空搜索"
-                    onClick={() => {
-                      setQuery("");
-                      setQuizAnswer(null);
-                      setRevealed(false);
-                    }}
-                  >
-                    <X size={13} />
-                  </button>
-                ) : (
-                  <kbd>/</kbd>
-                )}
+                {query ? <button aria-label="清空搜索" onClick={()=>setQuery("")}><X size={13}/></button> : <kbd>/</kbd>}
+              </div>
+              <div className="catalogue-toolbar">
+                <span>{filtered.length} 个条目</span>
+                <button aria-expanded={filtersOpen} onClick={()=>setFiltersOpen(v=>!v)}><SlidersHorizontal size={13}/>筛选条件</button>
+                <button className="catalogue-expand" aria-pressed={catalogueExpanded} onClick={()=>setCatalogueExpanded(v=>!v)}>{catalogueExpanded?'退出放大':'放大目录'}</button>
+              </div>
+              {!filtersOpen&&<div className="active-filter-summary">
+                {[catalogueScope!=='all'&&'考纲范围',scope!=='all'&&'学习状态',region!=='all'&&region,tag!=='all'&&tag,meridian!=='all'&&MERIDIANS.find(m=>m.id===meridian)?.shortName].filter(Boolean).join(' · ')||'全部穴位'}
+              </div>}
+              {filtersOpen&&<div className="catalogue-filters">
+              <div className="exam-catalogue-control">
+                <label htmlFor="catalogue-scope">学习范围</label>
+                <select id="catalogue-scope" value={catalogueScope} onChange={e=>{setCatalogueScope(e.target.value as CatalogueScope);setQuizAnswer(null);setRevealed(false);}}>
+                  <option value="all">全部学习条目 · {ACUPOINTS.length}</option>
+                  <option value="standard">十四经穴 · 362</option>
+                  <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
+                  <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
+                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
+                </select>
+                <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
+                <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
               </div>
               <div className="scope-tabs">
                 {(
@@ -608,6 +619,7 @@ export default function TcmApp() {
                   ))}
                 </select>
               </div>
+              </div>}
               <div className="catalogue-summary">
                 <span>{filtered.length} 个条目</span>
                 <span>名称 / 编码</span>
@@ -681,6 +693,9 @@ export default function TcmApp() {
           </div>
           </>}
         </aside>
+        {mode!=='anatomy'&&(
+          <CatalogueResizeHandle width={sidebarWidth} onWidth={setSidebarWidth}/>
+        )}
         <main className="model-workspace">
           <div className="model-topbar">
             <div>
