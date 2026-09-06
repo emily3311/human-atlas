@@ -37,7 +37,7 @@ import { Slider } from '@/components/ui/slider';
 import { AnatomyCatalogue, AnatomyDetails } from './AnatomyPanel';
 import { hasPlacement, questionAvailable } from './catalogue';
 import CatalogueResizeHandle from './CatalogueResizeHandle';
-import { catalogueWidth } from './catalogue-layout';
+import { catalogueWidth, nextCatalogueExpansion } from './catalogue-layout';
 import { teachingSystems } from './teaching-display';
 import { inCatalogue, examBadges, EXAM_SOURCE, PRACTICAL_NAMES, WRITTEN_NAMES, type CatalogueScope } from './exam-scope';
 import {
@@ -324,6 +324,7 @@ export default function TcmApp() {
     setExplosionAmount(0);
     setAnatomyDetailsOpen(false);
     setSidebarOpen(false);
+    setCatalogueExpanded(current=>nextCatalogueExpansion(current,'mode-change'));
     setReset(v=>v+1);
     if (next === "quiz") {
       setLabels(false);
@@ -520,7 +521,7 @@ export default function TcmApp() {
               <div className="catalogue-toolbar">
                 <span>{filtered.length} 个条目</span>
                 <button aria-expanded={filtersOpen} onClick={()=>setFiltersOpen(v=>!v)}><SlidersHorizontal size={13}/>筛选条件</button>
-                <button className="catalogue-expand" aria-pressed={catalogueExpanded} onClick={()=>setCatalogueExpanded(v=>!v)}>{catalogueExpanded?'退出放大':'放大目录'}</button>
+                <button className="catalogue-expand" aria-pressed={catalogueExpanded} onClick={()=>setCatalogueExpanded(current=>nextCatalogueExpansion(current,'toggle'))}>{catalogueExpanded?'退出放大':'放大目录'}</button>
               </div>
               {!filtersOpen&&<div className="active-filter-summary">
                 {[catalogueScope!=='all'&&'考纲范围',scope!=='all'&&'学习状态',region!=='all'&&region,tag!=='all'&&tag,meridian!=='all'&&MERIDIANS.find(m=>m.id===meridian)?.shortName].filter(Boolean).join(' · ')||'全部穴位'}
@@ -621,7 +622,6 @@ export default function TcmApp() {
               </div>
               </div>}
               <div className="catalogue-summary">
-                <span>{filtered.length} 个条目</span>
                 <span>名称 / 编码</span>
               </div>
               <div className="point-list">
