@@ -145,6 +145,14 @@ $ git diff --check
 
 全错 fixture 先保存 buildWrongExamCards 返回数组，再断言其实际长度为 4086；RELEASE_COUNTS 的 wrongDeckAllWrongFixture 同样读取此数组长度。全部数据统计值保持不变。
 
+### Round 2 — 帧缓冲验证顶点着色器实际应用位移
+
+Round 1 的上传/绘制观察仍可能漏掉“位移已上传，但顶点着色器忽略位移”的问题。最新门禁把上传状态仅用于同步，并在完整 render 调用结束后的微任务中读取默认帧缓冲；像素读取发生在浏览器合成、清理绘图缓冲之前。按不透明 alpha 阈值排除透明背景、地面、圆环，CSS 标签和面板本来就不在 WebGL 帧缓冲中。
+
+真正散开的模型必须在 8×8 分区中至少占据 16 区、覆盖至少一半画布宽高，并存在足够的不透明解剖像素。阈值基于“结构分布到网格”的几何特征，使用归一化跨度，不比较精确像素截图。
+
+新增一次性浏览器编译层反例，将顶点着色器的 XYZ 位移应用替换为零。反例仍须成功上传非零位移、显示 100% 滑块并绘制非空几何体，但实际像素分布必须被门禁拒绝。正常着色器在桌面、手机必须通过同一帧缓冲断言。全程未修改应用源码或生成产物。
+
 Round 1 最终按上文同样命令顺序重跑：完整性 8/8、全量 150/150，类型检查、构建、服务器验证、交互验证、git diff --check 均退出 0，仍仅有原先的包体积警告。新增浏览器输出如下：
 
 ```text
@@ -163,5 +171,19 @@ Browser 1440×900: default 0 / opt-in 39 seeds, truthful 0/39/344 counts, dashed
 Browser 390×844: default 0 / opt-in 39 seeds, truthful 0/39/344 counts, dashed hollow markers, surface pick, nudge/undo and pending-only Blob export passed.
 Acceptance 1440×900: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.
 Acceptance 390×844: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.
+exit 0
+```
+
+### Round 2 最终复验
+
+完整性 8/8、全量 150/150，类型检查、构建、服务器、交互验证及 diff 检查均退出 0；仅保留原有包体积警告。完整发布门禁仍按上文命令顺序执行。实际帧缓冲指标与第一次 GREEN 一致：
+
+```text
+Shader regression 1440×900: ignored XYZ rejected by actual framebuffer {"width":1440,"height":778,"opaqueSamples":5189,"occupiedCells":8,"widthFraction":0.09513888888888888,"heightFraction":0.4691516709511568,"upload":3}.
+Shader regression 390×844: ignored XYZ rejected by actual framebuffer {"width":390,"height":535,"opaqueSamples":2421,"occupiedCells":8,"widthFraction":0.23333333333333334,"heightFraction":0.4654205607476635,"upload":3}.
+Framebuffer 1440×900: actual opaque exploded geometry {"width":1440,"height":778,"opaqueSamples":20018,"occupiedCells":64,"widthFraction":0.9993055555555556,"heightFraction":0.9910025706940874,"upload":5}.
+Acceptance 1440×900: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, actual framebuffer spread (shader and frozen-offset regressions rejected), Emily AI popup and visible-panel content bounds passed.
+Framebuffer 390×844: actual opaque exploded geometry {"width":390,"height":477,"opaqueSamples":3177,"occupiedCells":62,"widthFraction":0.9974358974358974,"heightFraction":0.9622641509433962,"upload":6}.
+Acceptance 390×844: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, actual framebuffer spread (shader and frozen-offset regressions rejected), Emily AI popup and visible-panel content bounds passed.
 exit 0
 ```

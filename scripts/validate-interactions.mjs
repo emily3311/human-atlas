@@ -10,14 +10,52 @@ import { calibrationEscape, persistCalibrationDrafts } from '../app/tcm/calibrat
 import { parseCalibrationDrafts, upsertCalibrationDraft, undoCalibrationDraft, exportCalibrationDraftPackage } from '../app/tcm/calibration.ts';
 import { startValidationServer, launchValidationBrowser, isolateStorage, assertPanelContentFits } from './validate-server.mjs';
 
-// Observe real per-part XYZ offsets uploaded to WebGL and consumed by a subsequent draw.
+// Offset uploads synchronize sampling; only the completed framebuffer proves visible geometry.
 // This instrumentation lives only in disposable acceptance contexts, not the application.
-async function observeRenderedOffsets(page, partCount) {
-  await page.addInitScript(({ partCount }) => {
+async function observeRenderedOffsets(page, partCount, ignoreShaderOffsets = false) {
+  await page.addInitScript(({ partCount, ignoreShaderOffsets }) => {
     const textureWidth = 2 ** Math.ceil(Math.log2(partCount));
     const uploaded = new WeakMap();
-    const state = window.__releaseScene = { freezeOffsets: false, uploads: 0, draws: 0, rendered: null };
+    const state = window.__releaseScene = { freezeOffsets: false, uploads: 0, draws: 0, rendered: null, shaderMutations: 0, captureAfterUpload: null };
+    let captureQueued = false;
+    const captureFramebuffer = gl => {
+      if (captureQueued || state.captureAfterUpload === null || uploaded.get(gl).upload <= state.captureAfterUpload) return;
+      captureQueued = true;
+      // A microtask runs after the complete synchronous renderer.render, before compositing
+      // can discard the default drawing buffer. This includes all batches, not an intermediate draw.
+      queueMicrotask(() => {
+        captureQueued = false;
+        if (gl.getParameter(gl.FRAMEBUFFER_BINDING) !== null) return;
+        const width = gl.drawingBufferWidth, height = gl.drawingBufferHeight;
+        const rgba = new Uint8Array(width * height * 4);
+        gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, rgba);
+        const cells = new Uint32Array(64);
+        let opaqueSamples = 0, minX = width, maxX = -1, minY = height, maxY = -1;
+        for (let y = 0; y < height; y += 2) for (let x = 0; x < width; x += 2) {
+          // Opaque anatomy only: the transparent background, 40% ground and 30% ring
+          // cannot satisfy this threshold. No CSS text, labels or controls enter WebGL.
+          if (rgba[(y * width + x) * 4 + 3] < 240) continue;
+          opaqueSamples++;
+          minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+          cells[Math.min(7, Math.floor(y * 8 / height)) * 8 + Math.min(7, Math.floor(x * 8 / width))]++;
+        }
+        state.rendered.pixels = { width, height, opaqueSamples, occupiedCells: [...cells].filter(count => count >= 4).length,
+          widthFraction: opaqueSamples ? (maxX - minX + 1) / width : 0,
+          heightFraction: opaqueSamples ? (maxY - minY + 1) / height : 0, upload: state.rendered.upload };
+        // Keep sampling until the caller accepts a settled upload. Responsive canvas
+        // sizing can cause another layout/texture upload immediately after the first.
+      });
+    };
     for (const prototype of [WebGLRenderingContext.prototype, WebGL2RenderingContext.prototype]) {
+      const shaderSource = prototype.shaderSource;
+      prototype.shaderSource = function (shader, source) {
+        if (ignoreShaderOffsets && source.includes('transformed += state.xyz;')) {
+          source = source.replace('transformed += state.xyz;', 'transformed += vec3(0.0);');
+          state.shaderMutations++;
+        }
+        return shaderSource.call(this, shader, source);
+      };
       for (const method of ['texImage2D', 'texSubImage2D']) {
         const native = prototype[method];
         prototype[method] = function (...args) {
@@ -46,16 +84,24 @@ async function observeRenderedOffsets(page, partCount) {
         const native = prototype[method];
         prototype[method] = function (...args) {
           const result = native.apply(this, args);
-          if (uploaded.has(this) && this.canvas.matches('.atlas-canvas canvas')) state.rendered = { ...uploaded.get(this), draw: ++state.draws };
+          if (uploaded.has(this) && this.canvas.matches('.atlas-canvas canvas')) {
+            const pixels = state.rendered?.pixels;
+            state.rendered = { ...uploaded.get(this), draw: ++state.draws, ...(pixels?.upload === uploaded.get(this).upload ? { pixels } : {}) };
+            captureFramebuffer(this);
+          }
           return result;
         };
       }
     }
-  }, { partCount });
+  }, { partCount, ignoreShaderOffsets });
 }
 
 function assertRenderedExplosion(snapshot) {
   assert.ok(snapshot?.movedParts > 100 && snapshot.maxOffset > 0.1, 'rendered scene must draw displaced per-part offsets, not only update slider text');
+  const pixels = snapshot.pixels;
+  assert.ok(pixels?.upload === snapshot.upload && pixels.opaqueSamples >= 100 && pixels.occupiedCells >= 16
+    && pixels.widthFraction >= 0.5 && pixels.heightFraction >= 0.5,
+  `rendered scene must spread opaque anatomy across the framebuffer: ${JSON.stringify(pixels)}`);
 }
 
 for (const file of ['atlas.json']) {
@@ -128,6 +174,26 @@ let browser;
 try {
   browser = await launchValidationBrowser();
   try {
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
+      try {
+        await isolateStorage(page);
+        await observeRenderedOffsets(page, atlas.parts.length, true);
+        await page.goto(origin);
+        await page.getByRole('button', { name: '解剖图谱', exact: true }).click();
+        await page.locator('.model-loading').waitFor({ state: 'hidden', timeout: 90000 });
+        const slider = page.getByRole('slider', { name: '结构散开', exact: true });
+        await page.evaluate(() => { window.__releaseScene.captureAfterUpload = window.__releaseScene.uploads; });
+        await slider.press('End');
+        await page.waitForFunction(() => window.__releaseScene.rendered?.pixels && window.__releaseScene.rendered.movedParts > 100);
+        assert.equal(await slider.getAttribute('aria-valuenow'), '100');
+        assert.ok(await page.evaluate(() => window.__releaseScene.shaderMutations > 0), 'the vertex-shader regression must really replace offset consumption');
+        const snapshot = await page.evaluate(() => window.__releaseScene.rendered);
+        assert.ok(snapshot.maxOffset > 0.1 && snapshot.pixels.opaqueSamples >= 100, 'shader mutation must keep nonempty rendered geometry and valid uploaded offsets');
+        assert.throws(() => assertRenderedExplosion(snapshot), /rendered scene/, 'shader ignoring displacement must fail even when offset uploads and draws succeed');
+        console.log(`Shader regression ${width}×${height}: ignored XYZ rejected by actual framebuffer ${JSON.stringify(snapshot.pixels)}.`);
+      } finally { await page.close(); }
+    }
     const hydrationFailures = [];
     for (const scenario of ['delayed', 'offline']) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -396,13 +462,16 @@ try {
       const frozenSnapshot = await page.evaluate(() => window.__releaseScene.rendered);
       assert.throws(() => assertRenderedExplosion(frozenSnapshot), /rendered scene/);
       await slider.press('Home');
-      await page.evaluate(() => { window.__releaseScene.freezeOffsets = false; });
+      await page.evaluate(() => { window.__releaseScene.freezeOffsets = false; window.__releaseScene.captureAfterUpload = window.__releaseScene.uploads; });
       await slider.focus();
       await slider.press('End');
       await page.waitForFunction(() => document.querySelector('.anatomy-slider-dock output')?.textContent === '100%');
       assert.equal(await slider.getAttribute('aria-valuenow'), '100');
-      await page.waitForFunction(() => window.__releaseScene.rendered?.movedParts > 100);
-      assertRenderedExplosion(await page.evaluate(() => window.__releaseScene.rendered));
+      await page.waitForFunction(() => window.__releaseScene.rendered?.pixels && window.__releaseScene.rendered.movedParts > 100);
+      const explodedSnapshot = await page.evaluate(() => window.__releaseScene.rendered);
+      assertRenderedExplosion(explodedSnapshot);
+      console.log(`Framebuffer ${width}×${height}: actual opaque exploded geometry ${JSON.stringify(explodedSnapshot.pixels)}.`);
+      await page.evaluate(() => { window.__releaseScene.captureAfterUpload = null; });
       // Mobile intentionally hides the separate reset button; exercise both slider endpoints.
       if (width <= 680) await slider.press('Home');
       else await page.getByRole('button', { name: '复原模型', exact: true }).click();
@@ -423,7 +492,7 @@ try {
       }
       assert.deepEqual(errors, []);
       await page.close();
-      console.log(`Acceptance ${width}×${height}: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.`);
+      console.log(`Acceptance ${width}×${height}: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, actual framebuffer spread (shader and frozen-offset regressions rejected), Emily AI popup and visible-panel content bounds passed.`);
     }
   } finally { await browser.close(); }
 } finally { if (server) await server.close(); }
