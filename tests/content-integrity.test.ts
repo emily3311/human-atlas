@@ -53,10 +53,12 @@ test('release artifacts agree on sourced terminology, explanations, placement st
   assert.ok(sourcedMeshes <= coverage.translated, 'legacy translations without term evidence do not create cards');
   assert.equal(decks['point-effects'].length, points.filter(item => item.traditionalEvidence.length > 0).length);
   const wrongProgress = Object.fromEntries(examBank.questions.map(item => [item.id, { answer: item.answer === 'A' ? 'B' as const : 'A' as const, correct: false, attempts: 1 }]));
-  const allKnowledgeCards = [...Object.values(decks).flat(), ...buildWrongExamCards(examBank.questions, wrongProgress, explanationIndex(explanationBank))];
+  const allWrongCards = buildWrongExamCards(examBank.questions, wrongProgress, explanationIndex(explanationBank));
+  assert.equal(allWrongCards.length, 4086, 'every latest wrong answer produces its own exam card');
+  const allKnowledgeCards = [...Object.values(decks).flat(), ...allWrongCards];
   assert.equal(new Set(allKnowledgeCards.map(item => item.id)).size, allKnowledgeCards.length);
   assert.ok(allKnowledgeCards.every(item => isKnowledgeCardId(item.id)));
-  console.log('RELEASE_COUNTS ' + JSON.stringify({ terminology: { ...termReport, total: coverage.total }, questions: { total: examBank.questions.length, matched: explanationBank.explanations.length, conflicts: matchReport.answerConflicts, withoutExplanation: examBank.questions.length - explanationBank.explanations.length }, placements: { total: ids.length, ...counts }, decks: Object.fromEntries(Object.entries(decks).map(([name, cards]) => [name, cards.length])), wrongDeckAllWrongFixture: examBank.questions.length, uniqueCardsAllWrongFixture: allKnowledgeCards.length }));
+  console.log('RELEASE_COUNTS ' + JSON.stringify({ terminology: { ...termReport, total: coverage.total }, questions: { total: examBank.questions.length, matched: explanationBank.explanations.length, conflicts: matchReport.answerConflicts, withoutExplanation: examBank.questions.length - explanationBank.explanations.length }, placements: { total: ids.length, ...counts }, decks: Object.fromEntries(Object.entries(decks).map(([name, cards]) => [name, cards.length])), wrongDeckAllWrongFixture: allWrongCards.length, uniqueCardsAllWrongFixture: allKnowledgeCards.length }));
 });
 
 test('a copied question with an empty option is rejected', () => {

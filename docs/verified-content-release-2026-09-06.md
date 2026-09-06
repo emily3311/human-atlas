@@ -136,3 +136,32 @@ Acceptance 390×844: sourced matched/unmatched submissions, Chinese anatomy sele
 $ git diff --check
 (no output)
 ```
+
+## Round 1 — 面板内部溢出与真实场景位移回归
+
+发布门禁进一步检查可见面板的 scrollWidth/clientWidth、视口边界及后代元素的水平内容边界，覆盖题库页面/题卡、学习内容、校准、解剖目录/详情和卡片。明确排除正常横向滚动的主导航、卡组和题型切换条。390px 真实题卡被临时注入 min-width:700px 时，文档根宽度仍然正常，但新门禁必须拒绝；恢复样式后必须通过。
+
+散开验收在一次性浏览器 context 内观察结构 XYZ 位移纹理的真实 WebGL 上传，以及使用该状态的后续 draw。桌面、手机均验证绘制位移 0→大于 100 个结构发生位移→0。另一次仅在该 context 内把上传的 XYZ 固定为零：滑块仍显示 100%，场景验收必须拒绝。这些观察和反例均在验证脚本中实现，没有新增应用测试接口，也不依赖像素快照。
+
+全错 fixture 先保存 buildWrongExamCards 返回数组，再断言其实际长度为 4086；RELEASE_COUNTS 的 wrongDeckAllWrongFixture 同样读取此数组长度。全部数据统计值保持不变。
+
+Round 1 最终按上文同样命令顺序重跑：完整性 8/8、全量 150/150，类型检查、构建、服务器验证、交互验证、git diff --check 均退出 0，仍仅有原先的包体积警告。新增浏览器输出如下：
+
+```text
+Static server: 5 JSON artifacts HTTP 200 / application/json / parse passed; homepage, assets, model headers, path/method boundaries passed.
+Explanations 404 1440×900: real 4086-question shell, five options and submitted 解析暂不可用 passed.
+Contained overflow regression: a 700px exam card is rejected even while document width fits; restored panel passes.
+Explanations 404 390×844: real 4086-question shell, five options and submitted 解析暂不可用 passed.
+atlas.json: packing at desktop/mobile aspect ratios and search/inspection contracts passed.
+Tap, drag, multitouch, cancellation, and empty-view checks passed.
+Deterministic production contracts: default 0 / opt-in 39 point IDs, pending labels, Escape lifecycle, persisted/undoable draft Blob export, and immutable formal data passed.
+Cards hydration: delayed and failed CMB preserve exam repetitions=7; loading/error never claim an empty deck.
+Cards browser 1440×900: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Cards browser 390×844: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Cards browser 320×568: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Browser 1440×900: default 0 / opt-in 39 seeds, truthful 0/39/344 counts, dashed hollow markers, surface pick, nudge/undo and pending-only Blob export passed.
+Browser 390×844: default 0 / opt-in 39 seeds, truthful 0/39/344 counts, dashed hollow markers, surface pick, nudge/undo and pending-only Blob export passed.
+Acceptance 1440×900: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.
+Acceptance 390×844: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.
+exit 0
+```

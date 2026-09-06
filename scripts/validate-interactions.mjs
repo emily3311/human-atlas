@@ -8,7 +8,55 @@ import { buildPointCards, buildAnatomyCards, buildPointEffectCards } from '../ap
 import { placementDisplayControl, markerPresentation, placementRecord, placementCounts } from '../app/tcm/placement-quality.ts';
 import { calibrationEscape, persistCalibrationDrafts } from '../app/tcm/calibration-ui.ts';
 import { parseCalibrationDrafts, upsertCalibrationDraft, undoCalibrationDraft, exportCalibrationDraftPackage } from '../app/tcm/calibration.ts';
-import { startValidationServer, launchValidationBrowser, isolateStorage } from './validate-server.mjs';
+import { startValidationServer, launchValidationBrowser, isolateStorage, assertPanelContentFits } from './validate-server.mjs';
+
+// Observe real per-part XYZ offsets uploaded to WebGL and consumed by a subsequent draw.
+// This instrumentation lives only in disposable acceptance contexts, not the application.
+async function observeRenderedOffsets(page, partCount) {
+  await page.addInitScript(({ partCount }) => {
+    const textureWidth = 2 ** Math.ceil(Math.log2(partCount));
+    const uploaded = new WeakMap();
+    const state = window.__releaseScene = { freezeOffsets: false, uploads: 0, draws: 0, rendered: null };
+    for (const prototype of [WebGLRenderingContext.prototype, WebGL2RenderingContext.prototype]) {
+      for (const method of ['texImage2D', 'texSubImage2D']) {
+        const native = prototype[method];
+        prototype[method] = function (...args) {
+          const pixels = args[8];
+          const width = args[method === 'texImage2D' ? 3 : 4];
+          const height = args[method === 'texImage2D' ? 4 : 5];
+          const isOffsets = width === textureWidth && height === 1 && pixels instanceof Float32Array && pixels.length === textureWidth * 4;
+          if (isOffsets && state.freezeOffsets) {
+            args[8] = pixels.slice();
+            for (let index = 0; index < partCount; index++) args[8].fill(0, index * 4, index * 4 + 3);
+          }
+          const result = native.apply(this, args);
+          if (isOffsets) {
+            let movedParts = 0, maxOffset = 0;
+            for (let index = 0; index < partCount; index++) {
+              const magnitude = Math.hypot(...args[8].subarray(index * 4, index * 4 + 3));
+              if (magnitude > 0.0001) movedParts++;
+              maxOffset = Math.max(maxOffset, magnitude);
+            }
+            uploaded.set(this, { movedParts, maxOffset, upload: ++state.uploads });
+          }
+          return result;
+        };
+      }
+      for (const method of ['drawElements', 'drawArrays']) {
+        const native = prototype[method];
+        prototype[method] = function (...args) {
+          const result = native.apply(this, args);
+          if (uploaded.has(this) && this.canvas.matches('.atlas-canvas canvas')) state.rendered = { ...uploaded.get(this), draw: ++state.draws };
+          return result;
+        };
+      }
+    }
+  }, { partCount });
+}
+
+function assertRenderedExplosion(snapshot) {
+  assert.ok(snapshot?.movedParts > 100 && snapshot.maxOffset > 0.1, 'rendered scene must draw displaced per-part offsets, not only update slider text');
+}
 
 for (const file of ['atlas.json']) {
   const atlas=JSON.parse(await readFile(new URL(`../public/models/${file}`,import.meta.url)));
@@ -182,7 +230,7 @@ try {
         assert.equal(await card.getAttribute('aria-pressed'), 'false');
         if (label === '解剖' || label === '穴位作用') assert.equal(await card.textContent(), front, 'rating chooses first currently due card');
         if (label === '穴位') assert.match(await card.textContent(), /中府在哪里/, 'legacy rating chooses first currently due point');
-        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px ${label} must not overflow`);
+        await assertPanelContentFits(page, `${width}px ${label}`);
         assert.ok((await card.boundingBox()).height >= 280);
         assert.ok((await decks.getByRole('button').evaluateAll(els => els.map(el => el.getBoundingClientRect().height))).every(value => value >= 44));
       }
@@ -284,7 +332,7 @@ try {
       assert.equal(exported.drafts[0].modelVersion, atlas.version);
       assert.equal(await page.locator('.anatomy-selection').count(), 0);
       if (width === 390) {
-        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '390px layout must not overflow');
+        await assertPanelContentFits(page, '390px calibration');
         assert.ok(bounds.height >= 360, 'canvas minimum height');
         assert.ok(await panel.evaluate(el => getComputedStyle(el).position === 'static' && getComputedStyle(el).overflowY === 'visible'));
         assert.ok((await panel.getByRole('button').evaluateAll(elements => elements.map(el => el.getBoundingClientRect().height))).every(height => height >= 44));
@@ -308,9 +356,10 @@ try {
     const matched = bank.questions.find(question => question.id === explanations.explanations[0].questionId);
     const unmatched = bank.questions.find(question => !explanations.explanations.some(item => item.questionId === question.id));
     for (const [width, height] of [[1440, 900], [390, 844]]) {
-      const page = await browser.newPage({ viewport: { width, height } });
+      const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
       const errors = []; page.on('pageerror', error => errors.push(error.message));
       await isolateStorage(page);
+      await observeRenderedOffsets(page, atlas.parts.length);
       await page.route('**/data/cmb-tcm.json', route => route.fulfill({ json: { ...bank, questions: [matched, unmatched] } }));
       await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { ...explanations, explanations: [explanations.explanations[0]] } }));
       await page.goto(origin);
@@ -319,7 +368,7 @@ try {
         await page.getByRole('group', { name: '选择答案' }).getByRole('button').first().click();
         await page.getByRole('button', { name: '提交答案', exact: true }).click();
         await page.getByText(heading, { exact: true }).waitFor();
-        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px submitted exam overflow`);
+        await assertPanelContentFits(page, `${width}px submitted exam`);
         if (heading === '参考解析') await page.getByRole('button', { name: '下一题', exact: true }).click();
       }
       await page.getByRole('button', { name: '解剖图谱', exact: true }).click();
@@ -333,18 +382,32 @@ try {
       assert.match(await page.locator('.anatomy-selection').textContent(), /左颈阔肌/);
       await controls.getByRole('button', { name: '结构详情', exact: true }).click();
       await page.locator('.anatomy-detail-content').getByRole('heading', { name: '左颈阔肌', exact: true }).waitFor();
-      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px anatomy details overflow`);
+      await assertPanelContentFits(page, `${width}px anatomy details`);
       await page.getByRole('button', { name: '关闭结构详情', exact: true }).click();
       const slider = page.getByRole('slider', { name: '结构散开', exact: true });
       if (!(await slider.isVisible())) await page.locator('.anatomy-slider-dock').getByRole('button', { name: '展开', exact: true }).click();
+      await page.waitForFunction(() => window.__releaseScene.rendered?.movedParts === 0);
+      // Mutation check: control values alone still reach 100 when GPU offsets are frozen.
+      await page.evaluate(() => { window.__releaseScene.freezeOffsets = true; });
+      const beforeFrozen = await page.evaluate(() => window.__releaseScene.rendered.draw);
+      await slider.press('End');
+      assert.equal(await slider.getAttribute('aria-valuenow'), '100');
+      await page.waitForFunction(draw => window.__releaseScene.rendered.draw > draw, beforeFrozen);
+      const frozenSnapshot = await page.evaluate(() => window.__releaseScene.rendered);
+      assert.throws(() => assertRenderedExplosion(frozenSnapshot), /rendered scene/);
+      await slider.press('Home');
+      await page.evaluate(() => { window.__releaseScene.freezeOffsets = false; });
       await slider.focus();
       await slider.press('End');
       await page.waitForFunction(() => document.querySelector('.anatomy-slider-dock output')?.textContent === '100%');
       assert.equal(await slider.getAttribute('aria-valuenow'), '100');
+      await page.waitForFunction(() => window.__releaseScene.rendered?.movedParts > 100);
+      assertRenderedExplosion(await page.evaluate(() => window.__releaseScene.rendered));
       // Mobile intentionally hides the separate reset button; exercise both slider endpoints.
       if (width <= 680) await slider.press('Home');
       else await page.getByRole('button', { name: '复原模型', exact: true }).click();
       assert.equal(await slider.getAttribute('aria-valuenow'), '0');
+      await page.waitForFunction(() => window.__releaseScene.rendered?.movedParts === 0);
       const project = page.getByRole('link', { name: '更多 AI 项目 ↗', exact: true });
       assert.equal(await project.getAttribute('href'), 'https://emilyailab.com/');
       await page.context().route('https://emilyailab.com/', route => route.fulfill({ contentType: 'text/html', body: '<title>Project destination fixture</title>' }));
@@ -356,11 +419,11 @@ try {
       await popup.close();
       for (const mode of ['经穴图谱', '取穴自测', '我的课堂', '情境练习']) {
         await page.getByRole('button', { name: mode, exact: true }).click();
-        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px ${mode} panel overflow`);
+        await assertPanelContentFits(page, `${width}px ${mode}`);
       }
       assert.deepEqual(errors, []);
       await page.close();
-      console.log(`Acceptance ${width}×${height}: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, 0–100% explosion/reset, Emily AI popup and all mode layouts passed.`);
+      console.log(`Acceptance ${width}×${height}: sourced matched/unmatched submissions, Chinese anatomy selection, optional details, drawn GPU offsets 0→displaced→0 (frozen-offset regression rejected), Emily AI popup and visible-panel content bounds passed.`);
     }
   } finally { await browser.close(); }
 } finally { if (server) await server.close(); }

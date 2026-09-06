@@ -33,6 +33,52 @@ export async function isolateStorage(page) {
   });
 }
 
+export async function assertPanelContentFits(page, label) {
+  const violations = await page.evaluate(() => {
+    const panels = '.exam-page, .exam-shell, .exam-card, #learning-content, .calibration-panel, .anatomy-catalogue, .anatomy-detail-content, .knowledge-cards-panel, .flip-card';
+    // These strips intentionally scroll horizontally; their contained children are not panel overflow.
+    const scrollers = '.main-nav, .knowledge-decks, .card-types';
+    const failures = [];
+    const shown = el => el.checkVisibility({ checkVisibilityCSS: true }) && el.getBoundingClientRect().width > 1;
+    if (document.documentElement.scrollWidth > innerWidth + 1) failures.push('document exceeds viewport');
+    for (const panel of document.querySelectorAll(panels)) {
+      if (!shown(panel)) continue;
+      const rect = panel.getBoundingClientRect();
+      // Closed slide-out catalogues are intentionally positioned outside the viewport.
+      if (rect.right <= 0 || rect.left >= innerWidth) continue;
+      const name = panel.id ? `#${panel.id}` : `.${String(panel.className).trim().split(/\s+/).join('.')}`;
+      if (panel.scrollWidth > panel.clientWidth + 1) failures.push(`${name}: scrollWidth ${panel.scrollWidth} > clientWidth ${panel.clientWidth}`);
+      if (rect.left < -1 || rect.right > innerWidth + 1) failures.push(`${name}: bounds ${rect.left}..${rect.right} outside viewport ${innerWidth}`);
+      for (const child of panel.querySelectorAll('*')) {
+        if (!shown(child) || child.closest(scrollers) || child.closest('.sr-only')) continue;
+        const style = getComputedStyle(child);
+        if (style.clipPath === 'inset(50%)') continue; // Accessible native range input has no visual box.
+        const box = child.getBoundingClientRect();
+        if (box.left < rect.left - 1 || box.right > rect.right + 1) {
+          failures.push(`${name}: ${child.tagName.toLowerCase()}.${child.className} bounds ${box.left}..${box.right} exceed panel ${rect.left}..${rect.right}`);
+          break;
+        }
+      }
+    }
+    return failures;
+  });
+  assert.deepEqual(violations, [], `${label}: horizontal content overflow`);
+}
+
+export async function validateContainedOverflowRegression(page) {
+  const panel = page.locator('.exam-card');
+  const original = await panel.getAttribute('style');
+  try {
+    await panel.evaluate(el => { el.style.minWidth = '700px'; });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'fixture must reproduce overflow hidden from the document root');
+    await assert.rejects(() => assertPanelContentFits(page, 'injected 700px exam card'), /horizontal content overflow/);
+  } finally {
+    await panel.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), original);
+  }
+  await assertPanelContentFits(page, 'restored exam card');
+  console.log('Contained overflow regression: a 700px exam card is rejected even while document width fits; restored panel passes.');
+}
+
 export async function validateExplanation404(browser, origin) {
   for (const [width, height] of [[1440, 900], [390, 844]]) {
     const page = await browser.newPage({ viewport: { width, height } });
@@ -46,7 +92,8 @@ export async function validateExplanation404(browser, origin) {
       await page.getByRole('group', { name: '选择答案' }).getByRole('button').first().click();
       await page.getByRole('button', { name: '提交答案', exact: true }).click();
       await page.getByText('解析暂不可用', { exact: true }).waitFor();
-      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px explanation 404 shell overflow`);
+      await assertPanelContentFits(page, `${width}px explanation 404 shell`);
+      if (width === 390) await validateContainedOverflowRegression(page);
       console.log(`Explanations 404 ${width}×${height}: real 4086-question shell, five options and submitted 解析暂不可用 passed.`);
     } finally { await page.close(); }
   }
