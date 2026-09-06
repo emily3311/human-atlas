@@ -25,6 +25,7 @@ import {
   Lightbulb,
   ArrowUpRight,
   Menu,
+  FileQuestion,
 } from "lucide-react";
 import { DEFAULT_VISIBLE, type Atlas, type Part, type SystemId } from "../anatomy";
 import { ACUPOINTS, MERIDIANS } from "./data";
@@ -52,9 +53,10 @@ import {
   type Rating,
 } from "./study";
 import type { Acupoint } from "./types";
+import ExamPanel from "./ExamPanel";
 import "./tcm.css";
 
-type Mode = "anatomy" | "explore" | "cards" | "quiz" | "course" | "cases";
+type Mode = "anatomy" | "explore" | "cards" | "quiz" | "course" | "cases" | "exam";
 type Scope = "all" | "favorites" | "review" | "course";
 const ids = ACUPOINTS.map((p) => p.id);
 const studyIds=ACUPOINTS.filter(p=>!!p.location).map(p=>p.id);
@@ -63,6 +65,7 @@ const nav = [
   { id: "explore", label: "经穴图谱", icon: Compass },
   { id: "cards", label: "记忆卡片", icon: Brain },
   { id: "quiz", label: "取穴自测", icon: Target },
+  { id: "exam", label: "执医题库", icon: FileQuestion },
   { id: "course", label: "我的课堂", icon: GraduationCap },
   { id: "cases", label: "情境练习", icon: Lightbulb },
 ] as const;
@@ -324,6 +327,7 @@ export default function TcmApp() {
     setRotate(false);
     setExplosionAmount(0);
     setAnatomyDetailsOpen(false);
+    setComparisonOpen(false);
     setSidebarOpen(false);
     setCatalogueExpanded(current=>nextCatalogueExpansion(current,'mode-change'));
     setReset(v=>v+1);
@@ -420,7 +424,7 @@ export default function TcmApp() {
     [],
   );
   return (
-    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
+    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
       <header className="app-header">
         <a className="brand" href="/">
           <span className="brand-seal">经</span>
@@ -469,7 +473,7 @@ export default function TcmApp() {
           </span>
         </button>
       </header>
-      <div className="workspace" style={{"--catalogue-width":`${sidebarWidth}px`} as React.CSSProperties}>
+      <div hidden={mode === 'exam'} className="workspace" style={{"--catalogue-width":`${sidebarWidth}px`, display: mode === 'exam' ? 'none' : undefined} as React.CSSProperties}>
         <aside
           className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
           aria-label="穴位目录"
@@ -1226,6 +1230,7 @@ export default function TcmApp() {
           )}
         </aside>
       </div>
+      {mode === 'exam' && <ExamPanel onAbout={() => setAbout(true)} />}
       <footer className="app-footer">
         <span>经纬 · 让每一次学习，都有迹可循。</span>
         <span>
@@ -1237,7 +1242,7 @@ export default function TcmApp() {
           </button>
         </span>
       </footer>
-      {compared.length > 0 && (
+      {mode !== 'exam' && compared.length > 0 && (
         <div className="compare-dock">
           <GitCompareArrows size={17} />
           <span>穴位对比</span>
@@ -1257,7 +1262,7 @@ export default function TcmApp() {
           </button>
         </div>
       )}
-      {chosenPart && (
+      {mode !== 'exam' && chosenPart && (
         <div className="anatomy-selection">
           <div>
             <span>{SYSTEM_ZH[chosenPart.system]} · 解剖结构</span>
@@ -1382,6 +1387,10 @@ export default function TcmApp() {
               收藏、复习与个人课程保存在本浏览器。课程可以通过 JSON
               导出、导入；清除浏览器数据会删除本地记录。教师可使用笔记与课程文件组织教学，但系统不替代专业内容审校。
             </p>
+            <h3>执医题库</h3>
+            <p>
+              题库从 CMB（Chinese Medical Benchmark）训练数据中按“医师考试 · 执业医师 · 中医执业医师 · 单项选择题”严格筛选，当前包含 4086 题。它不是官方或当年完整题库，也未做逐题医学审定。源数据没有解析字段，因此页面只显示原答案和“暂无解析”。答题记录仅保存在本浏览器，与穴位学习记录分开。
+            </p>
             <h3>来源与署名</h3>
             <a href="https://github.com/ashemag/human-atlas" target="_blank" rel="noreferrer">
               Human Atlas · ashemag · MIT
@@ -1389,6 +1398,14 @@ export default function TcmApp() {
             </a>
             <a href="/ATTRIBUTION.md" target="_blank" rel="noreferrer">
               BodyParts3D · © The Database Center for Life Science · CC BY 4.0
+              <ExternalLink size={14} />
+            </a>
+            <a href="/CMB-ATTRIBUTION.md" target="_blank" rel="noreferrer">
+              CMB 数据转换与来源说明
+              <ExternalLink size={14} />
+            </a>
+            <a href="/licenses/CMB-Apache-2.0.txt" target="_blank" rel="noreferrer">
+              CMB · Apache License 2.0
               <ExternalLink size={14} />
             </a>
             <a

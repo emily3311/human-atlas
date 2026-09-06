@@ -14,6 +14,7 @@ import { anatomyLabel } from "./anatomy-zh";
 import { teachingSystems } from "./teaching-display";
 import { explosionOffset, explosionCameraPose, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
+import { renderableViewport } from "./scene-viewport";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
 export interface SceneOptions {
@@ -323,10 +324,12 @@ export default function AtlasScene(props: Props) {
       dirty = true;
     };
     const resize = () => {
+      const viewport = renderableViewport(el.clientWidth, el.clientHeight);
+      if (!viewport) return;
       layoutKey = "";
-      camera.aspect = el.clientWidth / Math.max(1, el.clientHeight);
+      camera.aspect = viewport.aspect;
       camera.updateProjectionMatrix();
-      renderer.setSize(el.clientWidth, el.clientHeight);
+      renderer.setSize(viewport.width, viewport.height);
       if (latest.current.options.isolate) focusPart();
       else fit();
     };
@@ -484,6 +487,7 @@ export default function AtlasScene(props: Props) {
     const render = () => {
       if (stopped) return;
       frame = requestAnimationFrame(render);
+      if (!renderableViewport(el.clientWidth, el.clientHeight)) return;
       const o = latest.current.options;
       const targetAmount = Math.max(0, Math.min(1, o.explode ?? 0));
       const previousAmount = amount;

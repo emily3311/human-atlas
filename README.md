@@ -24,6 +24,14 @@ npm run dev
 
 Open http://localhost:3016. To build the static site, run `npm run build`; the output is in `dist/`.
 
+Use the **执医题库** item in the top navigation to open the independent practice page. It contains 4,086 single-choice questions from the strictly filtered CMB candidate set, with search, sequential or shuffled practice, and a wrong-answer review scope. Answers and attempt counts are stored only in this browser under a module-specific key; they are not synced and can be cleared from the practice page without affecting anatomy study records. The source has no explanation field, so submitted questions show the source answer and **暂无解析** rather than generated explanations. Provenance, license, and scope limitations are available from **关于题库** and [CMB-ATTRIBUTION.md](public/CMB-ATTRIBUTION.md); inclusion is not a medical verification claim.
+
+To reproduce the packaged question data from the fixed audited archive:
+
+```sh
+node --experimental-strip-types scripts/import-cmb.ts /tmp/atlas-cmb-research.zip
+```
+
 ## Validate
 
 ```sh
