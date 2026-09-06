@@ -2608,6 +2608,9 @@
   .tcm-app .main-nav button {
     flex: 0 0 auto;
   }
+  .tcm-app:not(.anatomy-focus) .atlas-sidebar.mobile-open {
+    top: 113px;
+  }
 }
 
 @media (max-width: 680px) {
