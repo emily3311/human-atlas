@@ -1,0 +1,3703 @@
+{
+  "schemaVersion": 1,
+  "source": "TCMLE",
+  "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359",
+  "explanations": [
+    {
+      "questionId": "e2affb39be0963c459e1933dcf7411872b785a4d1a4e68eb4ccce75884c97010",
+      "answer": "C",
+      "text": "外源性哮喘。多见于儿童青少年,常于春秋发病，可有前驱症状，发病急,缓解快,缓解后哮鸣音很快消失，血清中IgE增高。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 198,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "40e18220909d89d4e71494314e56b87382083191368d091e269960e4263f98ae",
+      "answer": "E",
+      "text": "尿血肾气不固证治法:补益肾气,固摄止血。代表方:无比山药丸。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 87,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cf633b3ace48e3f75f83891df12f70213c02a6cb129f5b701c18db65ea219d8f",
+      "answer": "D",
+      "text": "患者腹大胀满,可辨为鼓胀,出现嗜睡,语无伦次,逐渐昏迷等神昏变证,其舌苔灰腻,脉弦细而滑,是痰浊壅盛,蒙蔽心窍的表现,治当化痰泄浊开窍，用苏合香丸,故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 371,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cb118ea068080234f493141d4cc108b30bca8f4391c69c9b196a6da9c27c57b4",
+      "answer": "D",
+      "text": "砂仁化湿行气,温中止泻,安胎。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 177,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4f67a1efb6efc8dc020c1e1488f6dc97339e3c6b3dfb3c4cb3e0cd3bf08b6b8c",
+      "answer": "D",
+      "text": "目前抗HIV的药物可分为3大类核苷类逆转录酶抑制剂、非核苷类逆转录酶抑制剂和蛋白酶抑制剂,核苷类逆转录酶抑制剂包括齐多夫定、双脱氣胞苷、双脱氧肌苷、拉米夫定和司坦夫定等,故ABCE项均能用于女滋病治疗;而阿糖腺苷主要应用于疱疹病毒感染的抗病毒治疗，对艾滋病治疗无效，故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 242,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "db62ba7da4e8ac19116308260cd21276a46bce0cdc9b2b6750d398cf5b8818fd",
+      "answer": "C",
+      "text": "颈静脉在心室收缩期显著地搏动，提示三尖瓣关闭不全，心室收缩时血液从右心室向右心房方向反流",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 146,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4986c6753b362375444e1d8f97d3406320356053125acd6ac61ade7e234b7b87",
+      "answer": "E",
+      "text": "亠阳证的表现为大汗出、汗冷、味淡微黏、身凉恶寒、四肢厥冷、卧神疲,口淡不渴,或喜热饮,舌淡白润,脉微欲绝。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 297,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "df0f60d3e321db74c8878d7178eb675a011b00cf438f7141bc46b491bcfdf9b3",
+      "answer": "E",
+      "text": "甲状腺功能亢进症(甲亢)时机体基础代谢率增高，心率加快,故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 242,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5990fdf95731cf97eed8874c21acd58b56dd08e6b4e8c57ed6af4d94a11cbdd1",
+      "answer": "B",
+      "text": "钩藤含挥发性成分，若久煎其有效成分会被破坏,因此钩藤人汤剂宜后下，故选择B。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 77,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5f581f13a98a5dcf2e72d3c6406ae21d5c09e0aafcf43bb7b89fd8ee49524d56",
+      "answer": "C",
+      "text": "湿热痢初起,如表邪未解里热已盛,则用葛根芩连汤表里双解。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 63,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4d40f4c47399de7c460ebfcf7039c5e195df13a786d6aed5b610e6580799a3eb",
+      "answer": "D",
+      "text": "湿为阴邪,易阻過气机,损伤阳气!湿性重浊,湿性黏滞,常见恶风寒、虽然出汗但热不退、四肢困倦、关节肌肉疼痛等症状,故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 69,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6f55318ed5af13666a63c8aa79ca3d717b87d99f5ac9168d31fa1b9c12621d7a",
+      "answer": "D",
+      "text": "代谢性碱中毒主是体内HCO:多引起。幽门梗阻、严重呕吐是最常见的病因,长期使用呋塞米等利尿药、C1-排出增多、HCO回收人血液增多,可发生低氯性碱中毒。低血钾时，K*从细胞内释出，Na-和H*进人细胞内,引起细胞外液碱中毒,称为低钾性碱中毒。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 178,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d708b961755787e7d4691d4cd782f2c8a3a73d161bcf846b6603205cfd8acbeb",
+      "answer": "B",
+      "text": "A项为湿热内盛之证。B项为阳虚湿盛之证,故选B。C项为肝胆热盛,痰湿久郁。D项为阴虚有热，热极津枯之证。E项为热人营血，兼有痰湿之证。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 22,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c7a76dc9f186f4a49136f08e075e1d22711129d0af3b8911e9b6f37fa367b622",
+      "answer": "D",
+      "text": "带状疱疹可见沿神经分布的疱疹,疼痛呈刀割样、灼伤样,剧烈难忍,持续时间长",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 310,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1445390de894edf8ae99f9c8e8f2b741656a5ccea850201d1f924f013bab52d1",
+      "answer": "C",
+      "text": "牌的生理功能为主统血,脾为后天之本,气血生化之源,脾运化的水谷精微是生成血液的主要物质基础。心主血脉,推动血液在脉中运行。肝藏血,贮藏血液、调节血量、防止出血。肺朝百脉主治节,全身血液通过百脉会聚于肺,经肺的呼吸进行气体交换,将富含清气的血通过百脉输送到全身。肾主生殖繁衍,肾精化生血液。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 97,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "824b9a6fce0d9019391b7dc331fd0727f32773c1c205d4b3d7954887fe551922",
+      "answer": "C",
+      "text": "防风通圣散解表通便,故选C。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 309,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4f603342161807359319889bbaddbbc5cf6c02fad19a05081a51cbb5d574035f",
+      "answer": "D",
+      "text": "久痹风、寒.湿偏盛不明显者,久痹风、寒.湿偏盛不明显者,可用蠲痹汤作为风寒湿痹通用的基础方进行治疗。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 143,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2f896dc33dd85d147568b272c18ae9038146ff83659c1c9f8cfc7158df9cd758",
+      "answer": "D",
+      "text": "独语是指自言自语,哺哺不休,见人则止,首尾不续者。多因心气不足,神失所养,或气郁生痰,蒙蔽心窍所致,故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 305,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a09f25091b533766bfc97abc505744fae3e25316b3f0530963ebef01f1eb5b32",
+      "answer": "A",
+      "text": "肉桂的功效:补火助阳,散寒止痛,温通经脉,引火归原。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 249,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d57d557b924db94e6c663aa71a7e35712aad3f8d6d78a66e95fae93fe14fecdf",
+      "answer": "D",
+      "text": "特殊病理的痰液有以下几种情况:红色或棕红色痰见于肺癌、肺结核、支气管扩张;铁锈色痰见于细菌性肺炎(大叶性肺炎)、肺梗死;粉红色浆液泡沫性痰见于急性左心功能不全、肺水肿;棕褐色痰见于阿米巴性脓肿、慢性充血性心脏病、肺淤血等;灰黑色痰见于煤矿工及大量吸烟者。肺脓肿及晚期肺癌患者痰常有恶臭。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 82,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "635344d09731f79c5751cb1362bc30557db3524010b8c273710c7c15c7a8a2c6",
+      "answer": "E",
+      "text": "舌苔花剥,状如地图,时隐时现,经久不愈,多为胃之气阴不足所致。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 252,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "06344456fd14518c14837ebda1e3e76759845b5f8ef5fbfed64a6abd6125e182",
+      "answer": "E",
+      "text": "大量胸腔积液肺组织被压缩，叩诊可呈实音。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 98,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4830475687469bf7f34d934796e8f0cba0d4841007d1b1f8e7f43f2a1a7c749a",
+      "answer": "A",
+      "text": "合谷穴的主治要点:头痛、齿痛、目赤肿痛、咽喉肿痛、失声、口眼歪斜、半身不遂、痄腮、疔疮、经团、腹痛、牙关紧闭、小儿惊风、鼻衄、耳鸣耳聋、发热恶寒、无汗、多汗、瘾疹、疟疾、产等病。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 195,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d036e9fd17cb3b38fda688653f48604dfcbaaecf442cb7e09c4c74091289ef29",
+      "answer": "D",
+      "text": "生理性甲状腺肿大:除甲状腺肿大外,往往无自觉症状，甲状腺肿大往往在青年期前即开始,到青春期、妊娠和哺乳期则肿大明显,早期为弥漫性逐渐肿大，质软，以后可形成大小不等的结节，质地坚韧，无血管杂音及震颤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 122,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bc209f2d4ba4e3994c19c368fef96cb367790b3aae775c937edd4b43ac33514e",
+      "answer": "B",
+      "text": "正常肺泡呼吸音的最明显听诊部位为肺泡组织较多且胸壁较薄的部位，如乳房下部、肩胛下部、腋窝下部。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 170,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cb36c03fd274061a3b84238ab734a13e5efd9d3cf27b7b00260ebef7649a1c39",
+      "answer": "D",
+      "text": "子肿气滞证,应首选天仙藤散",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 64,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7606693b4faa9b396769f93084280723692a7d46f665f3d5ffad28bd0feb0812",
+      "answer": "D",
+      "text": "阴黄的病机是寒湿阻滞,脾阳不足。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 67,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "637a092bdd52d4c5b57ca6ae74d90b9134675763dcec3f25254d365f4c543c1e",
+      "answer": "E",
+      "text": "病理性高血糖:①各型糖尿病及甲状腺功能亢进、Cushing病、肢端肥大症、啫铬细胞瘤等内分泌疾病;②颅外伤、颅内出血、脑膜炎等引起颅内压升高刺激血糖中枢以及在疾病应激状态时:③脱水、血浆呈高渗状态(高热、呕吐、腹泻)。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 74,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "95ec02a756df9961c7632718f688aab6e48d25912c62ac44acf188d8fc15cb4a",
+      "answer": "A",
+      "text": "生地黄有清热凉血、养阴生津之功,为清热凉血的要药。牡丹皮清热凉血、活血化瘀。赤芍清热凉血、化瘀止痛。紫草清热凉血,活血解毒,透疹，为预防麻疹的专药。金银花清热解毒,疏散风热",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 5,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "af33f36a43f2b45558a847f4b54d1f84fed11eae4122ae90360c0fd9899807ce",
+      "answer": "B",
+      "text": "A项灯草炙主要用于小儿痄腮、喉蛾.吐泻、麻疹、惊风等病证。B项隔姜灸主要适用于一切虚寒病证,对呕吐.腹痛、泄泻、遗精、阳痿、早泄、不孕、痛经和风寒湿痹等疗效较好。C项隔蒜灸多用于治疗肺结核、腹中积块及未溃疮疡等。D项隔盐炙有回阳、救逆、固脱之功,常用于治疗急性腹痛、吐泻、痢疾、淋病、中风脱证等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 71,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4ea5b84d8063da827752d78fce464c20fc470d1b94390e4114419a7acf0ea982",
+      "answer": "C",
+      "text": "呃逆气机阻滞用行气降逆、宽胸散结的五磨饮子。胃寒气逆的用温中散寒.降逆止呃的丁香散。胃火上逆用清热和胃的竹叶石膏汤或橘皮竹茹汤。气滞痰阻的用理气化痰的旋覆代赭汤。脾胃阳虚的用温补脾胃的理中丸。胃阴不足的用益气养阳的益胃汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 23,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "874c8ee68aa01e57f94f6cf6ceb1ef6bda3194ead36109e801bb3406c0dedb46",
+      "answer": "E",
+      "text": "小肠的泌别清浊功能包括泌别清浊后的糟粕,分为食物残渣及废水两部分,食物残渣下降到大肠,形成类便而排出体外:多余的水分则可气化生成尿液排出体外,故对于小肠泌别清浊功能失调的患者,小便不能及时气化人膀胱,水谷并走大肠,可见大便稀薄,小便短少,治疗选用分利方法,即“利小便以实大便”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 53,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "22b2f20c0da7a958bce5189061004f4ee871d6f611d634fdf8bda7e7e7cf4c84",
+      "answer": "D",
+      "text": "内源性哮喘,以女性居多患者常先有呼吸道感染或支气管的咳嗽、咳痰史及发热等全身症状，逐渐出现哮喘。发作时虽与外源性哮喘相似,但起病慢、持续较久，且逐渐加重，顽固性者夜间发作较为多见，待感",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 202,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c899821b92273b0a24ccec3405386dd2afc29a0b4a0ce46299258fdbf0e68e39",
+      "answer": "D",
+      "text": "心气大伤,神志散乱可出现郑声",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 109,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f0cfa5e4eabea6fa4843e3b577acad6425020d16988ead7f671ef5eca847a80b",
+      "answer": "E",
+      "text": "“实则泻其子”,胆经属于“木“,“木”生”火”，“火“为”木“之子,胆经实证,则应泻”火”所以应选用胆经上属火的穴位阳辅。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 267,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "728ad1f2c67c7fbea4259b28692785816b6751d48119de0f5b2b9088dee62885",
+      "answer": "D",
+      "text": "妊娠禁药或慎用药有峻下剂,破血剂,逐瘀剂,有毒剂,滑利剂,耗气、散气剂。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 196,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "20b31c95ad64a1152a80ddc77b0e5b6c98688e78a2e45fb0c16eb4af860a28d8",
+      "answer": "A",
+      "text": "小蓟的功效:凉血止血,散瘀解毒消痈",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 269,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b9abd9bd7464109714f57bb227af95522becefa058ac170eb81ba0266265faae",
+      "answer": "C",
+      "text": "成人血清钠的正常值是135~145mmol/L.",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 58,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e83a880ee57795cfcb0ca3a993ced02d9fa41643cd9aaf502b1052985f30ad64",
+      "answer": "E",
+      "text": "结节性红斑常见于小腿伸侧,临床表现为红色或紫红色疼痛性炎性结节,青年女性多见,病程有局限性,易于复发。该患者症状符合结节性红斑。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 340,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6d3fe977bd7ade487a7ae204b7d8600cc2e3823bb3a2ba26d71d60c463a529e7",
+      "answer": "D",
+      "text": "引起中枢性呕吐的情况:①中枢神经系统疾病(如脑血管疾病、肿瘤、外伤、偏头痛等):②全身性疾病(如感染、内分泌与代谢紊乱等);③药物反应与药物中毒(如洋地黄、吗啡中毒)。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 90,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9a74fbc4b0e27905cf78927a6e75a4a92d951dd157d7a82d5e9490d73c36619c",
+      "answer": "D",
+      "text": "辛夷发散风寒、通窍;紫苏解表散寒、行气宽中、解鱼毒,安胎。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 181,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "eedde42e105f34e77ef70378bc52e20a10009cf5980d21fea1927f3a471884ff",
+      "answer": "D",
+      "text": "肺气肿心浊音界缩小，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 338,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8a00a873628565a5761d932ebdb80b5130d32407780852e44e1eb339f8770fd0",
+      "answer": "A",
+      "text": "气瘿是颈前漫肿,边缘不清,皮色如常,按之柔软;肉瘿是甲状腺肿多呈球状,边界清楚,质地柔韧;瘿痈有急性发病史,甲状腺增大变硬,有压痛，常伴发热、吞咽疼痛等全身症状;石瘿多见于40岁以上患者,多年存在的颈部肿块,突然迅速增大,坚硬如石,表面凹凸不平,随吞咽动作而上下的移动度减少,或固定不移。根据症状首先排除E,根据以上症状选择A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 344,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e6ef632407f45525e9470091b5f95f5e47ebf22e8d6a4955339cc1be4dd8a4b6",
+      "answer": "A",
+      "text": "皮痛湿热塑涨肠道，宜通腑泄热,用大承气汤最合适。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 55,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "996075cd38f6f516fb804f2c1b95788a2df9b3170666f33695c6f55546be123f",
+      "answer": "D",
+      "text": "脾肾阳虚,虚寒内生,命火不足,不能温煦脾土,所以见到大便澄澈清冷、完谷不化。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 284,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "37751bb3521b8ab44d00f48188ae20db1d2445fc1848fe7bc3cec4996068e3f1",
+      "answer": "A",
+      "text": "薄荷疏散风热,清利头目,利咽透疹,疏肝行气。牛蒡子疏散风热，宣肺祛痰,利咽透疹,解毒散肿",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 193,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "19c5709c9332fc5379a039ef95503f35a222e4acd684b01f5e910eb22dada93b",
+      "answer": "D",
+      "text": "医师开具处方时，除特殊情况外必须注明的是临床诊断。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 162,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "89de45641bc4761dd4d09a814edec52c52b9138950718022c3f3f0eea0c0a0b4",
+      "answer": "A",
+      "text": "左归丸的功用:滋阴补肾填精益髓。一贯煎的功用:滋阴疏肝。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 333,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "41f28fc68ae99ed731f36e2bdd0f7aa2d400d9a4a8818d65c8b6d90ba895e995",
+      "answer": "C",
+      "text": "初期:颈部或耳之前后肿块,形如粟子,顶突根深,按之坚硬,推之不移,皮色不变,局部无热及疼痛,全身无明显不适,为肝郁痰凝,阻隔经络所致,故治法宜疏肝解郁,化痰散结,其他都是气血亏虚的中后期治法。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 72,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0c109aa870718247da5e9505bd18ab68ca7f517197b6088cf4a97415fb988ff5",
+      "answer": "D",
+      "text": "手指脓肿,应从侧方切开,再根据症状作纵形切口。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 312,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e8a3bab01e9ea968fc9b35ffb6b1f9c015829b03a0cf561821b7d0d38e00af44",
+      "answer": "A",
+      "text": "痿证日久,多累及肝肾,阴虚生内热,故肝肾亏损宜滋补肝肾,滋阴清热用虎潜丸最合适,故选A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 143,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9ee8114c866e6f3a9ecb686b7a15b8d4e1ac2336b15757d76a0ee1ce601fd6db",
+      "answer": "D",
+      "text": "宫外孕手术适应证:停经时间长,疑为输卵管间质部或残角子宫妊娠者休克严重,内出血是多或持续出血，虽经抢救而不易控制者;妊娠试验持续阳性，包块继续长大,杀胚药无效者;愿意同时施行绝育术者。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 180,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1c6084596f3eb7755bd5ff4134510a0ba042d0e1de46673165f78d0bd8f055c0",
+      "answer": "A",
+      "text": "病毒性脑炎均可引起颅压增高而发生呕吐。多不伴有恶心，但有剧烈头痛。呕吐与饮食无关。亦可伴有不同程度的意识障碍。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 446,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "edbe2c18c055df91fb6f65971c8a18878515c15407375252c8ba1842db46e10c",
+      "answer": "E",
+      "text": "本患者有神志恍惚,谵妄:烦躁不安,或有嗜睡的表现,为神志异常,属于痰蒙神窍。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 307,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d429afde11bd1523c4bb37f8cc701dc25411357d38b192a438d2ec8e0bf9f7c5",
+      "answer": "C",
+      "text": "由于内囊后支的感觉传导纤维受累，可出现病灶对侧偏身感觉减退或消失。如果视放射也受累，则出现病灶对侧偏盲，即构成内囊损害的三偏（偏瘫、偏身感觉障碍及偏盲）征。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 46,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9247ae30ceb63794667f491d93f1155ea3fcce784558d113665f6e59d060c71b",
+      "answer": "D",
+      "text": "再生障碍性贫血临床上常表现为较严重的贫血、出血和感染。红细胞、白细胞及血小板值均减少。急性白血病主要表现为发热、感染、出血、贫血等,体检有淋巴结、肝脾大及胸骨压痛,骨髓活检原始细胞>30%。胸骨压痛为急性白血病较特异的体征。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 234,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2118346bb0cdd4746453fddface3b9227058fbd0023146812a737da06cbbadfe",
+      "answer": "C",
+      "text": "麻子仁丸主治胃肠燥热，脾约便秘证,大便干结,小便频数。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 69,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "edfaa77862ae18e9f40b2b0d58486333a801c9393ff1c571b7faa4ca95dded34",
+      "answer": "B",
+      "text": "妊娠恶阻脾胃虚弱证主要证候:妊娠早期，恶心，呕吐不食,甚则食人即吐。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 176,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6f9974c8e1de053aaadbb7460715f90a59a6221ccf107fcaf9cf737f193760d5",
+      "answer": "B",
+      "text": "ACD项皆起于胞中,E项带脉束腰一周。只有B项正确。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 140,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3ecc2fd705ac2c0b493393673708f36ff02aac1ab319edb3474e9cf89a61eb6a",
+      "answer": "B",
+      "text": "五种药物均有祛风散寒之功,白芷治疗阳明头痛;本则擅长治疗巅顶头痛;苍耳子善治鼻渊头痛;细辛普治少阴头痛;吴茱英普治阴头痛。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 169,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "832642ced55aba944201062c096742c29609d0eb6776a1924ea3c125da99f7c3",
+      "answer": "A",
+      "text": "行政处罚包括人身罚、财产罚、行为罚、申诫罚。人身罚包括行政拘留、劳动教养；财产罚包括罚款、没收财物；行为罚包括责令停产、停业暂扣或者吊销许可证和营业执照；申诫罚包括警告、通报批评。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 230,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cbef1e297958e9bd291e0724be50b8eab1008b537296a5a0d6f75fd58ad08c30",
+      "answer": "D",
+      "text": "厥证的辨证论治。从患者症、舌、脉判断为痰厥，治以导痰汤行气豁痰。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 307,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "21f65071ba18fdb08189508a22f433531885146e80c5317837dbd31ddaf83aca",
+      "answer": "D",
+      "text": "葛根解肌退热,透疹,生津止渴,升阳止泻,可治疗项背强痛",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 189,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b807aac79a1942fed499df8c9d41779049321c0b784cee7d5afbc1a964f08dc4",
+      "answer": "C",
+      "text": "素有高血压病史,面红头胀,时有遗精或性欲亢进，舌红则为阳热亢盛的表现。眩晕耳鸣,腰膝酸软,失眠多梦,脉沉弦细为阴虚证的表现。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 350,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f8642695ad814d6a85b30f9db444658ebbade16d3d9f991c3d401514bc598916",
+      "answer": "A",
+      "text": "谵妄是一种以兴奋性增高为主的高级神经中枢急性活动失调状态，产生大量的幻觉、错觉并躁动不安,无意识丧失，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 102,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3b67e46a5c42aa45a53beccb90f0f3c0b9a89888a4a13f8411b63d83c91ca453",
+      "answer": "A",
+      "text": "HOAP方案包括三尖杉、阿素及泼尼松，主要用于急性粒细胞白血病的化疗。性粒细胞白血病常用治疗药物是白消安、旋玉红等;性淋巴细胞白血病常用苯丁酸氮芥治疗;慢性再生障碍性贫血常用雄激素等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 30,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "29a2ad0cb5a462856da01f505e92342e89745e8520478ce9fa20edff5978c702",
+      "answer": "C",
+      "text": "脾在志为思。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 65,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c809da41be86a833f56fb5ae5001eaf4acab903098e67fa914be402e30ec975a",
+      "answer": "D",
+      "text": "冲脉调节十二经气血。“冲”,有要冲、要道之意。冲脉上行至头,下行至足,后行于背,前布于胸腹,贯穿全身,成为总领诸经气血的要冲,并能调节十二经气血。当脏腑经络气血有余时,冲脉能够加以含蓄:当脏腑经络气血不足时,冲脉可以给予灌注和补充,从而调节和维持脏腑组织器官的正常生理功能活动,故有“十二经脉之海”“五脏六腑之海”之称。带脉的生理功能为约束纵行诸经。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 13,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f15539e2ea49eb8300f7c1aec99d9a1a8cfdf00ac72859c7da2b63109c6e92db",
+      "answer": "D",
+      "text": "郁李仁润肠通便,利水消肿;火麻仁润肠通便,滋养补虚。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 225,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "92f52aa187d1aae524275e1f50715cbbef1040cbcb0350a8436a5a03539f63dc",
+      "answer": "E",
+      "text": "由本患者的症状可知本病为痛经之虚证。应选用三阴交、足三里、气海调补气血、温养冲任。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 451,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0d3ada3ff0d175261bfb3364cc9aa9797208dbf845457631c8942755fc4a5b79",
+      "answer": "E",
+      "text": "头痛日久，痛久人络，致瘀血内阻脑脉,故痛如锥刺,固定不移,舌质紫,脉细涩。证属瘀血头痛。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 159,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ffd7de57550276e1cc6d8d652d1032efcfbd6e99f74b309e2ffd9c7bd37b7b1b",
+      "answer": "D",
+      "text": "合欢皮解郁安神,活血消肿。酸枣仁养心益肝,安神,敛汗。远志宁心安神,祛开窍,消散痈肿。琥珀镇惊安神,活血散瘀,利尿通淋。石镇惊安神,平肝潜阳,聪耳明目,纳气定喘。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 61,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "be88fdf3545904797acd5121f5a807e732db81c5814e86d59f85e2da3e6023fc",
+      "answer": "A",
+      "text": "冲和音活血止痛,疏风祛寒,消肿软坚,适用于半阴半阳证。太乙膏性偏清凉,消肿、清火、解毒、生肌。阳和解凝膏温经和阳,祛风散寒,调气活血,化痰通络,用于疮形不红不热,漫肿无头之阴证疮疡未溃者。咬头膏具有腐蚀性，功能蚀破疮头，适用于肿疡脓成,不能自破，以及患者不愿接受手术切开排脓者。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 40,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f09b8d7a0d5e2012c0d6c8c24f1b83351954144dc729a4c53af014818972d0d4",
+      "answer": "E",
+      "text": "与成人一样,小儿的正常舌象为淡红舌,故选E。舌质淡白为心阳不足;舌质绛红为心阴不足;舌质紫暗或暗红为瘀血内阻。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 224,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4d18d391f23d64a6971a5308c317f68fc67d9c3b1de7faa67e8b411970e9d8b2",
+      "answer": "A",
+      "text": "咳嗽病变主脏在肺,与肝、脾有关，久则及肾，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 11,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9b53e8d2c8f738e3557ba7e4515ce349a275ca91fd8674050acb4b0716642560",
+      "answer": "C",
+      "text": "ABDE项都是肝郁血热证的临床表现。肝郁血热证经色深红或紫红、质稠",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 152,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "deb9be51f431a7cb366c4d16d1d88e3bcaf23cb9d06bbe0d031634c637ad3419",
+      "answer": "B",
+      "text": "育龄期妇女与肝肾密切相关,故致病多以肝肾为主。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 52,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3f378c23e4362d1e21a819aa789a59f9385bb40af4fa289f08af2f30e552b3b5",
+      "answer": "A",
+      "text": "临产的征兆是胎位下移、小腹坠胀、有便意或见红，故选A。分娩是指怀孕末期，即孕280天左右，胎儿及胎衣自母休阴道娩出的过程。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 128,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "82cb280a18a0ab5fbe431fc0f20b085609bbb2205499a5daa76ba357c27b5166",
+      "answer": "C",
+      "text": "随着小儿年龄的增加,小儿的脉减慢,血压增高。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 228,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "55d927cd0802aad02a6b8c255fa3e24be1e3e5f29b3188c40a024a5f960a85f6",
+      "answer": "A",
+      "text": "A项为阳黄,乃湿热熏蒸为患。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 14,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "86841fbfcfb0a8a8db83a298e5a26aa57782046b43d6d19e95fdbccd9febe90f",
+      "answer": "E",
+      "text": "妊娠恶阻的病因病机为冲气上逆，胃失和降，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 192,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "09a5ef78bd2cd528cd80889c546ace396d972fa62782c3288d39ee7b5d217ee3",
+      "answer": "D",
+      "text": "气短乏力,兼见月经量多,为气虚而不能统血，气虚与失血并见的证候",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 117,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1d6d2072811603bd50c4b704a25c2b6576b21f3dc509e707be70fc07b46421a6",
+      "answer": "E",
+      "text": "阳和汤的药物组成:熟地黄、肉桂:麻黄、鹿角胶、白芥子、姜炭、生甘草。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 221,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2cee9ff2b09f1815384e54ffc43ec0efe1304377356e5516fbaf4ba57c1efefd",
+      "answer": "C",
+      "text": "香附疏肝解郁，调经止痛:理气调中。青皮疏肝破气,消积化滞。沉香行气止痛,温中止呕,纳气平喘。木香行气止痛健脾消食。佛手疏肝解郁,理气和中，燥湿化痰。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 261,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "70d16d7395c0d44366043e73b7b230e9adab46ea170c2a01d19ad29dd297e067",
+      "answer": "D",
+      "text": "独语多因心气不足,神失所养,或气郁生痰,蒙蔽心窍所致。错语虚证多由心脾两虚,心神失养所致,实证多由痰浊、瘀血、气郁等阻遏心神而成。两者的共同病因为心气不足,气郁痰阻,故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 34,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "128aae3506c5425af14d28b2ee0127d78ae40e6eca2774806fdfbd59b619b535",
+      "answer": "C",
+      "text": "少府是心经的荥穴，神门是心经的原穴,阴郄是心经的都穴,通里是心经的络穴。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 239,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f7c97d4af335c76a62ee714f912d647ceb18fb745f58e55d37ec5ba52a802473",
+      "answer": "E",
+      "text": "轻者，只要扶持患者安静平卧，室温保暖即可，或头位稍低，安静卧床，给饮开水或糖水。重者伴有意识障碍，当灸百会、人中或刺合谷、少商等穴救治。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 112,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "691f4e8721444812aec908e7dbf060b7c9bb8901617e6f5510f477e58ba6b284",
+      "answer": "B",
+      "text": "宗气的分布是上出息道,下走气街;卫气的分布是熏于肓膜,散于胸腹。通过三焦,流行全身是元气的分布;与血同行,环周不休是营气的分布。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 5,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8228c6bcd3cf7a21d7e2bfaba634d575a474f72c3b5c2ef2ab128ae6745eeb97",
+      "answer": "C",
+      "text": "脾主升清,是指脾具有将其运化和吸收的水谷精微等营养物质向上输送至心、肺等脏,通过心肺的气化作用化生气血,以营养全身,并通过脾气的升举作用维持人体内脏位置相对恒定的作用。脾的这一功能特点是以上升和升举为主，故说:“脾气主升。”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 65,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cefaf07c29d441c5f811396a84b2c0da2407eeced73e99a4254b2fa62b2aca42",
+      "answer": "C",
+      "text": "医疗废物是指医疗卫生机构在医疗、预防、保健以及其他相关活动中产生的具有直接或间接感染性、毒性以及其他危害性的废物。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 286,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e9b1458cba63eac71ddc8e73bf715d24f2e3656583c77ebfaf7bbaa5ec444c5f",
+      "answer": "B",
+      "text": "崩漏实热证,应首选清热固经汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 180,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bc82ecaf51fe97a30987dbffb7f31c2cb844dbb2d6ff2ef1e2ba61546a9f999f",
+      "answer": "E",
+      "text": "下列情况属于医院感染:①对于无明显潜伏期的感染,规定在48小时后发生的感染为医院感染,有明确潜伏期者则以住院时起超过该平均(或常见)潜伏期的感染为医院感染;②本次感染直接与上次住院有关;③在原有感染基础上出现其他部位新的感染(除外脓毒血症迁徙灶)，或在原感染已知病原体基础上又分离出新的病原体(排除污染和原来的混合感染)的感染;④新生儿经产道时获得的感染;⑤由于诊疗措施激活的潜在性感染,如疱疹病毒、结核杆菌等的感染。可见,婴幼儿经胎盘获得的感染不属于医院感染，故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 270,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6360704d90416d890a8d099cbe08a24d10d095a5f8ac0f2d549287b08a25f7c0",
+      "answer": "D",
+      "text": "旋覆代赭汤益气和胃、化痰降逆。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 349,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3deff32e27fbcde07d3a6bfc0a00646370b1cee37342273210828f5447342f07",
+      "answer": "B",
+      "text": "五加皮的主要功效为祛风湿强筋骨,利尿",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 61,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0349c45614bcfd1834bcba74555995ec6c3c9577baec6fc1047c92bcff4b63aa",
+      "answer": "A",
+      "text": "痒是因风、湿、热、虫之邪客于皮肤肌表，引起皮肉间气血不和;或由于血虚风燥,肤失活养而成。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 8,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "21d1863673daeb08a2093c7d338aeee773459c14315c765431f951d9aa820410",
+      "answer": "A",
+      "text": "再造散的组成:黄芪、人参、桂枝、甘草、熟附子、细辛、羌活、防风、川芎、煨生姜。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 285,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "38cb93e0763ddcaec875c38f98063bfbc140a348cdd1eb608ccd109395362f6d",
+      "answer": "A",
+      "text": "陈皮理气健脾,燥湿化痰,",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 257,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bdfc3803a1664231b8aa43ae6e8e33466aa94deea9c7b687fe907c8b77721716",
+      "answer": "E",
+      "text": "再生障碍性贫血分为先天性(遗传性)和后天性(获得性),获得性再生碍性贫血根据有无明确诱因分为原发性和继发性，原发性再生障碍性贫血即无明确诱因者。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 230,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0b3d6d4c7a8b37e1346ca238ae663011ee4e0879948f3e2daf058ee90c9ec66d",
+      "answer": "D",
+      "text": "月经病的主要病因是寒热湿邪侵袭、内伤七情、房劳多产、饮食不节、劳倦过度和体质因素。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 148,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "82b956d1c301ac8a269bf0721106041200a004ab2a93d12593901d46a636f68d",
+      "answer": "C",
+      "text": "围绝经期妇女脾肾功能开始衰退，故致病多以脾肾亏虚为主。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 56,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "da5af3d89bc8e3ac6edd2415181cc35cd4b96ede6bfb19aff3ad00d64e9e7f95",
+      "answer": "A",
+      "text": "B项少海属于手少阴心经,为手少阴心经合穴;C项小海属手太阴小肠经,为手太阳小肠经合穴;D项照海穴属足少阴肾经;项气海穴为任脉上的穴位。只有A项血海为足太阴脾经的腧穴,故选A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 267,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f50ca289f86cd6c88615693685a3514a7458ff03012f9a5a3b17cb0d3d5fec85",
+      "answer": "D",
+      "text": "尿路感染最多见的病原体是大肠埃希菌，占70％，其他依次为变形杆菌、克雷伯杆菌、产气杆菌。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 54,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6531d39395cae1d2c6fa96fc656b8555f977c3d74a1f4fbb0246b5a9af8f18c5",
+      "answer": "B",
+      "text": "虚热证表现为五心烦热,或骨蒸潮热，颧红盗汗,口燥咽干,心烦失眠,形体消瘦,或眩晕耳鸣,小便短黄,大便干结,舌红少苔少津，脉细数。实热证表现为身热烦躁,胸闷气粗,口干欲饮，脘腹胀痛拒按，大便秘结,小便短黄,舌红苔黄,脉滑数或洪数。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 54,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5c81822dfe9fe6013a7ae9897a87fe162001fd91b0cdbc3bdb6d564793c61979",
+      "answer": "B",
+      "text": "“阴脉之海”是指任脉，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 179,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3c342a2475164b97707727640b4ecc2aeac751e954768c3897169efedf65f8b9",
+      "answer": "A",
+      "text": "肺不张、胸膜粘连等可将气管拉向患侧。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 334,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d960dba1f58c56f06ad69bb2d212819d3d30b2460e4fa3fe61c934e84fd3822a",
+      "answer": "E",
+      "text": "阴经分布在四肢的内侧面“内侧前中后,太阴厥少阴”。但足三阴经在内踝尖上8寸以下的分布，前中后部位依次是厥阴、太阴、少阴",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 105,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ba2eaee578074cc54e0848a680e939b002572de78860488f6c27a9504c2eaa58",
+      "answer": "C",
+      "text": "外阴部成群水疱,糜烂,灼热,瘙痒，湿热秽浊之气下注于膀胱,局部气血运行不畅,湿热熏蒸,出现尿道刺激症状。诊断为阴部热疮。辨证属湿热下注，治以清热利湿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 320,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b74ea7116736e1e90e1477e6db5e0a035d3a5b15f3462e24ec1f43f8162f3637",
+      "answer": "C",
+      "text": "五输穴中,井主心下满,荣主身热,输主体重节病,经主喘咳寒热，合主逆气而泄。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 259,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "04fe946f3678702f5d6067fc9e0623f95ca5dac8c6183ffa76289b57ed603111",
+      "answer": "B",
+      "text": "感冒属表寒里热者,应用麻黄和石膏解表清里，宣肺泄热。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 7,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7b15016c024a4de2ea508b8a64e6e1fd2a2ecbddc3c203053038fd587a857c5f",
+      "answer": "B",
+      "text": "雌激素作用有促进卵泡发育、促使乳腺管增生、促进第二性征发育、促进骨中钙的沉积、使宫颈黏液分泌增加;促进外生殖器发育、丰满、色素沉着等。B项是孕激素的生理作用。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 220,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "396eadc9e1d5cc75f681dca2f427a9149ce712a5cdd504182b812bae1e6fc602",
+      "answer": "D",
+      "text": "痈之大者名发。说明发的病变范围较痈为大,生于结喉处的,称为锁喉痈。根据题于提示脓已成了则密要切开排脓,其他的都是辅助疗法或早期的适应证。国家执业医师资格考试，中医执业医师",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 304,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6e1b30755d693348ff63077b0e647a760ae9db389361031caeecf05ee0533ab0",
+      "answer": "B",
+      "text": "肠鸣音次数增多，且呈响亮、高亢的金属音，称肠鸣音亢进，多见于机械性肠梗阻。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 38,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "dabcb17c3fbf9857c8a1d689bc2a5b8b170a33947438db6d72fdb0c9cc134dfd",
+      "answer": "B",
+      "text": "瘿痈是以急性发病,结喉两侧结块肿胀,色红灼热,疼痛为主要表现的急性炎症性疾病，而B项皮色不变的只有气瘿和石疼的前期，其他瘿病均有皮色改变。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 88,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "edbab18a0dcc55a77e6768b70af93754f51f4dbc573b2962b98e7e597a4fac28",
+      "answer": "C",
+      "text": "急黄神昏舌绛者治宜清热解毒,凉营开穷,重在开窍;阳黄初起见表证者,治宜解表清热利湿，重在解表，故123题选C,124题选E",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 17,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0002d92f922578ccac0199a82c8c94fe18ad8466d2bb5033d1573c8d7aa0700f",
+      "answer": "C",
+      "text": "风热者,涕黄而质稠,伴风热表证;鼻流浊涕,或稠涕若脓血,腥臭难闻,或流黄水,长湿无干,此为“鼻渊”,又曰“脑漏",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 53,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e1c8579bb70c9b4f3f918d2ecfc1d1241eaed4a543116fa8e3927c973136167c",
+      "answer": "A",
+      "text": "麻醉药品、精神药品、医疗用毒性药品、放射性药品等属于特殊管理药品。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 262,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "85b0de2848d5a273144552c997ffdefb90f3e374c4de8a8aebc336f7be2a4fa8",
+      "answer": "B",
+      "text": "天南星的功效为燥湿化痰,祛风止痉,故选B。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 169,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0785b8922192556d402c8a30f3177e8852a41f79c812fe1cbfb87a99a539d7d6",
+      "answer": "E",
+      "text": "面瘫的恢复期多数患者均存在身体虚弱,所以应配足三里",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 275,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fd1d9284387cb528ab475637c50c987b39e0704800a00f8c4a5f331225b8a2c5",
+      "answer": "A",
+      "text": "久卧伤气，久坐伤肉",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 141,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "be45ee29762f5c0ae03b7c454b906520078210147de03d37429395f64b5416d8",
+      "answer": "E",
+      "text": "肺为娇脏,是指肺为清虚之脏,轻清肃静,不容纤芥,不耐邪气之侵,肺气通于天,不耐寒热,故为娇嫩之脏。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 21,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2b2b0d1334521dd981afdae91d81cfa9990516499fbed1e1b5ad2692daec8043",
+      "answer": "E",
+      "text": "培元补肾法主要适用于小儿胎察不足,肾气虚弱及肾不纳气之证,如解颅、五迟、五软、遗尿、哮喘等,而肺炎喘嗽外因责之于感受风邪,或由其他疾病传变而来;内因责之于小儿形气未充,肺脏娇嫩,卫外不固。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 248,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "abaa871d6edd85a1cbd42e4c324b84ea4cd2349c5ae99cc55cdc540309fd4c52",
+      "answer": "D",
+      "text": "伤寒的抗菌治疗，喹诺酮类药物为首选。主要因为该类药物有以下优点：抗菌谱广，尤其对革兰阴性杆菌活性高；细菌对其产生突发耐药的发生率低；体内分布广，组织体液中药物浓度高，可达有效抑菌或杀菌水平；大多品种系口服制剂，使用方便。目前常有的该类药物有氧氟沙星、环丙沙星和依诺沙星等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 206,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "62656dfb72a9b7625d8aca730fbc6b4099ae26f3b6f1ba125572a7943d55056a",
+      "answer": "C",
+      "text": "妊娠病的发病机制有四，一是阴血虚;二是脾肾虚:三是冲气上逆;四是气滞,如胎体浙大,气机升降失调。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 200,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f0cf3c4a963c00a7ac3957d9a17ac98d0495fadd95603cea90cef3346bd2eb34",
+      "answer": "B",
+      "text": "气与血的关系:气能生血;气能行血;气能摄血,而为气母。血屈阴而主静，血波不能自行其循行有赖于气的推动。气行则血行，气潜则血瘀;故治疗血行瘀滞,多配用补气、行气药。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 25,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f774b06f141bc7a75e82321362fe4f62b89a6781a1437f60d42cb3d48723d8c5",
+      "answer": "E",
+      "text": "蛇串疮是一种皮肤上出现成簇水疱,多旱带状分布,痛如火燎的急性疱疹性皮肤病。相当于西医的带状疱疹,其特点为皮肤上出现红斑、水疱或丘疱疹，累累如申珠,排列成带状,沿一侧周围神经分布区出现局部刺痛或伴界核肿大。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 304,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "15a29b8b98ab09f64515632aa6a49c53de495f29d0c0b283248aae69aa97c4e3",
+      "answer": "A",
+      "text": "绛舌主里热亢盛,阴虚火旺。舌绦少苔或无苔则为阴虚火旺,或热病后期阴液耗损。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 66,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "406568d36760c42e93c7082608a7fdd4ec61ac7b5b531a43de2d122d1345bc77",
+      "answer": "D",
+      "text": "胃溃疡的主要症状是上腹部疼痛。嗳气、反酸可见于反流性食管炎，BCE项均不是胃溃疡的特征。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 166,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "098ac3a451fb42b42e6b4d6cb4e5d5ebd9a2f87785429a04669efc6e260b263a",
+      "answer": "E",
+      "text": "日月的定位:在上腹部,当乳头直下,第七肋间隙,前正中线旁开4寸，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 227,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0b8ad36c45a8a4c2bc005e4c142316c026138370312e8bdb578c669482be804b",
+      "answer": "A",
+      "text": "月经过多气虚证首选方剂是举元煎。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 52,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ffeadbfe15d3b76ac33f95439db3263a685720654854a5acadf12a7e19ce46b1",
+      "answer": "E",
+      "text": "吐血胃热壅盛,治宜清泻胃火,凉血止血,方用泻心汤,名为泻心,实则泻胃。十灰散泻热凉血,收涩止血,故选E。A项用于肾阴虚胃热。B项用于肝火犯胃。C项都是泻火,无凉血止血作用,治吐血证不够合适。D项用于湿热型便血。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 151,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9d8f3180c26665e74e1d7453f8c4b91b638ecc8945c74e28373859b9e610f511",
+      "answer": "E",
+      "text": "在四肢部,阴经分布在内侧,阳经分布在外侧面,内侧分三阴,大体上,太阴、阳明在前缘,少阴、太阳在后缘,厥阴、少阳在中线。故患者疼痛沿三焦经放散,其病变部位在D;患者病发心绞痛,沿手少阴经放散,其病变部位在E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 10,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f82ba8de8631b0e2b596fcba7c2bd6ad3282b6364322831c0a07c659aa06cebb",
+      "answer": "E",
+      "text": "若汗出热退,脉静身凉,是邪去正复之佳兆，主疾病向愈;若汗出而身热不减,仍烦躁不安，脉来疾急，为邪胜正衰之危候,主病情恶化。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 2,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d4beddad4fd3764009a96f15328ebd0849fc51ec0d19079174821f4809cd992b",
+      "answer": "B",
+      "text": "了胸腹部侧线由内向外佐次为足少阴肾经、足阳明胃经、足太阴脾经、足厥阴肝经,故选B。A项位于第三侧线,D项位于第二侧线,E项位于第四侧线。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 195,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6bc5393dcd0c8346d8cf57ff7a21e7006311f30ed4ab87d28a4cfb6d652c6ac5",
+      "answer": "E",
+      "text": "麻子仁丸的组成:麻子仁、芍药、枳实、大黄、厚朴、杏仁",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 289,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5db923b4f4b8c1915c807dfb8da2be044dbdb2810ac397a1c3909e700de3e225",
+      "answer": "E",
+      "text": "桑叶疏散风热、清肺润燥、平肝明目、凉血止血。蜜炙能增强润肺止咳作用,可润肺燥。看到“蜜炙”就想到“润燥”,故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 121,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6473ccead3abe1bb6dad2fc8217b85ffb68ab3f40033a5135061e422b7c5ac26",
+      "answer": "E",
+      "text": "牛膝活血通经,补肝肾,强筋骨,利水通淋,引火下行。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 245,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7e5c11b58a85d63ab59a7db104ec7053b6404d06ab9094e6811764a7b875bdcf",
+      "answer": "D",
+      "text": "丁香的功效:温中降逆,散寒止痛,温肾助阳。为胃寒呕逆之要药。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 141,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4c895c2ddd5d25cbf97fe15aae57233556ebc63d8eaa813f4dc2de50e5032434",
+      "answer": "A",
+      "text": "巴豆性烈最为上,偏与牵牛不顺情。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 129,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6deae9d4e74dc4cd184549d9e6244869d737816cad3bc3f44fa2fb1f32ca3576",
+      "answer": "B",
+      "text": "巨大脾脏可见于慢性粒细胞白血病急性变,故选B。急性白血病、肝硬化脾功能亢进时可见脾大,但多为轻至中度。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 22,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "178214de222c08babfccb065ed10a3d2ec45d63801ee63b48f2ced797915d14d",
+      "answer": "C",
+      "text": "足厥阴肝经过阴器,连目系、环唇内,故排除;足少阴肾经循喉咙,挟舌本,故排除;足太阴脾经挟咽,连舌本,敝舌下,故本项正确;足阳明胃经起于鼻,入上齿,环口挟唇,循喉咙,故排除;足少阳胆经起于目锐眦·下耳后,人耳中.出耳前,故排除",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 227,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b8f4f32c8f433ee4451e0c07aea14b6ab05f49f760e76f8b840db8cd0710e6af",
+      "answer": "C",
+      "text": "A项为先天不足,肾精亏损,水波停聚于颅脑所致。B项为先天肾精不足,颅骨发育不良所致。C项属实证。D项多属虚证。E项多是先天肾气不足，或后天脾胃弱,骨骼失养,发育不良所致，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 58,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7df108530465cc66728a06b80a9de815666373a829f1004115dfeb7fd4449ef4",
+      "answer": "A",
+      "text": "十二经脉在四肢的排列:手足阳经为阳明在前，少阳在中，太阳在后;手足阴经为太阴在前、厥阴在中、少阴在后。阴经分布在四肢内侧，阳经分布在四肢外侧。手太阴肺经应是分布在上肢内侧前缘",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 159,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9e753d17ae70870c15f64a34e2d6dbe8d2871f883dafd5409be72a7ab7b79a5d",
+      "answer": "C",
+      "text": "三焦为“决渎之官“",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 81,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9c801e353a120a5c27caadf79d1cf76a2b080458484d66d5c319cfc8ad14d07c",
+      "answer": "A",
+      "text": "喜则气缓",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 137,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9eecc3c61b6fd60b0439c8e8e978955cd34c6b4d748dcbe2d97fdf08d589c881",
+      "answer": "D",
+      "text": "至宝丹的功用:化浊开窍清热解毒。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 345,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2b54e73d25fd53cf9103d8cd10c2746a3360d82aaa9e05d8e90a22b2e6f13374",
+      "answer": "D",
+      "text": "火热之邪人于血分,聚于局部,腐蚀血肉,而发为疮疡痈肿,临床上局部多红肿热痛为特征",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 133,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "af420a79a4ec8ecc6b4a64a2bb72a8bae5d7365a4cd56a2f1f653cf864c19283",
+      "answer": "D",
+      "text": "津液输布主要是通过三焦，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 73,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0a3782e484655ee1795e1702225cb70e51e4bc13df30c513eff02588e27f49c9",
+      "answer": "E",
+      "text": "雀琢灸是指施灸时,艾条点燃的一端与施灸部位的皮肤并不固定在一定的距离,而是像鸟雀啄食一样,一上一下施灸。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 235,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bc00cacbe98502cbd5589efe11eb59234c11e86207c2550e997887a74dd2daf4",
+      "answer": "C",
+      "text": "月经过多血热证,应首选保阴煎。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 56,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3530d6080f95c8e0a6a27892f9dd1dbed43dbb54542220ff485739425fc9fa26",
+      "answer": "A",
+      "text": "石韦功效:利尿通淋,清肺止咳,凉血止血。用于湿热淋证,为清热利尿通淋常用药,尤宜于血淋。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 185,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "996f3ebdb41c9645c74fa7888e841650bc26e5113bb77634ace4190bd2fb476d",
+      "answer": "E",
+      "text": "温经汤主治证候皆因冲任虚寒,瘀血阻滞。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 257,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7bddc798b26b6d070a5f76d8ce00e530a5d325fada3ac4392334796d4a7f4913",
+      "answer": "B",
+      "text": "参苓白术散的配伍意义:方中人参白术、茯苓益气健脾渗湿为君。配伍山药、莲子肉助君药以健脾益气,兼能止泻;并用白扁豆、苡仁助白术茯苓以健脾渗湿,均为臣药。更用砂仁醒脾和胃,行气化滞,是为佐药。桔梗宣肺利气,通调水道，又能载药上行,培土生金;炒甘草健脾和中,调和诸药,共为佐使。综观全方,补中气,渗湿浊,行气滞,使脾气健运,湿邪得去,则诸症自除。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 201,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "68861af590228111b3bc51fdd3420867097ef31914a40ad0b58f50b1bdd1d5d2",
+      "answer": "D",
+      "text": "忠儿长期泄泻病史,有轻度抽搐症状,由此可诊为慢惊风。患儿久泻不止，脾土受伤,肝木无制,因脾虚肝旺而出现慢惊风的早期症状，故其证候是土虚木亢。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 456,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d0e3f1a4da4ef9a50d4a2a5f1257406cffe646cec08b48fbe2e0f464379b3a82",
+      "answer": "A",
+      "text": "有机磷中毒双侧瞳孔缩小,脑肿瘤、脑疝两侧瞳孔大小不等，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 118,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "79faa6903e078622b978cafcc2b1f4e075eda2709bc8c2d3a6377c7770602ce0",
+      "answer": "E",
+      "text": "大黄附子汤的主治证候为阳成恶药，腹捕便秘，胁下捕，友然，所冷,舌苔白腻,脉紧弦。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 65,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "df9429aae1525cceb9c17a7553ae260a33a0767cbe41f1c12c121fcf7cac06ce",
+      "answer": "A",
+      "text": "仙茅具有的功效是温肾壮阳、祛寒除湿、培补肝肾。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 61,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c663fae2da8bcb7c4806c6b9ee086fdf6ee6eb2278bb7cb658144ca8115d6d8b",
+      "answer": "A",
+      "text": "芦根清热泻火,生津止渴:除烦,止呕,利尿。淡竹叶清热泻火，除烦，利尿,故选择A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 197,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8c7e2ae0376a2d5fa541be015ee914ca7679ce6412274fd3c1e5104fb069dac0",
+      "answer": "C",
+      "text": "肝主疏泄而血，具有条达气机调节情志的功能。肝病日久，则肝气郁,疏泄失职，故见两胁胀满疼痛。气为血帅，气则血凝,故见舌质瘀点、瘀斑。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 113,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "17eafc5afd8ff1ca2b93826204d4b521564496230933e529b3ccc9cd4691dd00",
+      "answer": "A",
+      "text": "黄疸特征尿赤便秘,肝胆火盛,故胁胀闷痛。治宜清热利湿，佐以泻下，热重于湿,故力量集中在清热，方用茵陈高汤:故选A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 71,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "946d60d3cb42f360961ab4fe15f7e3098ae6caafc9a194d99f7eb6b515f02e0e",
+      "answer": "D",
+      "text": "有无尿痛是尿血与血淋的鉴别方法。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 75,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "32784db177ebd0a505864f6c0722f2c0f906dc0a90e7cc9ba8d44c958ffbc340",
+      "answer": "D",
+      "text": "丹剂有外用和内服两种,丹剂无固定剂型，如属水丸剂的有梅花点舌丹:属糊丸剂的有人丹、小金丹，属蜡丸剂的有黍米寸金丹等，其余剂型有固定剂型，故选D",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 281,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1b31d3fc8f83a6347e68fc174033963dd667a0f082527f968eacb0c9a3e0b00d",
+      "answer": "B",
+      "text": "语音展颤的强弱受到发音的强弱、音调的高低、胸壁的厚薄以及气道通畅程度的影响，减弱或消失主要见于肺泡内含气量过多、支气管阻塞大量胸腔积液或气胸、胸膜高度增厚粘连、胸壁皮下气肿或皮下水肿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 134,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "043c07656df308f821e0530a0583f3f9aff2d018c8142018095c9d9130127e27",
+      "answer": "A",
+      "text": "间歇热:体温骤升达高峰，持续数小时后,骤降至正常,经过1天或数天后又骤然升高，如此高热期与无热期反复交替发作,见于疟疾、急性肾盂肾炎等",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 74,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "76d9598d228c2d660578edae26be787b27a40006c22333c07201dd25edad7191",
+      "answer": "C",
+      "text": "丹参活血调经,祛瘀止痛凉血消痈,除烦安神",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 273,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "639dc3cab7937783d78b0146c7ac02f15f90fa1489bd155e1a8d414cb59c1110",
+      "answer": "A",
+      "text": "归脾汤的功用:益气补血,健脾养心。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 205,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a1ec5f1483a4d1e605c14f9000821c791a1e830687682109c772c704bc7cbce6",
+      "answer": "C",
+      "text": "饮在肠间,则肠鸣沥沥有声;饮在胸胁,则胸胁胀满,咳唾引痛;饮在胸膈,则胸闷,咳喘,不能平卧,其形如肿;饮溢肌肤,则见肌肤水肿,无汗,身体疼重。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 149,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "142f3c12d049550203725e2c858d44cc07ab06826ba98ce25ad44345e5b4b8f2",
+      "answer": "E",
+      "text": "狂证痰热瘀结证由气郁痰结、血气凝滞、瘀热互结、神窃被塞所致。治法:豁痰化瘀,调畅气血。代表方:疯狂梦醒汤加减。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 35,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "960ebbf3ab610cd26845f3852b277b7ca81f88006e250d6715f97ed6896f9c0c",
+      "answer": "C",
+      "text": "防风汤祛风通络,散寒除湿,侧重祛风,用于风重的行痹,故选C。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 131,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9e8b329c73d6a736e403e850a82663b17a8e9a055364217444e4db98b5380b9c",
+      "answer": "A",
+      "text": "呼气性呼吸困难，病变在小支气管。表现为呼气困难，呼气相对延长，伴哮鸣音。见于支气管哮喘及其他慢性阻塞性肺病。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 94,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9454de01dedc2075c2eac70fc5754d8df53ab67cc989f26f16463db9bd1ba8ec",
+      "answer": "A",
+      "text": "1型糖尿病有明显的三多一少症状（多饮多尿多渴，体重减少），青少年多见，与肥胖无明显关系，婴幼儿起病常急，成年起病者可缓慢进展，在感染或应激时出现酮症及严重高血糖。治疗主要依靠胰岛素，对降糖药不敏感。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 58,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f633268fcb3393ad00f2562c4068f08fa25698a77b46fc4937aa0ce66cc84277",
+      "answer": "C",
+      "text": "胁痛瘀血停着证用旋覆花汤祛瘀通络。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 39,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9795ef0720e6c7fcd6d20eb0e773f6297bb075aa12b07c1c1d964437d828c67c",
+      "answer": "A",
+      "text": "伤寒血培养第1周阳性率最高,可达80%。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 258,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fd9c4892813dd9d5a002806d06cd0b6acc61bfc088b06184e7ebcb2f59cbc3d0",
+      "answer": "A",
+      "text": "就季节变化而育,由夏至秋气候由热变凉，是一个阳消阴长的过程;由冬至春,气候由寒变暖,是一个阴消阳长的过程就人体而言,功能(阳)的产生，必然消耗一定的营养物质(阴)，这就是阴消阳长的过程，而营养物质(阴)的化生利用又必然要消耗一定的能量(阳)，这就是阳消阴长的过程。这种一定范围的消长是正常的，如果一方消得太过，就会发生疾病，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 9,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9dd512c5b4ada2febbb5a8d28bb3c6f104e7157868da0c7c91529f3fec6c4a8f",
+      "answer": "B",
+      "text": "薄荷能舒肝解郁,治疗肝郁气滞、胸闷胁痛，紫苏为行气宽中、醒脾止呕良药，可治疗脾胃气滞、胸闷呕吐。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 69,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7edf138773db34171937d4b0209d3d72df1bd8ee9173cbdbe361267b6f0b0b61",
+      "answer": "D",
+      "text": "黄疸阴黄包括寒湿阻退证和脾虚湿滞证,前者治疗首选茵陈术附汤,后者治疗首选黄芪建中汤,故选D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 111,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7a1ec6c6045edb819d919da0ed29928f82b1a7052ba680dc4b44b805aa7b23cc",
+      "answer": "C",
+      "text": "下合穴共有六个,胃、大肠小肠、胆、膀胱、三焦的下合穴依次为足三里上巨虚、下巨虚、阳陵泉、委中、委阳。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 187,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "17b93daea4dff4c6e4607f004c78c69bcb7bec9c0b57c807cd1c1c5d14b04851",
+      "answer": "E",
+      "text": "制化,“制”,即制约、克制;“化”,即生制化是把相克联系中只有相生而没有相克,则不能维持正常的平衡,如果仅有相克而没有相生,则万物无以生化。制化是通过五行中的相生、相克,对五行中某一行旺盛之时,予以制约,防止其“亢而为害”。五行学说运用生克关系的调节,解释大自然的正常生态平衡以及人体生理平衡",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 5,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fbfeec249d70dc72920e28d37a0fec358200ff5d524693cd0d35a91036e98eb9",
+      "answer": "C",
+      "text": "君主之官:君主,指心在脏腑中居首要地位的意思。君主之官:人体器官名。指心脏。心主神明，主血脉，居脏腑中最重要位置,故称之。《素问·灵兰秘典论》:“心者,君主之官。神明出焉。”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 29,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e9fee01d9876ce61afca24bd877b7dc49b04ddf93e65d61850da9e367ee8b7c4",
+      "answer": "B",
+      "text": "老年有头疽患者多发,尤其是消渴病患者,易出现内陷之证。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 120,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0c4496dbc9181d9e2d312934f3d14205afad27b670160adb3ac26d05be7ac4cd",
+      "answer": "D",
+      "text": "逍遥散疏肝解郁,健脾和营。一贯煎滋阴疏肝。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 297,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3a75a403cbb5fc763a1dece4412596792b118aa7298012e19a9b623a1a73ae35",
+      "answer": "E",
+      "text": "日月的定位:在上腹部,当乳头直下,第7肋间踊,前正中线旁开4寸。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 215,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1dfdb34f162c394d81c3e39b810b2f0a98fab57f7053bcd506a7615d515d8436",
+      "answer": "C",
+      "text": "风、寒、暑、湿、火均可外感其中,风,有内生肝风;寒,有内生虚寒;湿,有内生痰湿;火,有内生肝火;只有暑邪只能外感,不能内生。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 125,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "71a42d2eb6a4b3cbe1fd0ebe20ec4c54eddd6500910bc9ca23760347d4f994de",
+      "answer": "B",
+      "text": "放射性疼痛为一个局部病灶通过神经或邻近器官而波及其他部位的疼痛。胆道疾病引起的腹痛多放射至神经走行的部位，即右肩部，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 154,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a324b732ce92db6545373cca8a6737bc386ac93525783d480ec7d8abe3099eb3",
+      "answer": "B",
+      "text": "厥证是由阴阳失调,气机逆乱所引起,以突然昏倒,不省人事,四肢厥冷为主要表现的一种病证。厥证的病因可以有气虚下陷,清阳不升,痰随气升,上蒙清窍,失血过多,气随血脱,气血凝滞,脉络瘀阻,但是最终都引起气机逆乱，升降失常,阴阳之气不相顺接而致,故排除ACDE。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 123,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "00bae210c58bb2492b88a27d339333e0b1ba92fef7954fbca86800146b6e5264",
+      "answer": "A",
+      "text": "此病证为肺炎喘嗽之阴虚肺热证。治宜养阴清肺,润肺止咳。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 418,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bc474114e9d4e6846668d1bebd670a09dc29b88ff93f9732e07626a335667164",
+      "answer": "A",
+      "text": "以病因命名者,如冻疮、水火烫伤、破伤风、毒蛇咬伤、漆疮。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 4,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "93346994cf80b18818406349bec83451640807f8019b554bd99cd4b541483294",
+      "answer": "C",
+      "text": "手阳明大肠经经脉为多气多血之经。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 247,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "401b412cc853a0960764f9c0092340c957010359474938447638ff6166546dbd",
+      "answer": "C",
+      "text": "槟榔杀虫消积,行气,利水,截疟。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 265,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "282ab1144776b4a8c5c42a639bdc45cd0fec47049b853d6e2dbd620219009259",
+      "answer": "E",
+      "text": "喷射性呕吐常发生在患有脑部疾病时，如脑炎或脑部肿瘤，因颅内压增高而出现喷射性呕吐。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 106,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7933915c6cc8bca63058012d10e25fb8569e33dc48e5c010188337dcb3bf4e64",
+      "answer": "E",
+      "text": "E项指脉来急疾,一总七八至。主阳极阴竭,元阳将脱。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 46,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "584d82732ec47526568a2e1f5d3be93c26132087760e6ef135c3c951df1824f3",
+      "answer": "B",
+      "text": "反胃是脾胃虚寒,胃中无火,食入不化,表现为饮食入胃后,良久尽吐而出。噎膈是痰、气、血有形之邪痰阻食道。噫气是骨气上逆,声音沉缓而长,多伴酸腐气味,食后多发。呃逆是骨气上逆动膈,声短而频,不能自制。梅核气也表现为咽中如物梗阻,但是辫气交阻，无有形之物,食物可以咽下。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 39,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1dfc61f641fa224a22c745ad9466b23ec73c1d594f58d31168fbab1171b4bb29",
+      "answer": "A",
+      "text": "邪热炽盛,燔灼肝经,热极生风,可以形成风气内动。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 29,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d5514fdf8ca85b14a92c68447fac8c8fb22e36409e2c258fbf5267a81d83a0ec",
+      "answer": "C",
+      "text": "知母性寒质润,有滑肠作用,故脾虚便溏者应慎用。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 201,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5e9d63999be61d7c3b95232a14e2a2bd572f836d88eac5797d014afcad5335d1",
+      "answer": "A",
+      "text": "肺心病的主要体征为颈静脉怒张、肝大、下肢水肿等。右心室扩大及肥大,右心失代偿则体循环瘀血，出现上述临床表现。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 194,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "60725f04420198041f9448aa8f14ff6a07fe994837c663b49382a9282a944ed2",
+      "answer": "C",
+      "text": "拯阳理劳汤功效为温补心肾，态气温阳，用一心阳能让，故选",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 119,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c93ad99c04408de7921e009d2d3d329b631dae9af72f014e210c3c1b017fc3ab",
+      "answer": "D",
+      "text": "胆囊炎致呕吐有恶心征兆，吐后不觉舒服，伴有发热，无腹胀及胃肠型；幽门梗阻呕吐隔宿食物；肝炎致呕吐有恶心征兆，吐后不觉舒服，伴有黄疸、发热；肝硬化可见上腹膨隆，无胃肠型，有恶心征兆，吐后不觉舒服；胃炎无上腹膨隆及胃肠型，有恶心征兆，吐后觉舒服。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 386,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "338172e52ef6f93f35dedd6b23ec1f24b6c87fd13f3a3a9445fc503dda5b7cad",
+      "answer": "E",
+      "text": "本病好发于皮肤细嫩、皱褶部位,常从手指缝开始,1~2周内可广泛传布至上肢屈侧、肘窝、腋窝前、乳房下、下腹部、臀沟、外生殖器、大腿内上側等处,偶尔侵犯其他部位,不侵犯头部及面部,但婴幼儿例外。皮损主要为红色丘疹、丘疱疹、小水疱、隧道、结节。结节常见于阴茎、阴、少腹等处;水疱常见于指缝;隧道为疥疮的特异性皮损,微微隆起,稍弯曲呈淡灰色或皮色,在隧道末端有个针头大的灰白色或微红的小点,为疥虫隐藏的地方。本病传染性极强,患者常有奇痒。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 84,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "75b73c766b80c28b08307404a26ab405967bc34d25869a6c818bad1c9aeb3ea9",
+      "answer": "D",
+      "text": "走黄的发生主要在于火毒炽盛,毒人营血,内攻脏腑。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 28,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "94f23204cc336993a6676d7246e72bbe50819778025986164717ab992267bfc3",
+      "answer": "D",
+      "text": "心主血脉而藏神,肝藏血而主魂,血虚则心肝失养,神魂不宁,可见心、肝可同有血虚。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 70,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4f15988a208e6777a6fa5f9ea97c377edc19fc8a13622bb705e7e70f5666962c",
+      "answer": "E",
+      "text": "胸痹的主要病机为心脉痹阻病位在心,涉及肝、肺、脾、肾等脏。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 59,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "99e5202bdea2839e24258f25c13d75bdb0bf7e37f506383ff72bed873d226cfb",
+      "answer": "C",
+      "text": "痞满伴胸满闷,头晕目眩,身重困倦,呕恶纳呆，不渴为痰湿内阻之证。治以祛湿化痰,理气宽中为法,用二陈平胃汤湿健脾,化痰理气。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 425,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "eb0350221be4430ff72f6fe706a32ebbcb1ac1771c11d2ffa624e568fb48c919",
+      "answer": "A",
+      "text": "炙法的分类,艾条灸。雀啄灸:施灸时,将艾条点燃的一端与施灸部位的皮肤并不固定在一定距离,而是像鸟雀啄食一样,一上一下活动地施灸。温和炙,施和时将艾条的一端点燃,对淮应灸的腧穴部位或患处,距皮肤2～3cm,进行熏烤,使患者局部有温热感而无灼痛为宜。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 119,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ae640c2bf159e87748485d9dbc54c1eb4cf74d9e3285fadf2f7c49ae335194f1",
+      "answer": "D",
+      "text": "豨莶草袪风湿,利关节,解毒。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 49,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2043b3eb2a5c3e789557bff3e73478a5427572ba5fe08acffc0916b8f0c48480",
+      "answer": "D",
+      "text": "正常人呼吸运动的频率和节律正常16～18次/分，与脉搏之比为1:4，节律均匀而整齐。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 106,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "79509c4e4071b4aff09b4fb52a4ca2a88890195606af147ce205390ed0296892",
+      "answer": "D",
+      "text": "太阳头痛引经药:羌活、蔓荆子、川芎。阳明头痛引经药:葛根、白芷。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 26,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "eb9a3ee09994a8d9d9df805fff71a6c472b5ddb5fdc4042605f6cb65c36f2e7c",
+      "answer": "E",
+      "text": "肾主纳气,具有帮助肺保持呼吸的深度、防止呼吸浅表的作用,故称肾为“气之根”，故选择E",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 53,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d4d809c60c9debd3a0731548d61ed12e5892e67dca116647aaf01996502d9088",
+      "answer": "E",
+      "text": "芦根清热泻火,生津止渴除烦,止呕,利尿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 205,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b43f3d279134ac37192d4dc27eee73d4a3458a2bd94c18e4564cc3a2735a1244",
+      "answer": "E",
+      "text": "急黄神昏舌绛者治宜清热解毒,凉营开穷,重在开窍;阳黄初起见表证者,治宜解表清热利湿，重在解表，故123题选C,124题选E",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 18,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1b11c9cf785074e779b23e4f26ea63c5da39fe36816a8fd1e858fd68f308bc4b",
+      "answer": "D",
+      "text": "四缝穴主治小儿疳积、百日咳。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 231,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f4b05affdcc6e1da8e9857588b52b667ef95202f6a6b154678c996ea3c27b9e4",
+      "answer": "D",
+      "text": "穿心莲清热解毒,凉血，消肿,燥湿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 213,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f98f966fe1ef55326cd946cac1dd5423ee8f3cdf33e7cd813b4f7fbb5b81fa6b",
+      "answer": "A",
+      "text": "在清晨空腹或餐后6~8小时以上仍能听到振水音,提示幽门梗阻或胃扩张。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 106,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fb0745d80e3d346cdbabd8833e58197527a66350a1dc3992a746a2de3a1bc5fe",
+      "answer": "D",
+      "text": "在四肢部,阴经分布在内侧,阳经分布在外侧面,内侧分三阴,大体上,太阴、阳明在前缘,少阴、太阳在后缘,厥阴、少阳在中线。故患者疼痛沿三焦经放散,其病变部位在D;患者病发心绞痛,沿手少阴经放散,其病变部位在E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 9,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "936a6701342dbe78df4789e9b8e9855fbe39de3691d578ada9413c99b0f7a9d4",
+      "answer": "A",
+      "text": "八脉交会穴歌云“公孙冲脉胃心胸”,故选A。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 247,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8638f87c5e5aaffff0f41643f49de7a5caf04ca8e0c256aa43ff9ed11587e8e5",
+      "answer": "D",
+      "text": "凡跌打损伤、沸水、火焰、冷冻等,都可直接伤害人体，属于外来伤害。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 8,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0596c52f4bf6042377895cc4c953288e2f45bd9c010d4f7a88f88d4dbc2311ba",
+      "answer": "C",
+      "text": "肺主通调水道,是指肺的宜发和肃降对体内津液的输布、运行和排泄有疏通和调节的作用。通过肺的宣发,水液向上、向外输布，布散全身,外达皮毛，代谢后以汗的形式由汗孔排泄:通过肺的肃降,水液向下、向内输送,而成为尿液生成之源,经肾蒸腾汽化,将代谢后的水液化为尿贮存于膀胱,而后排出体外。可见肺的宣发与肃降功能与其通调水道作用密切相关。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 93,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e05a939519a1057793c4c6d33a062fe9f47f6fcf59165f896e19cb8cf2b464ca",
+      "answer": "B",
+      "text": "可知“气、火、风”为肝脏病理发展过程中的一大特点。肝气郁结是肝失疏泄,气机郁滞的表现。肝郁不舒,郁而化火，可形成肝火;久之肝火内耗肝阴,肝阴不能制约肝阳而致肝阳上亢;肝阳升动无制，风气内动,则为肝风(肝阳化风)。三者之间，常以肝气都结头生品水即旺安的固发用李王成气病及血，气潜必血瘀,气郁不达,津液停聚，亦可酿痰。气、火、痰、瘀、风的病理变化过程,可产生各种复杂的病变,其病理根源，则均与肝气郁结有关",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 41,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2e534768e62ee2c3d17be45966d3695edec91b2cbfa61ae8993b76dde7eae881",
+      "answer": "D",
+      "text": "血小板减少常见于血小板减少性紫癜、脾功能亢进、再生障碍性贫血和白血病等症。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 142,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "909256fd24dc037a5de282103bbb7327b44c78417551a77942605a5fb7ec57ad",
+      "answer": "A",
+      "text": "产后三急指呕吐、泄泻、盗汗。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 212,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "42e47401b42b3fe0147eba7768d8662d4d111228b9eda2751551866b01ecb62c",
+      "answer": "D",
+      "text": "气的生成有两个方面,一方面是肺吸人自然界的清气,另一方面是脾胃消化和运化的水谷之精气,故肺、脾与气的生成关系最密切;肝主疏泄,调畅人体气机,肺能调节全身气机，故与气机调节关系最密切的脏是肺和肝，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Past_Paper.json",
+        "sourceQuestionIndex": 8,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "75ec0b5a691cf2f300959b0218fc5b01d7bba96c242b5d36baf3265fe2dc8bbb",
+      "answer": "D",
+      "text": "寒从中生是指机体阳气虚衰,温煦气化功能减退,虚寒内生的病理变化。寒从中生与肾阳虚不足有关。脾为后天之本,为气血生化之源,脾阳能达于肌肉四肢。肾阳为人身阳气之根,能温煦全身脏腑组织,故脾肾阳气虚衰,则温煦失职;最易表现虚寒之象,而尤以肾阳虚衰为关键。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 33,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a069a010abe16d78b41ac35087847a99fd1ce343c25be71c20d30ad7840aa6ec",
+      "answer": "C",
+      "text": "《丹溪心法》将郁证列为一个专篇，提出气、湿、火、食、温、痰六郁之说。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 139,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "cecd77897b0779abb79935650f4fbf4ed78d79ac144e8c2137daf57a5fd92fd5",
+      "answer": "A",
+      "text": "脱疽主要由于脾气不健,肾阳不足,又加上外受寒冻,寒湿之邪人侵而发病。它与湿热、情志无关,故首先排除BCE。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 116,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "844c6f3a796a1c4826f01df8a89c0ae9964c336978598eea87cf00d916811839",
+      "answer": "D",
+      "text": "时行感冒是指在一个时期内广泛流行,证候相类似者,称为时行感冒;与感冒风热证的区别点在于有无流行性，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 3,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fdbc56032af51c517633efea10f7033b0f7adb4f06c1efa887edabc72bc55479",
+      "answer": "B",
+      "text": "大建中汤组成:蜀椒、人参干姜、胶饴。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 313,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "17733f54d28edf784a27940a7b072fa55e15f885fcfd56ae17d42b5f3ba030bd",
+      "answer": "D",
+      "text": "锥体束病理反射包括巴宾斯基征、奥本海姆征、戈登征以及查多克征等，直腿抬高试验又称“拉塞格征”。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 166,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "58f70b3aa67571549885cecd1b6c5572d97c0748cfdba435f338d5afd1b73feb",
+      "answer": "E",
+      "text": "血清钾增高见于:①肾脏排钾减少;②摄人大量钾盐,超过肾脏排钾能力;③严重溶血或组织损伤,红细胞或组织的钾大量释放人细胞外液;④组织缺氧或代谢性酸中毒时大量细胞内的钾转移至细胞外，故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 182,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4270641ea67d79cb817b5abeef218a63d7fde362631b4b3eeb540717b9124b1c",
+      "answer": "C",
+      "text": "妇女在绝经前后,肾气虚衰,天癸浙竭,冲任二脉虚衰,由于体质因素,肾虚天癸竭的过程加剧,难以较迅速地适应这一阶段的过渡，使阴阳失去平衡,脏腑气血不相协调,因而出现诸多证候。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 192,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "95d3143c34e0133a2094508ed76a32dc170d9694b00986121bc7d9788a9c0c5a",
+      "answer": "C",
+      "text": "人工流产并发症有人流综合征、子宫穿孔、人流不全、宫颈或颈管内口粘连、人流术后感染。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 68,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4455e4969a6613651c84f9f7ec032e965e196daade945188e0113df25ec5ba88",
+      "answer": "E",
+      "text": "肾中所藏之精,按其来源又有先天和后天之别。先天之精:来源于父母，与生俱来,藏于肾中,是人体生长、发育、生殖的基本物质;出生之后,有赖于后天之精的不断充养，后天之精:来源于水谷精微,由饮食水谷经脾胃化生，是维持脏腑功能活动的精微物质，又称五脏六腑之精。后天之精是维持人体生命活动的基本物质,又称为脏腑之精。故称“封藏之本”其余选项干扰性不大。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 9,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e1340341c52ea3646b7ffd7ad9ba8de74809abf8e433eba8c2915b05d984c7f9",
+      "answer": "D",
+      "text": "肝藏血,主要表现在三个方面:①贮藏血液,肝如同“血库”一般,能够贮藏一定的血液，以供人体活动所需，发挥其潘养脏腑组织、维持相应功能作用;②调节血量，肝除藏有一定的血液外,还具有依据机体之需调节循环血是作用为当机体处于安静休息，或睡眠状态时,机体所需血最减少,部分血液回流人肝,并贮藏起来,而当人体在工作,或剧烈活动时,机体所需血量增加,血液则由肝脏输送到经脉,以供全身各组织器官所需;③收摄血液,防止出血。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 45,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0ea936caad9af8e25810a7655a6040bbaca0abe43b4878d1becf31124d6d362e",
+      "answer": "C",
+      "text": "少泽穴的主治:乳痈、乳少等乳疾。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 219,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "db46cc6fd048832ff0208c6a9f9068b797a69f63c03f1658e9aef1398ef02f36",
+      "answer": "B",
+      "text": "胡黄连功效:清虚热,除疳热。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 217,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "55994b24e0a0d89d4125cbe75dfe33fe933d31ca9f654639d796daba232b02c2",
+      "answer": "E",
+      "text": "缀解期,可见神疲乏力,食欲不振!形体消瘦,四肢不温等症,治以健运脾胃、补益气血为主,可选用温脾汤",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 79,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "483772e834d5a318319f3811a9ef3a9f79d7e26ae548eeaa0f83e22d36990256",
+      "answer": "B",
+      "text": "阴阳转化是指阴阳对立双方,在一定的条件下,可以各自向其相反的方向转化,是在量变基础上的质变。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 17,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5a08e8ce3c63e16af4072d3ab88f45881a8c01d04f17ffd951be5a000958c0b7",
+      "answer": "E",
+      "text": "闭经的病因有气血虚弱、气滞血瘀、肾气亏虚、阴虚血燥、痰湿阻滞。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 184,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4a35efdf818df7dea0e93f932005f4a3677be70e44fdd5044d90a664c9844107",
+      "answer": "D",
+      "text": "粪一口途径是甲型肝炎的主要传播途径。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 78,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "71b6fa215e209692a59e77d669bf4ff392453bca64fc2f870b6ea14a031db074",
+      "answer": "E",
+      "text": "结脉指脉来级,时而一止,止无定数。促脉指脉来数,时而一止，止无定数。代脉指脉来时见一止,止有定数,良久方来。微脉指极细极软,按之欲绝,似有若无。弱脉指极软弱而沉细。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 109,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9bc7a9c0048ecc084f7b01b6ba67875b91176d42a3938b2e3aa6670156e38bc1",
+      "answer": "A",
+      "text": "痢疾时止时发,久久不愈者为休息痢,因治疗失宜,或气血虚弱,脾肾不足,以致正虚邪恋,湿热积滞伏于肠胃而成。治宜温中清肠，调气化滞,所以休息痢发作时应用连理汤,本方由理中丸加黄连而成。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 75,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "741890b826575c181c171e20c1368a9d026b66db29f0dbbde7d6fd87d359f42c",
+      "answer": "A",
+      "text": "大建中汤主治的腹痛特点:腹痛连及胸脘,痛势剧烈,其痛上下走窜无定处,或腹部时见块状物上下攻撑作痛。四逆汤主治寒厥,症见四肢厥逆,恶寒蜷卧,腹痛下利,神衰欲寐等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 4,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "67361606cbfb46d937c7382a38cbf67960cef421448054db9de3ad678c26c7d6",
+      "answer": "C",
+      "text": "肝肾亏损证。证候:筋骨萎弱，发有迟缓,坐起、站立、行走、生齿等明显迟于正常同龄小儿,头项萎软,天柱骨倒,舌淡,苔少,脉沉细无力。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 432,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "20f35012f763364cb346648897fb6289afa1e4f0fe10dd8e083aff223aa0db3c",
+      "answer": "C",
+      "text": "聚证若痰较重,兼有食滞,腑气虽通,苔腻不化者,可用平胃散。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 151,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a302f7611fdd759f6dcf1a7e460902109b4d11aa6ae9a185a415b269ca6a3e4a",
+      "answer": "B",
+      "text": "板蓝根具有清热解毒,凉血利咽的功效,多用于温热病发热、头痛、喉痛或温毒发斑、痄腮、痈肿疮毒、丹毒、大头瘟等",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 217,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ce3a8ae721f36fff23d2974c6730747c2d062ee6d375f22730aed0b2d7e12839",
+      "answer": "B",
+      "text": "温胆汤的组成:半夏、竹茹、枳实、陈皮、甘草、茯苓、生姜、大枣。凉散的组成:川大黄、朴硝、甘草、山栀子仁、薄荷叶、黄芩、连翘。骨散的组成:银柴胡、胡黄连、秦艽、鳖甲、地皮、青茜、知母、甘草。温脾汤的组成:大黄、当归、千姜、附子、人参、芒硝、甘草。清胃散的组成:升麻、生地黄、当归、川黄连、牡丹皮、石膏。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 225,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2bd50b537d99e31ee9319bf21d63fe1309aa190145ad168d45fc72910f39a517",
+      "answer": "B",
+      "text": "肝开窍于目,肝藏血,眼依赖肝血活养才能发挥视觉功能。《素问·五脏生成篇》说:“肝受血而能视。”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 41,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3fcbdf683ebd1d54fa46cb91f4c6d041a1b8d8588476a4a33343963e70839440",
+      "answer": "E",
+      "text": "二尖瓣器质性收缩期杂音的特点：强度常在3/6级以上，持续时间长，占据整个收缩期，可遮盖第一心音,常向左腋下传导,吸气时减弱,呼气时加强,左侧卧位时更明显,故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 218,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fd12020c16f6fef043b7f095f2f5bba7e2e54032260172ef735efc294db0e855",
+      "answer": "B",
+      "text": "VP方案,即长春新破十泼尼松,主要用于急性淋巴细胞性白血病的诱导化疗。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 26,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7833c88fc10cf073359c269b922b9a9d8225c7809304506dc20d77198c3b3454",
+      "answer": "D",
+      "text": "肉桂能够补火助阳,加人补气药中能够鼓舞正气生长。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 253,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f4979a3df99184cfc72728a828f6d66a1444656ab08549285961d8cf5ff2dc54",
+      "answer": "A",
+      "text": "久病咳喘,提示病变本在肺,日久及肾,表现为乏力少气，呼多吸少，自汗耳鸣，舌淡脉弱。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 113,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a0e6af9afd209036426282f5f1ca374a8c4186472da38701dc13fdb055b7a5aa",
+      "answer": "B",
+      "text": "胃的生理功能:受纳、腐熟水谷;主通降,以降为和,故选B。ACDE项均属脾的生理功能。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 77,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "420580633a61df64f3eae00d49a20e16716cd81db84e3e80946e3d4641479c0f",
+      "answer": "E",
+      "text": "正疟应祛邪截疟和解表里，用柴胡截疟饮。劳疟应益气养血扶正祛邪,用何人饮。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 30,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0297a748b20eec27e3d3bec5a5379922a258ec77bb60dc5892aea5653f4c08b8",
+      "answer": "C",
+      "text": "威灵仙祛风湿,通经络,消骨鲠。防己祛风湿,止痛,利水消肿。狗脊祛风湿,补肝肾,强腰膝。此外,狗脊的绒毛有止血作用。独活祛风湿，止痛,解表。木瓜舒筋活络,和胃化湿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 45,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1892e1456fc0cd37a79d40fb18d229b3c002f3e10693ef51b123f9815cfaab7d",
+      "answer": "A",
+      "text": "足厥阴肝经人毛中,环阴器",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 97,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "136b023b5605c30c82b4c6b91ff11365e92e9e7513daa6139322caa834173261",
+      "answer": "B",
+      "text": "郁证之肝郁伤神证(心神失养证)治法:甘润缓急,养心安神。代表方:甘麦大枣汤加减。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 79,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1975d456ac4d14d5b2af3ec7f74c4bc1666d6d84139f8c3dddc963c09c8a0ee0",
+      "answer": "A",
+      "text": "耻骨联合上缘至股骨内上髁上缘的骨度分寸是18寸。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 259,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "94f7aa07d0217ec26a8df382047c4f0245fc56dfbd9c23c2cfed4df471e1af0a",
+      "answer": "E",
+      "text": "中年患者，上腹部胀痛，与饮食有关，偶反酸嗳气，应为胃部疾病，结合病史，应为慢性胃炎，故选E。胃溃疡腹痛常有规律，为进食后痛；胆囊炎、心绞痛疼痛性质、部位与本例不符。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 294,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4ae926927b7a637b2c3082537726f3247bb689a533180e3ccf0846a57eb1e641",
+      "answer": "D",
+      "text": "清营汤清营透热，养阴活血。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 301,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bcbe3e42eeb5653fa3cdd42bfd05869596d3b417cc1e61c29c2946b98e166059",
+      "answer": "C",
+      "text": "过清音是属于鼓音范畴的一种变音，介于鼓音与清音之间。过清音的出现提示肺组织含气量增多，弹性减弱，临床常见于肺气肿。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 106,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "bdcb1a4d0e925bf432365a05652e2d67d5950255e44138b39660fb10aee4c8c8",
+      "answer": "D",
+      "text": "色素细胞出现常见于心力衰竭、肺炎、肺气肿、肺出血等;支气管哮喘者可见杜什曼螺旋体。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 314,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "94d81876d96c4a569a7afc52d01c69a6b5f0ad13de4f87dfde83ec281c3ed5b8",
+      "answer": "D",
+      "text": "蝉蜕甘、寒,归肺、肝经,故选择D。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 165,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "ab0400db3632cda8330b14e81c65e823a712531f9bd5c171b05064bed00442a7",
+      "answer": "D",
+      "text": "肿疡毒势方盛,正气已虚，不能托毒外出,当用补托法,补托法代表方剂为托里消毒散。透脓散为透托法代表方剂，仙方活命饮、黄连解毒汤、清肝解郁汤为消法。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 36,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a0f009f0bb7340454af1fd0139390ccdaa84836fe91739a4b6183a4c24dbc839",
+      "answer": "C",
+      "text": "小柴胡汤的组成:柴胡、黄梦、人参甘草、半夏、生姜、大枣,故选C。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 165,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "72be3b496e4515e224c1ceac45caa1e151dda0622baaa85da2d23c0172f3f130",
+      "answer": "B",
+      "text": "手太阳经行于面颊部，足太阳经行于头顶、后头部。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 101,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "36f6e72ccd3e71574d66414aed853cfc7109ed6efdb3c2b81d392da792c2832b",
+      "answer": "E",
+      "text": "青少年胸段下部及腰段均后凸，多为发育期姿势不良或患脊椎骨软骨炎的后果。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 142,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "11a1714b77bd6ffef73e01b203591c94637205ed9d930aa1c433708535a697a4",
+      "answer": "B",
+      "text": "肝属木,脾属土,属相克关系、肝木痛及脾土,为木旺乘士。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 25,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1d37ee567574e5a9faf1810c1efce9af8f008612c59b07be16a018a200366df2",
+      "answer": "A",
+      "text": "传染性非典型肺炎主要传播途径为飞沫，经呼吸道感染。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 74,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "134202ba55db8136ef44c55221ada70e82b9cb9829183bb744f7090a74969660",
+      "answer": "C",
+      "text": "同病异治，同一病证,因时、因地、因人不同,或由于病情进展程度、病机变化，以及用药过程中正邪消长等差异，治疗上应相应采取不同治法。感冒可以用辛温解表和辛谅解表两种治疗方法，所以是同病异治",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 1,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "86f275cae8114d9ad91b700d9ce8fb6f0d8bcf10ef972ae2709e56fbfc253647",
+      "answer": "B",
+      "text": "胃是机体对饮食物进行消化吸收的重要脏器,主受纳腐熟水谷,有“太仓”、“水谷之海”之称。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 5,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3bbbda8aa3712237824be596966c4404f43f9736fd386257a6ea3542ed54fe3f",
+      "answer": "A",
+      "text": "]针刺准备体位。仰卧位时头面、胸腹部及四肢部的腧穴易于暴需,方便针刺。仰靠坐位时头面、前颈、上胸等部的穴位能得到最好的暴露。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 111,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "e009e9b674697723f6ede5fbbadf6c7179976212876a65c358f3e1a3fb31dc27",
+      "answer": "E",
+      "text": "滑石的功效:利水通淋、清热解暑、祛湿敛疮。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 241,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "65ffa86db4f844d22bc5dcdf40c03d57d327143b28072c2ff31b26a24e6752dd",
+      "answer": "D",
+      "text": "地榆性寒苦降,味涩收敛,有凉血泄热、收敛止血作用,可用于各种出血证,尤宜于下焦血热所致的便血、痔血等,还能解毒敛疮,为治疗烫伤的要药。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 149,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "85ebbf6bddf02c2497ebc9d0b40068b980d7d60b1fc83356c7d98737138650a9",
+      "answer": "A",
+      "text": "胶艾汤主治证的病机是妇人冲任虚损，血虚有寒证，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 325,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9f972f0b2a8fc5caca20b5053772f965e1c8a92fcd6d0edff5e07d91e8a6ac97",
+      "answer": "E",
+      "text": "十宣穴的主治要点:昏迷，癫痫，高热，咽喉肿痛，是急救的要穴。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Past_Paper.json",
+        "sourceQuestionIndex": 239,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a100bbaaa0b481c421b62dd54c609558d0700adcc5e9a263638b8dee227a79a0",
+      "answer": "E",
+      "text": "“风热郁闭\"治宜疏风清热,\"咽喉肿痛”治宜利咽消肿，大便秘结”治宜通便。综合判断应选择具有潜肠和利明之功的疏散风热药。而牛劳子疏散风热,宣肺祛痰,利咽透疹,解毒散肿,故选E。薄荷疏散风热,清利头目,利咽透疹,疏肝行气。蝉蜕疏散风热,利明开音,透疹,明目退翳,息风止痉。二者都不具有滑肠之功。菊花疏散风热,平抑肝阳,清肝明目，清热解毒。蔓荆子疏散风热,清利头目。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 201,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "7cbfaf686b56cb27fb1e647f59ec850aed55c0adc35c1b0cf3cb0a392d24a02a",
+      "answer": "C",
+      "text": "痔生于肛门齿线以上，直肠末端黏膜下的痔内静脉丛扩大、曲张形成的柔软静脉团,称为内痔。内痔是肛门直肠疾病中最常见的病种。与西医病名相同。内痔好发于截石位3、7、11点，其主要临床表现有便血、痔核脱出、肛门不适感。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 116,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "74b5c026607f6c355875c2de824c50b1fe2e0244b543970a2d820278c67f812f",
+      "answer": "E",
+      "text": "ABCD项都是气虚证的表现,E项为实证的月经先期的概念,故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 136,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3b97c80ecbbb5944abab83ad47b00cc2fd1de9bbc39fb74986c7b52dd88990b1",
+      "answer": "C",
+      "text": "痢疾的历史沿革。金元时期刘完索指出,“调气则后重自除,行血则便脓自愈\"；”逆流挽舟法\"是喻家言(喻昌)提出的治疗痢疾初期兼有表证的治法。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 23,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0bf0a759363c42957ff9c3cd48ccf288b27a8dc7101075d3cf6fa5d91154e41b",
+      "answer": "E",
+      "text": "川芎活血行气、袪风止痛;丹参活血调经、祛瘀止痛、凉血消痈、除烦安神;延胡索活血行气止痛;姜黄活血止痛;郁金活血止痛、行气解郁、清心凉血、利胆退黄。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 197,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b09ff7455fee5c9110489de93201bd36d38ac286357edfa3ec75c2303edb2036",
+      "answer": "B",
+      "text": "肺大疱表现为位于肺野边缘甚细薄的透亮空腔，可为圆形、椭圆形或较扁的长方形，大小不一，较大的肺大疱中，有时可见到横贯的间隔。肺脓肿在急性化脓性炎症阶段，肺内出现大片密度致密影，密度较均匀，边缘模糊，可侵及一个肺段或一叶的大部。当病变中心肺组织发生坏死液化后，则在致密的实变中出现含有液面的空洞，空洞四周有较厚的炎症浸润，其内壁略不规整。引流支气管瓣性阻塞时，空洞可迅速增大。浸润型肺结核空洞形成X线表现：在肺上、中部显示大量条索状或一致致密影，其中有多发、不规则的空洞存在。可常有上部胸膜增厚，伴有不同程度的肺萎陷，致使胸廓塌陷，肋间隙变窄，肺门影上移，中、下肺部常有肺气肿，肺纹呈垂柳状。两肺中、下部有支气管播散病变。慢性纤维空洞型肺结核X线表现：在肺上、中部显示大量条索状或一致致密影，其中有多发、不规则的空洞存在。可常有上部胸膜增厚，伴有不同程度的肺萎陷，致使胸廓塌陷，肋间隙变窄、肺门影上移、中、下肺部常有肺气肿，肺纹呈垂柳状。两肺中、下部有支气管播散病变。周围型肺癌空洞形成癌瘤发生坏死，与支气管相通经排出后，可显示偏心性不规则空洞。或有结节向洞腔内突出。多数没有液平面，如伴有感染可出现明显的液平面。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 102,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2548864d4b956c01b8cc24d0d21c5f8b8527eeb7fb34f75e0242cbff70beabc3",
+      "answer": "E",
+      "text": "人体实验的类型包括自体实验、自愿实验、强迫实验。这些实验都需要付出道德代价，天然实验也是人体实验的类型，但其不需要付出道德代价。成部门除医师法规定不予注册的情形外，应当自受理申请之日起20日内准予注册,将注册信息录人国家信息平台,并发给医师执业证书。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 270,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "566b5d19c2330d943a09d7e14e321970a2f99febd56c192266b1ffe1ec11bb14",
+      "answer": "B",
+      "text": "哮病寒哮用射干麻黄汤。热哮用定喘汤。痰浊哮用二陈汤合三子养亲汤。风痰哮用三子养亲汤。外寒内热的寒包火哮用厚朴麻黄汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 7,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5b225edd1d05b9f5420d5fdd664bf39f496d011131527a215ce3091ff0abd0e5",
+      "answer": "D",
+      "text": "升、浮,指药物向上、向外的趋向性作用。一般而言,发表、透疹、升阳、涌利水、潜阳、镇惊安神、止咳平喘、止呕等药具有沉降作用。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 161,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a3848e0e2de084dc4ed8a8e37ad9c051b1bbc87224cb187c44fed485c4ef0a93",
+      "answer": "C",
+      "text": "导致胰腺的自身消化而发生急性胰腺炎,故其本质为自身消化性疾病。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 218,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "842259f9a0255803814c66b03630d73ff29f1fa565eba76ba94efc44170cc5f0",
+      "answer": "E",
+      "text": "主动脉瓣重度狭窄，心搏量减少，由于脑缺血可出现眩晕、晕厥、黑蒙。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 50,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d75ed1c7cd186694b333da8750188b6c4c6686347f9d91941c46c970e32b74ad",
+      "answer": "B",
+      "text": "本病由于损伤胃肠,导致肠道传化失司。糟粕停滞,气滞血瘀。瘀阻久则化热,盛则肉腐成痈。大便不爽,次数增多为阳明经症状,便频数,时时汗出,皮肤甲错。二目下陷,口干而臭,为阴伤的表现。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 380,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f7b09165fc5d4f5fc548b23d7fed28a519d68858337c4a0d1b2d89338d3d724b",
+      "answer": "E",
+      "text": "宗气贯注于心肺,具有推动肺的呼吸、助心推动血液运行的功能。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Past_Paper.json",
+        "sourceQuestionIndex": 17,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f501fdc6ad2925466191c4f861381583cce3cdac4d4185d2ca60491bbd1b9d2e",
+      "answer": "E",
+      "text": "溻渍法适用于疮疡溃后脓水淋漓或腐肉不脱,皮肤病瘙痒、脱屑,内、外痔的肿胀疼痛等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 72,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a70d1ee9a178f0e450287e7c18d6b1a9384e9a66aaa60d85cd8027e787b23f38",
+      "answer": "E",
+      "text": "影响肾小球滤过率有三大因素:有效滤过压、肾小球血浆流量、滤过膜通透性和滤过面积的改变",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 222,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1a0e217072ba6f9fc3de05c48cfa19dc8eaca8603a55347cc501bba9930e22b8",
+      "answer": "A",
+      "text": "小面积烧伤,初期用京万红烫伤药膏、清凉油、紫草膏等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 92,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3a8082c87bdb39046ccd3172a5258966696d4947dc342c810c06fbbd64ec4138",
+      "answer": "C",
+      "text": "手足冷,脉沉等,似属寒证,但四肢冷而身热不恶寒反恶热，脉沉数而有力，更见烦渴喜冷饮,咽干、口臭、谵语、小便短赤,大便燥结或热痢下重,舌质红,苔黄而干等症,故选C。A项主要表现为恶寒发热,头痛身痛,口潟引饮,心烦尿黄,咳喘痰黄,舌红苔薄等。B项多表现为发热头痛,咽干汗出,食少腹胀，便溏溲清,舌体胖,苔略黄等。D项表现为身热,面色浮红,口,脉大等似属热证,但患者身虽热却反欲盖衣被,渴欲热饮而饮不多,面红时隐时现,浮嫩如妆,不像实热之满面通红,脉大却按之无力。同时还可见到四肢厥冷，下利洁谷,小便清长,否淡苔白等症状。E项是指患者在同一时间内，上部表现为热，下部表现为寒的证候。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 453,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6a1f5ed0f7085dfc34565396cc3cffbe698e5692e74118d32261f144cfe4fef2",
+      "answer": "B",
+      "text": "络石藤祛风通络,凉血消肿,",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 53,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "58e843b36554479bb19588fff37cf594883900ac19c31638b6944707e1d790e6",
+      "answer": "A",
+      "text": "气虚,是指气的推动、温煦、防御、固摄和气化功能的减退，从而导致机体的某些功能活动低下或衰退,抗病能力下降等衰弱的现象;气脱，是指气不能内守而外脱,不符合本题,排除B;气陷,是气的上升不及或下降太过，排除E;元气耗损和功能减退,与血和津液无关,排除CD。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 41,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "52c217bed7f24522a5cc2490ae167cecdc7470ecc643d2d177cd0a5365593e10",
+      "answer": "D",
+      "text": "胸膜摩擦音吸气和呼气相均可听到,以吸气末或呼气开始最为明显，屏气即消失,深呼吸或听诊器胸件加压时，摩擦音增强。心包摩擦音是心包膜纤维素渗出致表面粗糙,心脏收缩时脏层与壁层心包摩擦产生的振动传至胸壁所致,常在胸骨左缘第四肋间触及,屏气后不消失。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 134,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8344192ccfcfccc490fb938163433faeb622cad81fadc88b638b4b3be657e975",
+      "answer": "D",
+      "text": "糖尿病是一组以慢性血葡萄糖水平增高为特征的代谢疾病群。糖尿病酮症酸中毒是糖尿病最常见最严重的疾病并发症。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 74,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8f1ebae949944f4abe64062a8989b60c123f0c2f19de2de3c1ab80a16556f69c",
+      "answer": "C",
+      "text": "土爱稼稿,为万物之母,故为“化”五化中生属木、长属火、化属土、收属金、藏属水。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 101,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "316de745aad09fc63b5e00218b86e2471f98572eeaa0520acdb1b108e6902abb",
+      "answer": "E",
+      "text": "贯众的功效是清热解毒,凉血止血,杀虫;槟榔杀虫消积,行气利水,截疟;花椒温中止痛,杀虫止痒;雷丸杀虫消积;榧子杀虫消积,润肠通便,润肺止咳，故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 141,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "07b99823f69ca63647caf1e33e6fb5fd81235f539c9cfab827eb915f08fa1e3c",
+      "answer": "C",
+      "text": "情志的五行归属:怒属肝,喜属心思属脾,悲属肺,恐属肾。金克木,故悲克怒。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 65,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "6722dc15d6f7f4d497455cba78e4cc18fbef293d027830ed552abd3d6be62dc5",
+      "answer": "B",
+      "text": "痛经气滞血瘀证治法:理气行滞,化瘀止痛。主方:膈下逐瘀汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 156,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0da16e64d78df8c584b6b9ad877fa79823b34906e18fae9d61e3f5d647aaec86",
+      "answer": "B",
+      "text": "大脉指脉体宽大,但无脉来汹涌之势。大脉的出现提示病情加重。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 42,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c6e13a5443f8d5b3b0e72e1db5083eb0c63cee5f8dfb23b4dbe75cd8999ac032",
+      "answer": "B",
+      "text": "肛裂、肛检查法。肛门局部望诊可以看见有无肛裂;探针检查可以探知肛瘘瘘管的方向、度、长度等。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 8,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "f9384380006a1a4f481e7de5b612f12197ec4b9af0f2b3ba0f16cccb09858cac",
+      "answer": "C",
+      "text": "心肾不交是肾水不足,不能上济于心,而使心火独亢;或心阴虚心火旺盛而致肾水不足或心火不能下降于肾,而致肾水凝聚,不能上济于心其治法为泻心补肾,即泻南补北。肝阳上亢，多因肝肾阴虚,水不涵木,肝阳亢逆无所制,气火上扰,故其治法为滋水涵木。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 13,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4a87c929550c7685ef626656faa78b3c7035917547695f0add48545a049da030",
+      "answer": "E",
+      "text": "外感咳嗽多起病急,病程短常伴恶寒发热等表证,实证多见。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 15,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2e13bf24287d7963ab38d2601b2122ae8589db55180ec04b5ce6ebd1b7fea9d0",
+      "answer": "B",
+      "text": "因解热药或糖皮质激素的应用,可使某些疾病的特征性热型变得不典型或是不规则热型。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 10,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "358aabe1b389bb259ab61a7efccecfae8e7c4aee02033b45e85036276a94d03a",
+      "answer": "E",
+      "text": "素问·宣明五气篇》:“心藏神，藏魄,肝藏魂,脾藏意,肾藏志。”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 81,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "a77b872cdeb288f39569dfeecb75a396b531342566be4e3dc09291e6045882cb",
+      "answer": "E",
+      "text": "由本患者的症状可知本病为痛经之虚证。应选用三阴交、足三里、气海调补气血、温养冲任。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 451,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d20e81bacda89fef72c4fbc8b965ce5bd25d12b79bffb8bd193faae19b1987ec",
+      "answer": "D",
+      "text": "假神提示脏腑精气耗竭殆尽,正气将绝,阴不敛阳,虚阳外越,阴阳即将离决,属病危。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 10,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "5940dfd218ed0d940fd3de1c86775adfbc161a6cf22b99fd7ab5ddb38b20f4bc",
+      "answer": "B",
+      "text": "弦脉主肝胆病,肝之实证、气逆于上、可出现咳晕,头痛:或为肝不足,疏泄失常,筋脉失养而见胁痛,四肢拘急。主痰伙，凡痰伙内停，症见喘淌,咳逆,胁胀痛,心悸短气者,可见弦脉。主诸痛凡脘腹痛,寒疝腹痛,痹痛等、均见弦脉。主疟疾,凡疟疾发热恋战交替,发有定时,或少阳病证等,亦见弦脉。亦主虚金医要略·呕吐吵下利病脉证治2云:“脉弦者虚也、胃气无余,食吐,变为反,寒在于上;医反下之,今脉反弦,故名曰虚。”",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 289,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9a1872d76e504047aaea2f6c46323430f504c79452ca310c3ac5ec7e55db9a9b",
+      "answer": "C",
+      "text": "浊痰凝结见于初起硬结期。肾子处酸胀痛,附舉硬结,子系呈条索状肿硬;无明显全身症状;苔薄,脉滑。辨证分析:肝肾亏损,脉络空虚，浊痰乘虚下注,结于肾子,脉络不通,故肾子处酸胀隐痛,附睾硬结,子系呈条索状肿硬;病属初起,仅在局部,故多无全身症状;苔薄、脉滑为浊痰凝结之象。治法宜温经通络,化痰散结。方药阳和汤加减。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 112,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fe2a2e8c797d8bac4ff58893aae8e81963220da7d2fc7fc51b2852bfa24c20a4",
+      "answer": "C",
+      "text": "C项是指一支或多支近端不可逆性扩张,其典型症状为慢性咳嗽伴大量脓痰和反复咯血。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 370,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b205ac5d1b0585c2043081950fd0eb96944259adb23e92484d37a45b9b2de9c7",
+      "answer": "E",
+      "text": "应按乳络方向切口。避免损伤乳腺导管。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 100,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "71a5c2d93096dc95fcf73097bf7fe7ea3060a5661a8577318148072ef1d727a2",
+      "answer": "B",
+      "text": "肝属木,肾属水;心属火,脾属土,肺属金,水火既济指的是心、肾两脏。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 33,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d2d9f23cc997173d7667ae7adcb627ceca7ebebf7b652bffc07b2c2175aff20a",
+      "answer": "E",
+      "text": "厥证的基本病机是气机逆乱,升降失常,阴阳之气不相顺接。病位较深,病因多直接损伤内脏。E项为外感，不是内伤，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 75,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b72cbb1e6285979291ebdfcbd047f59bbadb81e676dd5138e67469e44d2b47e2",
+      "answer": "A",
+      "text": "正疟应祛邪截疟和解表里，用柴胡截疟饮。劳疟应益气养血扶正祛邪,用何人饮。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 29,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "353d4571d44c3fd376c5813d2e9273e6afcdefc955b8b877ba1d0632bd0c7519",
+      "answer": "C",
+      "text": "龟板能滋阴潜阳,益肾健骨,养血补心;鳖甲能滋阴潜阳,软坚散结,无镇心安神作用,余药皆有镇心安神作用。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 193,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "000acb1281c94d13660a4726d72cf4e036d77fcccd24a8fd43c4805dadfe4a31",
+      "answer": "A",
+      "text": "洋地黄引起的呕吐为中枢性呕吐故选A，其余选项均可引起周围性呕吐。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 242,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3c72aa8c0aecbc6a41325aadf025ee9f97c6f85b962e82624a2bb96f6922fea4",
+      "answer": "B",
+      "text": "哺乳时间一般以8个月为宜。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 140,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "552021d6435a3d44b00d579eb1b4af712c9de2e567d621e22ed3274282c684af",
+      "answer": "A",
+      "text": "A项属于弛张热,又称败血症热型。体温常在39℃以上，波动幅度大，小时内体温波动范围超过2℃,常见于败血症风湿热、重型肺结核及化脓性炎症。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 306,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "fd33b3e0a3ba89232d1c17ee17381b02d916f4e3266e6c7db4474689e275504a",
+      "answer": "B",
+      "text": "甘温除热法为金元时期李果所创旨在应用性味甘温的药物治疗虚损引起的发热,其代表方剂为补中益气汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 337,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "2b21e4c7ba31e968970c4412391d2583743fde47d87a745a907861166fe65ce6",
+      "answer": "C",
+      "text": "山茱英补益肝肾,收敛固涩。五倍子敛肺降火，止咳止汗,涩肠止泻,固精止遗,收敛止血,收湿敛疮。莲子固精止带,补脾止泻,益肾养心。诃子涩肠止泻,敛肺止咳,利咽开音。金樱子固精缩尿止带,涩肠止泻。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 61,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8ff086c3595d65016f0a460ac3fd110f6a7ee3a40ac79bd25a7f19fbf020077e",
+      "answer": "B",
+      "text": "肉豆蔻涩肠止泻,温中行气;白豆蔻化湿行气,温中止呕,故二者均具有的功效是温中散寒,行气消胀。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 161,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9f545277e52c2b0a4b148c22516e86b07c73201407ab7c92a295cb7b7a27430d",
+      "answer": "A",
+      "text": "不寐的原因很多,但总是与心脾肾及阴血不足有关,其病理变化,总属阳盛阴衰,阴阳失交，阳气不能人于阴分。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 143,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "32d7c1fe3a590508758483b13833b29303b3184bbc08921b299502b8fb9d89a2",
+      "answer": "C",
+      "text": "天癸,源于先天,藏之于肾,受后天水谷精微的滋养,人体发育到一定时期,肾气旺盛,肾中真阴不断得到充实，天癸逐渐成熟。C项是男女天癸初至后的年龄,不是成熟的年龄。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 300,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "30440b756c8717c2f241446ada297047cca0eab88bdf1748e672276b2f7127ee",
+      "answer": "B",
+      "text": "吴鞠通的“稚阴稚阳”理论,包括了机体柔嫩、气血未盛、脾胃虚弱、肾气未充、腠理疏松、神气怯弱、筋骨未坚等特点，,概括为“脏腑娇嫩，形气未充”。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 244,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "9639f193362a9f1dba8a16994d918a994b84dde3414950385ffeca180391b121",
+      "answer": "C",
+      "text": "特殊之毒包括虫毒、蛇毒、疯犬毒、漆毒、药毒、食物毒和疫毒、无名毒。某些人由于禀性不耐,接触生漆后而发漆疮。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 4,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "3bce01dff6ac515f8b9c6e7d30d226d02207f38d26ec123d690acee379a17f1e",
+      "answer": "E",
+      "text": "产后发热感染邪毒证用五味消毒饮合失笑散或解毒活血汤。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 192,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "377fcf213dee8e96a0606da940e31b34864d86ea5255692ea7ec4e76e8831a1d",
+      "answer": "E",
+      "text": "反跳痛是腹腔内脏器的炎症已累及腹膜壁层的征象，当突然抬手时腹膜被牵拉而引起剧烈疼痛。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_2/Mock.json",
+        "sourceQuestionIndex": 134,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8d182e2ee8bec69b3bb11ad2513176ddf3405a4aef58cc348ebe2c74caeafc36",
+      "answer": "B",
+      "text": "大肠主传泻糟粕,是水谷废物排的通路。从胃的受纳、腐熟及牌的运化，经过小肠的别清浊,后由大肠排泄,构成一个水谷运化、吸收、排的过程,所以大便下利或秘结都是大肠的传导失常。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 41,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "b656a43613da64dbee0ce98ba0de06132de6996bd16f6d631d938c1f096f0bb6",
+      "answer": "D",
+      "text": "①功能性蛋白尿见于剧烈运动、精神紧张等;②体位性(直立性)蛋白尿以青少年多见;③病理性蛋白尿分:肾前性,肾性(如肾小球和肾小管炎症、血管病变、中毒等),肾后性。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 190,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "c1971be8e64014243b273eacd4b408fe1ea11a4f3d0abbcf531edb717354a0a0",
+      "answer": "C",
+      "text": "桂枝具有发汗解肌之功,倘若配伍得当,则既可以治疗风寒表实无汗,又治风寒表虚有汗。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 145,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "0fbd581c8c94b76ba443ddde0f628b25f2dfee0fdcd4cbd00ef024a12c7a9560",
+      "answer": "A",
+      "text": "久病咳喘,提示病变本在肺,日久及肾,表现为乏力少气，呼多吸少，自汗耳鸣，舌淡脉弱。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 113,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "1e97d2de0afba8ec132ff1a5f0aa2ede85666c4fe7fae2fa46f447a4a67b1ca9",
+      "answer": "E",
+      "text": "《医疗事故处理条例》第六十一条，非法行医，造成患者人身损害，不属于医疗事故，触犯刑律的，依法追究刑事责任；有关赔偿，由受害人直接向人民法院提起诉讼，故选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 478,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "41aab08213d5d45f5125ed1047cea09db2a45dd9abc1caf26a209fad4b835a95",
+      "answer": "D",
+      "text": "痢疾为气血不畅,邪毒凝滞肠腑,损伤脂膜,可破伤血络,出现赤白相间。赤多为血多,应重用血药,白多为伤血不重,应重用气药。总的洽则是调和气血。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 63,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "8958c05cc9733b0f9e810a90c201436f52af460956306f65242689996f359c0e",
+      "answer": "A",
+      "text": "热邪扰乱心神可出现谵语",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_4/Mock.json",
+        "sourceQuestionIndex": 105,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "80b313bda90710547b612e3dbd4206120fc72da88b7069a97a039513fdff2a26",
+      "answer": "C",
+      "text": "石音用于外感热病,高热烦渴,肺热咳喘,胃火亢盛;知母用于外感热病,高热烦渴,肺热咳喘,阴虚消渴,肠便秘;芦根用于热病烦渴、胃热呕逆、肺热咳嗽、肺痈吐脓、热淋涩痛;天花粉用于热病烦渴、肺热燥咳、疮疡肿毒;夏枯草用于目赤肿痛、疬瘿瘤、乳痈肿痛",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_1/Mock.json",
+        "sourceQuestionIndex": 37,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "4be3420c94a654aa25f9184bb8e536aec2226983ecfaa7faa59c25c85d8c2cdf",
+      "answer": "B",
+      "text": "《金匮要略》将痰饮分为四类:饮停于胃肠称为痰饮;饮留胁下称为悬饮;饮溢四肢称为溢饮;饮停胸肺称为支饮，",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Theory_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 99,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "d9cb1c8f1ae04909a54140ae046ef66d3d0b1987a1a209a9dc67fb0c53c6acfe",
+      "answer": "C",
+      "text": "太阳头痛引经药:羌活、蔓荆子、川芎。阳明头痛引经药:葛根、白芷。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_5/Past_Paper.json",
+        "sourceQuestionIndex": 25,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    },
+    {
+      "questionId": "848f37933d591a43ffecaff765cea7540f0af1c70521da483a3db14fa4a5463a",
+      "answer": "E",
+      "text": "百日咳病因为感受百日咳时邪，邪侵肺系,夹痰交结气道,导致肺失肃降,肺气上逆，发为痉咳,故149题选C。百日咳恢复期咳而无力多由脾气素虚,痰浊阻肺,痉咳日久，耗散正气而致,故150题选E。",
+      "provenance": {
+        "dataset": "TCMLE",
+        "sourceFile": "Licensed/Fundamental_Concept_Questions/Year_3/Mock.json",
+        "sourceQuestionIndex": 120,
+        "sourceCommit": "39e92cda586860c29a0ee00e4e29e15aedabb359"
+      }
+    }
+  ]
+}
