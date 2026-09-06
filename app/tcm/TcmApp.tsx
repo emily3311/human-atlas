@@ -54,6 +54,7 @@ import {
 } from "./study";
 import type { Acupoint } from "./types";
 import ExamPanel from "./ExamPanel";
+import { ExamAbout } from './exam-about';
 import { EmilyAboutSection, EmilyProjectLink } from "./EmilyLinks";
 import "./tcm.css";
 import "./mobile.css";
@@ -1445,13 +1446,7 @@ export default function TcmApp() {
               收藏、复习与个人课程保存在本浏览器。课程可以通过 JSON
               导出、导入；清除浏览器数据会删除本地记录。教师可使用笔记与课程文件组织教学，但系统不替代专业内容审校。
             </p>
-            <h3>执医题库</h3>
-            <p>
-              题库从 <a href="https://github.com/FreedomIntelligence/CMB" target="_blank" rel="noreferrer">CMB（Chinese Medical Benchmark）</a> 训练数据中按“医师考试 · 执业医师 · 中医执业医师 · 单项选择题”严格筛选，当前包含 4086 题。它不是官方或当年完整题库，也未做逐题医学审定。答题记录仅保存在本浏览器，与穴位学习记录分开。
-            </p>
-            <p>
-              336 条参考解析来自 Apache-2.0 标记的 <a href="https://huggingface.co/datasets/Bolin97/TCMLE" target="_blank" rel="noreferrer">TCMLE 数据</a>，仅在题干、A–E 选项全部一致且答案一致时关联，2 道答案冲突已隔离；未匹配题不生成 AI 解析。
-            </p>
+            <ExamAbout />
             <h3>来源与署名</h3>
             <a href="https://github.com/ashemag/human-atlas" target="_blank" rel="noreferrer">
               Human Atlas · ashemag · MIT

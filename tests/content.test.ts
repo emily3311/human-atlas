@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { ExamAbout } from '../app/tcm/exam-about.ts';
 import { CURATED_ACUPOINTS as ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
 
 const REQUIRED = 'LU1 LU5 LU7 LU9 LI4 LI10 LI11 LI20 ST25 ST36 ST40 ST44 SP6 SP9 SP10 HT7 SI3 SI11 BL13 BL20 BL23 BL40 BL60 KI1 KI3 PC6 PC7 TE5 TE14 GB20 GB21 GB34 LR3 GV14 GV20 CV4 CV6 CV12 CV17'.split(' ');
@@ -98,4 +101,17 @@ test('cases only reference known points and carry sources', () => {
     assert.ok(item.sources.length > 0, `${item.id} sources`);
     assert.match(item.explanation, /原创|教学|未审阅/);
   }
+});
+
+test('about question bank centralizes verified explanation limits and project links', () => {
+  const markup = renderToStaticMarkup(createElement(ExamAbout));
+
+  assert.match(markup, /4086 题/);
+  assert.match(markup, /336 条参考解析/);
+  assert.match(markup, /2 道答案冲突已隔离/);
+  assert.match(markup, /题干、A–E 选项全部一致且答案一致/);
+  assert.match(markup, /未匹配题不生成 AI 解析/);
+  assert.match(markup, /href="https:\/\/github\.com\/FreedomIntelligence\/CMB"/);
+  assert.match(markup, /href="https:\/\/huggingface\.co\/datasets\/Bolin97\/TCMLE"/);
+  assert.doesNotMatch(markup, /来源标签|来源答案|逐题复核/);
 });
