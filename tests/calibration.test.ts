@@ -99,34 +99,81 @@ test('upsert takes an authoritative surface hit and undo retains only ten in-mem
   assert.deepEqual(undoCalibrationDraft(store, draft.id).drafts[0].position, [1, 0, 0]);
 });
 
-test('draft exports persist only current drafts under the fixed storage schema', () => {
+test('draft exports reject a mutated store instead of serializing a calibration escalation', () => {
   const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
-  const exported = JSON.parse(exportCalibrationDraftPackage(store));
-  assert.equal(CALIBRATION_DRAFT_STORAGE_KEY, 'jingwei-calibration-drafts:v1');
-  assert.deepEqual(exported, { version: 1, drafts: [draft] });
+  const mutated = store as unknown as { drafts: Array<Record<string, unknown>> };
+  mutated.drafts[0].status = 'calibrated';
+  assert.throws(() => exportCalibrationDraftPackage(store, context), /draft status/i);
 });
 
-test('formal packages enforce bilateral rules, duplicate pairs, and exact review metadata', () => {
+test('draft exports validate the in-memory store before a tampered toJSON hook can conceal it', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const mutated = store as unknown as { drafts: Array<Record<string, unknown>> };
+  mutated.drafts[0].status = 'calibrated';
+  Object.defineProperty(mutated.drafts[0], 'toJSON', { value: () => draft });
+  assert.throws(() => exportCalibrationDraftPackage(store, context), /draft status/i);
+});
+
+test('draft exports reject mutated vectors and strings instead of serializing illegal JSON', () => {
+  const invalidFields: Array<[string, (store: { drafts: Array<Record<string, unknown>> }) => void, RegExp]> = [
+    ['position', (store) => { store.drafts[0].position = [Infinity, 0, 0]; }, /position.*finite/i],
+    ['evidence', (store) => { store.drafts[0].evidence = 'a'.repeat(2001); }, /evidence/i],
+  ];
+  for (const [label, mutate, error] of invalidFields) {
+    const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+    mutate(store as unknown as { drafts: Array<Record<string, unknown>> });
+    assert.throws(() => exportCalibrationDraftPackage(store, context), error, label);
+  }
+});
+
+test('draft exports persist only current values after actual undo history exists', () => {
+  let store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  store = upsertCalibrationDraft(store, draft, { position: [8, 0, 0], normal: [0, 0, 1], surfaceDistance: 0 }, context);
+  const exported = JSON.parse(exportCalibrationDraftPackage(store, context));
+  assert.equal(CALIBRATION_DRAFT_STORAGE_KEY, 'jingwei-calibration-drafts:v1');
+  assert.deepEqual(exported, { version: 1, drafts: [{ ...draft, position: [8, 0, 0] }] });
+  assert.deepEqual(undoCalibrationDraft(store, draft.id).drafts[0].position, draft.position);
+});
+
+test('formal package accepts both left and right placements for bilateral points', () => {
   const accepted = validateCalibrationPackage(validPackage, context);
   assert.deepEqual(accepted, { ok: true, errors: [], records: [validRecord] });
+  const right = validateCalibrationPackage({ ...validPackage, records: [{ ...validRecord, side: 'right' }] }, context);
+  assert.equal(right.ok, true);
+  assert.deepEqual(right.records, [{ ...validRecord, side: 'right' }]);
+});
 
+test('formal package rejects an illegal right placement for a unilateral point', () => {
   const rightGV20 = validateCalibrationPackage({
     ...validPackage,
     records: [{ ...validRecord, pointId: 'GV20', side: 'right' }],
   }, context);
   assert.equal(rightGV20.ok, false);
   assert.match(rightGV20.errors.join('\n'), /unilateral/i);
+});
 
-  const invalid = validateCalibrationPackage({
-    ...validPackage,
-    atlasVersion: 'wrong-version',
-    reviewedBy: '',
-    reviewedAt: 'not-a-date',
-    evidence: '',
-    records: [{ ...validRecord }, { ...validRecord }],
-  }, context);
-  assert.equal(invalid.ok, false);
-  assert.match(invalid.errors.join('\n'), /atlas version|reviewedBy|ISO date|evidence|duplicate/i);
+test('formal package rejects a non-exact atlas version', () => {
+  const result = validateCalibrationPackage({ ...validPackage, atlasVersion: 'wrong-version' }, context);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /atlas version/i);
+});
+
+test('formal package rejects a missing reviewer', () => {
+  const result = validateCalibrationPackage({ ...validPackage, reviewedBy: '' }, context);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /reviewedBy/i);
+});
+
+test('formal package rejects missing evidence', () => {
+  const result = validateCalibrationPackage({ ...validPackage, evidence: '' }, context);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /evidence/i);
+});
+
+test('formal package rejects a duplicate point-side pair', () => {
+  const result = validateCalibrationPackage({ ...validPackage, records: [{ ...validRecord }, { ...validRecord }] }, context);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /duplicate/i);
 });
 
 test('invalid formal packages are rejected atomically', () => {
@@ -160,6 +207,46 @@ test('formal package validation checks vector, normal, distance, status, strings
   const prototypeKey = validateCalibrationPackage(JSON.parse('{"schemaVersion":1,"atlasVersion":"fixture-atlas-v1","reviewedBy":"Dr Fixture","reviewedAt":"2026-09-06T12:00:00.000Z","evidence":"fixture","records":[],"constructor":{}}'), context);
   assert.equal(prototypeKey.ok, false);
   assert.match(prototypeKey.errors.join('\n'), /prototype key/i);
+});
+
+test('draft dates reject semantically invalid offsets and accept ISO boundary offsets', () => {
+  for (const offset of ['+99:99', '+24:00', '+00:60']) {
+    assert.throws(
+      () => parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [{ ...draft, updatedAt: `2026-09-06T12:00:00${offset}` }] }), context),
+      /ISO date/i,
+      offset,
+    );
+  }
+  assert.doesNotThrow(() => parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [{ ...draft, updatedAt: '2026-09-06T12:00:00+23:59' }] }), context));
+});
+
+test('formal package dates reject semantically invalid offsets and accept ISO boundary offsets', () => {
+  for (const offset of ['+99:99', '+24:00', '+00:60']) {
+    const result = validateCalibrationPackage({ ...validPackage, reviewedAt: `2026-09-06T12:00:00${offset}` }, context);
+    assert.equal(result.ok, false, offset);
+    assert.match(result.errors.join('\n'), /ISO date/i, offset);
+  }
+  assert.equal(validateCalibrationPackage({ ...validPackage, reviewedAt: '2026-09-06T12:00:00-23:59' }, context).ok, true);
+});
+
+test('draft normals include both tolerance boundaries and reject values outside them', () => {
+  for (const length of [0.98, 1.02]) {
+    assert.doesNotThrow(() => parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [{ ...draft, normal: [0, 0, length] }] }), context));
+  }
+  for (const length of [0.9799, 1.0201]) {
+    assert.throws(() => parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [{ ...draft, normal: [0, 0, length] }] }), context), /unit normal/i);
+  }
+});
+
+test('formal normals include both tolerance boundaries and reject values outside them', () => {
+  for (const length of [0.98, 1.02]) {
+    assert.equal(validateCalibrationPackage({ ...validPackage, records: [{ ...validRecord, normal: [0, 0, length] }] }, context).ok, true);
+  }
+  for (const length of [0.9799, 1.0201]) {
+    const result = validateCalibrationPackage({ ...validPackage, records: [{ ...validRecord, normal: [0, 0, length] }] }, context);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /unit normal/i);
+  }
 });
 
 test('the CLI reads exactly one explicit input path and writes nothing when validation fails', () => {

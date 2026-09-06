@@ -56,6 +56,7 @@ export type CalibrationPackageValidation = {
 export const CALIBRATION_DRAFT_STORAGE_KEY = 'jingwei-calibration-drafts:v1';
 
 const NORMAL_TOLERANCE = 0.02;
+const NORMAL_BOUNDARY_EPSILON = 1e-12;
 const MAX_EVIDENCE_LENGTH = 2000;
 const MAX_REVIEWER_LENGTH = 100;
 const DANGEROUS_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
@@ -100,7 +101,7 @@ const validateVec3 = (value: unknown, name: string, errors?: string[]): value is
 const validateNormal = (value: unknown, errors?: string[]): value is Vec3 => {
   if (!validateVec3(value, 'normal', errors)) return false;
   const length = Math.hypot(value[0], value[1], value[2]);
-  if (Math.abs(length - 1) <= NORMAL_TOLERANCE) return true;
+  if (Math.abs(length - 1) <= NORMAL_TOLERANCE + NORMAL_BOUNDARY_EPSILON) return true;
   const message = `normal must be a unit normal within tolerance ${NORMAL_TOLERANCE}`;
   if (errors) {
     errors.push(message);
@@ -111,7 +112,7 @@ const validateNormal = (value: unknown, errors?: string[]): value is Vec3 => {
 
 const isIsoDate = (value: unknown): value is string => {
   if (typeof value !== 'string') return false;
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.exec(value);
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|([+-])(\d{2}):(\d{2}))$/.exec(value);
   if (!match) return false;
   const year = Number(match[1]);
   const month = Number(match[2]);
@@ -120,6 +121,7 @@ const isIsoDate = (value: unknown): value is string => {
   const minute = Number(match[5]);
   const second = Number(match[6]);
   if (month < 1 || month > 12 || hour > 23 || minute > 59 || second > 59) return false;
+  if (match[7] && (Number(match[8]) > 23 || Number(match[9]) > 59)) return false;
   return day >= 1 && day <= new Date(Date.UTC(year, month, 0)).getUTCDate();
 };
 
@@ -216,15 +218,7 @@ const parseDraft = (value: unknown, context: CalibrationContext): CalibrationDra
   };
 };
 
-export function parseCalibrationDrafts(serialized: string | null | undefined, context: CalibrationContext): CalibrationDraftStore {
-  checkedContext(context);
-  if (serialized === null || serialized === undefined || serialized === '') return setHistory(emptyStore(), new Map());
-  let value: unknown;
-  try {
-    value = JSON.parse(serialized);
-  } catch {
-    throw new Error('Calibration draft storage contains invalid JSON');
-  }
+const parseDraftStoreValue = (value: unknown, context: CalibrationContext): CalibrationDraftStore => {
   assertSafeObject(value, 'draft store');
   assertOnlyKeys(value, ['version', 'drafts'], 'draft store');
   if (value.version !== 1 || !Array.isArray(value.drafts)) throw new Error('draft store must have version 1 and a drafts array');
@@ -239,6 +233,18 @@ export function parseCalibrationDrafts(serialized: string | null | undefined, co
     placements.add(placement);
   }
   return setHistory({ version: 1, drafts }, new Map());
+};
+
+export function parseCalibrationDrafts(serialized: string | null | undefined, context: CalibrationContext): CalibrationDraftStore {
+  checkedContext(context);
+  if (serialized === null || serialized === undefined || serialized === '') return setHistory(emptyStore(), new Map());
+  let value: unknown;
+  try {
+    value = JSON.parse(serialized);
+  } catch {
+    throw new Error('Calibration draft storage contains invalid JSON');
+  }
+  return parseDraftStoreValue(value, context);
 }
 
 export function upsertCalibrationDraft(
@@ -287,8 +293,10 @@ export function undoCalibrationDraft(store: CalibrationDraftStore, draftId: stri
   }, history);
 }
 
-export function exportCalibrationDraftPackage(store: CalibrationDraftStore): string {
-  return JSON.stringify({ version: 1, drafts: store.drafts.map(cloneDraft) });
+export function exportCalibrationDraftPackage(store: CalibrationDraftStore, context: CalibrationContext): string {
+  checkedContext(context);
+  const verified = parseDraftStoreValue(store, context);
+  return JSON.stringify({ version: verified.version, drafts: verified.drafts.map(cloneDraft) });
 }
 
 const packageError = (value: unknown, label: string, errors: string[]): Record<string, unknown> | undefined => {
