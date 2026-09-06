@@ -7,7 +7,7 @@ import { decodeModelResponse, loadModelChunks } from "../model-download";
 import { SYSTEMS, type Atlas, type Part, type SystemId } from "../anatomy";
 import { PointerTap } from "../pointer-tap";
 import { createExplosionLayout } from "../explosion-layout";
-import { PLACEMENTS } from "./placements";
+import { PENDING_PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
 import { anatomyLabel } from "./anatomy-zh";
@@ -207,7 +207,7 @@ export default function AtlasScene(props: Props) {
     const proportionGuide=createGuide(el);
     const markers: Marker[] = [];
     for (const point of props.points) {
-      const placement = PLACEMENTS[point.id];
+      const placement = PENDING_PLACEMENTS[point.id]?.placement;
       if (!placement) continue;
       for (const side of point.bilateral ? [1, -1] : [1]) {
         const button = document.createElement("button");

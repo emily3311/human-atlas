@@ -1,4 +1,20 @@
 export type Region = '头颈' | '胸腹' | '背腰' | '上肢' | '下肢';
+export type Vec3 = [number, number, number];
+export interface Placement {
+  position: Vec3;
+  normal: Vec3;
+}
+export type PlacementStatus = 'unregistered' | 'pending-review' | 'calibrated';
+export type PlacementDisplayMode = 'calibrated-only' | 'include-pending';
+export type PlacementRecord = {
+  pointId: string;
+  status: PlacementStatus;
+  placement?: Placement;
+  source: string;
+  modelVersion: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+};
 export interface Source { title: string; url: string; section?: string }
 export interface ClassificationEvidence { source: Source; tags: string[] }
 export interface Meridian { id: string; name: string; shortName: string; color: string; description: string }

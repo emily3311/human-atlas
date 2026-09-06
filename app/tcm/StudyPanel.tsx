@@ -70,7 +70,7 @@ export default function StudyPanel({
             ["identify", "认穴"],
           ] as const
         ).map(([id, name]) => (
-          <button key={id} disabled={!questionAvailable(point,id)} title={!questionAvailable(point,id)?'此题型的资料或三维定位尚未就绪':undefined} className={type === id ? "active" : ""} onClick={() => onType(id)}>
+          <button key={id} disabled={!questionAvailable(point,id,'include-pending')} title={!questionAvailable(point,id,'include-pending')?'此题型的资料或三维定位尚未就绪':undefined} className={type === id ? "active" : ""} onClick={() => onType(id)}>
             {name}
           </button>
         ))}

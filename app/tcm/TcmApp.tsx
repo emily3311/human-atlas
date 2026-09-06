@@ -63,6 +63,7 @@ import { workspacePolicy, workspaceUiState, type LearningMode } from "./mobile-l
 type Mode = LearningMode;
 type Scope = "all" | "favorites" | "review" | "course";
 const ids = ACUPOINTS.map((p) => p.id);
+const placementDisplayMode = 'include-pending' as const;
 const studyIds=ACUPOINTS.filter(p=>!!p.location).map(p=>p.id);
 const nav = [
   { id: "anatomy", label: "解剖图谱", icon: Layers },
@@ -235,9 +236,9 @@ export default function TcmApp() {
   },[layer]);
   const point = ACUPOINTS.find((p) => p.id === activeId) ?? ACUPOINTS[0],
     currentMeridian = MERIDIANS.find((m) => m.id === point.meridian)!;
-  const hasModel=hasPlacement(point.id);
+  const hasModel=hasPlacement(point.id,placementDisplayMode);
   useEffect(()=>{
-    if(!questionAvailable(point,cardType)) {setCardType('location');setRevealed(false);}
+    if(!questionAvailable(point,cardType,placementDisplayMode)) {setCardType('location');setRevealed(false);}
   },[point.id,cardType]);
   const dueIds = useMemo(() => reviewQueue(studyIds, store.reviews, now), [store.reviews, now]);
   const reviewedCount = Object.keys(store.reviews).length,
@@ -258,7 +259,7 @@ export default function TcmApp() {
           ).includes(normalize(query));
         return (
           inCatalogue(p,catalogueScope) &&
-          (mode!=='quiz'||hasPlacement(p.id)) &&
+          (mode!=='quiz'||hasPlacement(p.id,placementDisplayMode)) &&
           (mode!=='cards'||!!p.location) &&
           matches &&
           (meridian === "all" || p.meridian === meridian) &&
@@ -1142,7 +1143,7 @@ export default function TcmApp() {
                   <option value="standard">十四经穴 · 362</option>
                   <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
                   <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
-                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
+                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id,placementDisplayMode)).length}</option>
                 </select>
                 <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
                 <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
