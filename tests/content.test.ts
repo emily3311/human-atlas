@@ -30,7 +30,7 @@ test('every point is source-linked and structured for landmark learning', () => 
 });
 
 test('traditional summaries declare whether point-specific support was verified', () => {
-  const verified = new Set(['LI4','PC6','KI1','ST36','GV20','BL13','BL20','BL23']);
+  const verified = new Set(['LU5','LU9','LI4','ST36','SP9','BL13','BL20','BL23','KI1','PC6','GB34','LR3','GV20','CV4']);
   for (const point of ACUPOINTS) {
     assert.match(point.traditional, /传统常用于|传统功用/);
     assert.doesNotMatch(point.traditional, /相关传统主治须/);
@@ -40,6 +40,13 @@ test('traditional summaries declare whether point-specific support was verified'
       assert.ok(point.sources.some((s) => /大学|医院/.test(s.title) && !/GB\/T|WHO/.test(s.title)), `${point.id} institution source`);
     } else assert.match(point.traditional, /待逐条来源核验/);
   }
+});
+
+test('reviewed national-standard details stay exact', () => {
+  const byId = new Map(ACUPOINTS.map((p) => [p.id, p]));
+  assert.match(byId.get('ST36')!.location, /犊鼻与解溪连线上/);
+  assert.equal(byId.get('CV17')!.pinyin, 'Dànzhōng');
+  assert.deepEqual(byId.get('CV12')!.landmarks, ['找到脐中央','找到剑突尖','在脐中与剑突尖连线中点取点']);
 });
 
 test('representative specific-point classifications are filterable', () => {

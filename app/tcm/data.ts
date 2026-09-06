@@ -6,6 +6,8 @@ const WHO: Source = { title: 'WHO Standard Acupuncture Point Locations in the We
 const SAFETY: Source = { title: 'WHO benchmarks for the practice of acupuncture', url: 'https://www.who.int/publications/i/item/978-92-4-001688-0', section: 'Safe practice, pp. 9–13' };
 const NCCIH: Source = { title: 'Acupuncture: Effectiveness and Safety', url: 'https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety', section: 'Is acupuncture safe?' };
 const CLASSIFICATION: Source = { title:'广西中医药大学《针灸学》教学大纲', url:'https://www.gxtcmu.edu.cn/zjtn/jysjs/zjtncfjfx/jxyhygl1/zjx/88xszyctzydwzyzxyxl/jxdg12/content_26039', section:'特定穴分类；八脉交会穴、八会穴及下合穴教学内容' };
+const BUCM_SHU_MU: Source = { title:'北京中医药大学远程教育《针灸学》课程', url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c1/c1_62a.htm', section:'背俞穴、募穴及俞募配穴正文' };
+const AHTCM_CLASSES: Source = { title:'安徽中医药大学《神灸经纶》灸法选穴规律研究', url:'https://xinan.ahtcm.edu.cn/xiaran.pdf', section:'表3 特定穴分类：原穴、络穴、下合穴、八脉交会穴等' };
 
 export const MERIDIANS: Meridian[] = [
   ['LU','手太阴肺经','肺经','#60a5fa'],['LI','手阳明大肠经','大肠经','#f59e0b'],['ST','足阳明胃经','胃经','#eab308'],
@@ -26,7 +28,7 @@ const seeds: Seed[] = [
  ['LI11','曲池','Qūchí','LI','上肢','肘外侧，尺泽与肱骨外上髁连线中点。',['屈肘显露肘横纹','找到肱骨外上髁','取尺泽与外上髁连线中点']],
  ['LI20','迎香','Yíngxiāng','LI','头颈','面部，鼻翼外缘中点旁，鼻唇沟中。',['找到鼻翼外缘','确定鼻翼外缘中点','在同水平鼻唇沟取点']],
  ['ST25','天枢','Tiānshū','ST','胸腹','腹部，脐中央旁开2寸。',['找到脐中央','建立水平线','向外量2寸']],
- ['ST36','足三里','Zúsānlǐ','ST','下肢','小腿前外侧，犊鼻下3寸，胫骨前嵴外一横指。',['屈膝找到犊鼻','向下量3寸','在胫骨前嵴外一横指取点']],
+ ['ST36','足三里','Zúsānlǐ','ST','下肢','小腿外侧，犊鼻下3寸，犊鼻与解溪连线上。',['屈膝找到犊鼻','沿犊鼻与解溪连线向下量3寸','在胫骨前肌上核对']],
  ['ST40','丰隆','Fēnglóng','ST','下肢','小腿外侧，外踝尖上8寸，胫骨前肌外缘。',['找到外踝尖','向上量8寸','触认胫骨前肌外缘']],
  ['ST44','内庭','Nèitíng','ST','下肢','足背，第2、3趾间，趾蹼缘后方赤白肉际。',['找到第2与第3趾','沿趾间隙向近端','在趾蹼缘后方取点']],
  ['SP6','三阴交','Sānyīnjiāo','SP','下肢','小腿内侧，内踝尖上3寸，胫骨内侧缘后际。',['找到内踝尖','向上量3寸','触认胫骨内侧缘后际']],
@@ -73,6 +75,8 @@ const traditional: Record<string,string> = {
  CV4:'培补元气、温肾固本；传统常用于下腹、泌尿生殖及虚弱。', CV6:'益气固本、调理下焦；传统常用于下腹、气虚及泌尿生殖不适。', CV12:'和胃健脾、降逆化痰；传统常用于上腹胀痛、恶心及食欲不振。', CV17:'宽胸理气、调畅气机；传统常用于胸闷、气短及乳部不适。',
 };
 const traditionalSources: Partial<Record<string,Source[]>> = {
+ LU5:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c1/c1_61a.htm',section:'五输穴临床应用：尺泽与肺实证喘咳、胸满、咽痛'}],
+ LU9:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c1/c1_61a.htm',section:'五输穴临床应用：太渊与肺虚证喘咳、胸满、少气'}],
  LI4:[{title:'上海中医药大学护理学院：吃吃喝喝的春节到了',url:'https://hl.shutcm.edu.cn/2018/0705/c2501a28044/page.htm',section:'“牙疼：按揉合谷和偏历穴”合谷条目'}],
  PC6:[{title:'上海中医药大学创新创业学院：中医药文化探索之旅',url:'https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm',section:'内关穴：心慌、晕车、呕吐、胃痛等传统保健用途'}],
  KI1:[{title:'上海中医药大学创新创业学院：中医药文化探索之旅',url:'https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm',section:'涌泉穴：劳累、头晕、潮热、腰痛等传统保健用途'}],
@@ -81,6 +85,16 @@ const traditionalSources: Partial<Record<string,Source[]>> = {
  BL13:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肺俞、脾俞等背俞穴的传统配伍说明'}],
  BL20:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肺俞、脾俞等背俞穴的传统配伍说明'}],
  BL23:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肾俞温补肾阳的传统理论说明'}],
+ SP9:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c2/c2_9b_2.htm',section:'胁痛辨证配穴：阴陵泉健脾除湿'}],
+ GB34:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c2/c2_9b_2.htm',section:'阳陵泉疏理肝胆、调理气血'}],
+ LR3:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c2/c2_9b_2.htm',section:'太冲疏肝解郁的传统配穴说明'}],
+ CV4:[{title:'湖北中医药大学王华名老中医传承工作室',url:'https://www.hbucm.edu.cn/wanghua/info/1004/1047.htm',section:'足三里、关元配伍：关元益精补气、扶助人体之本'}],
+};
+const classSources: Partial<Record<string,Source[]>> = {
+ LU1:[BUCM_SHU_MU],ST25:[BUCM_SHU_MU],CV4:[BUCM_SHU_MU],BL13:[BUCM_SHU_MU],BL20:[BUCM_SHU_MU],BL23:[BUCM_SHU_MU],
+ LU7:[CLASSIFICATION,AHTCM_CLASSES],SI3:[CLASSIFICATION,AHTCM_CLASSES],PC6:[CLASSIFICATION,AHTCM_CLASSES],TE5:[CLASSIFICATION,AHTCM_CLASSES],
+ LU9:[CLASSIFICATION,AHTCM_CLASSES],GB34:[CLASSIFICATION,AHTCM_CLASSES],CV12:[BUCM_SHU_MU,CLASSIFICATION],CV17:[CLASSIFICATION],
+ LI4:[AHTCM_CLASSES],HT7:[AHTCM_CLASSES],KI3:[AHTCM_CLASSES],PC7:[AHTCM_CLASSES],LR3:[AHTCM_CLASSES],ST36:[AHTCM_CLASSES],ST40:[AHTCM_CLASSES],BL40:[AHTCM_CLASSES],
 };
 const classes: Record<string,string[]> = {
  LU1:['募穴'],LU5:['合穴'],LU7:['络穴','八脉交会穴'],LU9:['输穴','原穴','八会穴'], LI4:['原穴'],LI11:['合穴'],LI20:['交会穴'],
@@ -111,7 +125,7 @@ export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,
   sources: [
     { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:`第5.${chapter[meridian]}节 ${id} ${name}` },
     { ...WHO, section:`Point ${id} ${name}; general location guidelines` },
-    ...(classes[id]?.length ? [CLASSIFICATION] : []),
+    ...(classSources[id] ?? []),
     ...(traditionalSources[id] ?? []),
     ...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[]),
   ],
