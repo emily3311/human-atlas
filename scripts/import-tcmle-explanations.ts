@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { isAbsolute, resolve, relative } from 'node:path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { isAbsolute, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { parseExamBank, type AnswerKey, type ExamBank, type ExamQuestion } from '../app/tcm/exam-bank.ts';
@@ -60,16 +60,6 @@ export function classifyMatch(cmb: ExamQuestion, candidate: TcmleQuestion):
   return { kind: 'accepted', explanation: candidate.reason.trim() };
 }
 
-function listJsonFiles(directory: string): string[] {
-  return readdirSync(directory, { withFileTypes: true })
-    .flatMap((entry) => {
-      const fullPath = resolve(directory, entry.name);
-      if (entry.isDirectory()) return listJsonFiles(fullPath);
-      return entry.isFile() && entry.name.endsWith('.json') ? [fullPath] : [];
-    })
-    .sort();
-}
-
 function parseTcmleQuestion(value: unknown, sourceFile: string, sourceQuestionIndex: number): TcmleQuestion | undefined {
   if (!isRecord(value)
     || typeof value.query !== 'string'
@@ -91,11 +81,14 @@ function parseTcmleQuestion(value: unknown, sourceFile: string, sourceQuestionIn
   };
 }
 
-function readLicensedQuestions(tcmleDir: string): { files: string[]; questions: TcmleQuestion[] } {
-  const licensedDirectory = resolve(tcmleDir, 'Licensed');
-  const files = listJsonFiles(licensedDirectory).map((file) => relative(tcmleDir, file));
+export function readLicensedQuestions(tcmleDir: string, sourceCommit: string): { files: string[]; questions: TcmleQuestion[] } {
+  const files = execFileSync('git', ['-C', tcmleDir, 'ls-tree', '-r', '--name-only', sourceCommit, '--', 'Licensed'], { encoding: 'utf8' })
+    .split('\n')
+    .filter((file) => file.endsWith('.json'))
+    .sort();
   const questions = files.flatMap((sourceFile) => {
-    const parsed: unknown = JSON.parse(readFileSync(resolve(tcmleDir, sourceFile), 'utf8'));
+    const raw = execFileSync('git', ['-C', tcmleDir, 'show', `${sourceCommit}:${sourceFile}`], { encoding: 'utf8', maxBuffer: 160_000_000 });
+    const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) throw new Error(`TCMLE source file must contain an array: ${sourceFile}`);
     return parsed.flatMap((value, index) => {
       const question = parseTcmleQuestion(value, sourceFile, index + 1);
@@ -192,7 +185,7 @@ function runCli(tcmleDir: string): void {
   }
   const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
   const cmb = parseExamBank(JSON.parse(readFileSync(resolve(root, 'public/data/cmb-tcm.json'), 'utf8')));
-  const { files, questions } = readLicensedQuestions(tcmleDir);
+  const { files, questions } = readLicensedQuestions(tcmleDir, EXPECTED_TCMLE_COMMIT);
   const { bank, report } = buildExplanationArtifacts(cmb, questions, sourceCommit, files);
   if (report.strictMatches !== 338 || report.accepted !== 336 || report.answerConflicts !== 2) {
     throw new Error(`Unexpected TCMLE match counts: ${JSON.stringify({ strictMatches: report.strictMatches, accepted: report.accepted, answerConflicts: report.answerConflicts })}`);

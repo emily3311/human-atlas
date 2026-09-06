@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 
 import { explanationIndex, parseExamExplanationBank } from '../app/tcm/exam-explanations.ts';
-import { assertCleanTcmleCheckout, classifyMatch, normalizeExamText, strictQuestionMatch } from '../scripts/import-tcmle-explanations.ts';
+import { assertCleanTcmleCheckout, classifyMatch, normalizeExamText, readLicensedQuestions, strictQuestionMatch } from '../scripts/import-tcmle-explanations.ts';
 
 const cmbFixture = {
   id: 'a'.repeat(64),
@@ -42,11 +42,13 @@ const validPayload = {
   }],
 };
 
+const licensedFixture = '[{"question_num":1,"reason":"original","query":"原题","options":{"A":"甲","B":"乙","C":"丙","D":"丁","E":"戊"},"answer":"A"}]\n';
+
 function temporaryGitCheckout(): { directory: string; trackedFile: string } {
   const directory = mkdtempSync(resolve(tmpdir(), 'tcmle-cleanliness-'));
   const trackedFile = resolve(directory, 'Licensed/Theory_Questions/Year_1/Mock.json');
   mkdirSync(resolve(directory, 'Licensed/Theory_Questions/Year_1'), { recursive: true });
-  writeFileSync(trackedFile, '[{"question_num":1,"reason":"original"}]\n');
+  writeFileSync(trackedFile, licensedFixture);
   execFileSync('git', ['init', '--quiet', directory]);
   execFileSync('git', ['-C', directory, 'config', 'user.email', 'test@example.invalid']);
   execFileSync('git', ['-C', directory, 'config', 'user.name', 'TCMLE test']);
@@ -114,18 +116,37 @@ test('checkout cleanliness rejects tracked changes and untracked candidate JSON 
   try {
     assert.doesNotThrow(() => assertCleanTcmleCheckout(directory));
 
-    writeFileSync(trackedFile, '[{"question_num":1,"reason":"changed"}]\n');
+    writeFileSync(trackedFile, licensedFixture.replace('original', 'changed'));
     assert.throws(
       () => assertCleanTcmleCheckout(directory),
       /TCMLE checkout has tracked changes/i,
     );
 
-    writeFileSync(trackedFile, '[{"question_num":1,"reason":"original"}]\n');
+    writeFileSync(trackedFile, licensedFixture);
     writeFileSync(resolve(directory, 'Licensed/Theory_Questions/Year_1/Injected.json'), '[]\n');
     assert.throws(
       () => assertCleanTcmleCheckout(directory),
       /TCMLE checkout has untracked files/i,
     );
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('licensed questions come only from the committed tree despite ignored worktree injection', () => {
+  const { directory, trackedFile } = temporaryGitCheckout();
+  try {
+    const commit = execFileSync('git', ['-C', directory, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    appendFileSync(resolve(directory, '.git/info/exclude'), 'Licensed/Theory_Questions/Year_1/000-injected.json\n');
+    writeFileSync(resolve(directory, 'Licensed/Theory_Questions/Year_1/000-injected.json'), '[{"question_num":1,"reason":"injected","query":"注入题","options":{"A":"甲","B":"乙","C":"丙","D":"丁","E":"戊"},"answer":"A"}]\n');
+
+    const imported = readLicensedQuestions(directory, commit);
+    assert.deepEqual(imported.files, ['Licensed/Theory_Questions/Year_1/Mock.json']);
+    assert.deepEqual(imported.questions.map((question) => question.reason), ['original']);
+
+    writeFileSync(trackedFile, licensedFixture.replace('original', 'working-tree change'));
+    const reimported = readLicensedQuestions(directory, commit);
+    assert.deepEqual(reimported.questions.map((question) => question.reason), ['original']);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
