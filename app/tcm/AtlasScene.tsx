@@ -6,9 +6,12 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import { decodeModelResponse } from "../model-download";
 import { SYSTEMS, type Atlas, type Part, type SystemId } from "../anatomy";
 import { PointerTap } from "../pointer-tap";
+import { createExplosionLayout } from "../explosion-layout";
 import { PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
-import {createGuide} from './guide';
+import { createGuide } from "./guide";
+import { anatomyZh } from "./anatomy-zh";
+import { explosionOffset, overlaysAllowed, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
@@ -27,6 +30,9 @@ export interface SceneOptions {
   reset: number;
   selectedPart: string;
   isolate: boolean;
+  explode?: number;
+  visibleSystems?: SystemId[];
+  anatomyLabels?: boolean;
 }
 interface Props {
   atlas: Atlas;
@@ -63,6 +69,11 @@ export default function AtlasScene(props: Props) {
       dirty = true,
       ready = false,
       lastOptions: SceneOptions | undefined;
+    let amount = 0,
+      layoutKey = "",
+      packingWidth = 1,
+      packingHeight = 1;
+    let layoutCells = new Map<string, import("../explosion-layout").LayoutCell>();
     const controller = new AbortController();
     let renderer: T.WebGLRenderer;
     try {
@@ -133,20 +144,38 @@ export default function AtlasScene(props: Props) {
     ring.rotation.x = -Math.PI / 2;
     ring.position.y = -0.012;
     scene.add(ring);
-    const materials = new Map<SystemId, T.MeshStandardMaterial>(),
+    const textureWidth = T.MathUtils.ceilPowerOfTwo(props.atlas.parts.length),
+      partData = new Float32Array(textureWidth * 4),
+      partTexture = new T.DataTexture(partData, textureWidth, 1, T.RGBAFormat, T.FloatType),
+      materials = new Map<SystemId, T.MeshStandardMaterial>(),
       batches = new Map<SystemId, T.Mesh[]>(),
       geometries: T.BufferGeometry[] = [],
       pickers = new Map<string, T.Mesh>();
+    partTexture.needsUpdate = true;
     for (const system of SYSTEMS) {
-      materials.set(
-        system.id,
-        new T.MeshStandardMaterial({
+      const material = new T.MeshStandardMaterial({
           color: system.id === "integumentary" ? 0xcbd3b8 : system.color,
           roughness: 0.67,
           metalness: 0.025,
           side: T.DoubleSide,
-        }),
-      );
+        });
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.partState = { value: partTexture };
+        shader.uniforms.stateWidth = { value: textureWidth };
+        shader.vertexShader =
+          "attribute float partIndex; uniform sampler2D partState; uniform float stateWidth; varying float partVisible;\n" +
+          shader.vertexShader;
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <begin_vertex>",
+          "#include <begin_vertex>\nvec4 state = texture2D(partState, vec2((partIndex + 0.5) / stateWidth, 0.5)); transformed += state.xyz; partVisible = state.w;",
+        );
+        shader.fragmentShader = "varying float partVisible;\n" + shader.fragmentShader;
+        shader.fragmentShader = shader.fragmentShader.replace(
+          "#include <clipping_planes_fragment>",
+          "#include <clipping_planes_fragment>\nif (partVisible < 0.5) discard;",
+        );
+      };
+      materials.set(system.id, material);
       batches.set(system.id, []);
     }
     const highlightMaterial = new T.MeshStandardMaterial({
@@ -159,9 +188,18 @@ export default function AtlasScene(props: Props) {
     });
     let highlight: T.Mesh | undefined;
     let surface: T.Mesh | undefined;
+    const centers = props.atlas.parts.map((p) =>
+        new T.Vector3().fromArray(p.bounds[0]).add(new T.Vector3().fromArray(p.bounds[1])).multiplyScalar(0.5),
+      ),
+      offsets: Vec3Tuple[] = props.atlas.parts.map(() => [0, 0, 0]);
     const overlay = document.createElement("div");
     overlay.className = "point-overlay";
     el.appendChild(overlay);
+    const anatomyHover = document.createElement("div");
+    anatomyHover.className = "part-hover";
+    anatomyHover.setAttribute("role", "tooltip");
+    anatomyHover.hidden = true;
+    el.appendChild(anatomyHover);
     const proportionGuide=createGuide(el);
     const markers: Marker[] = [];
     for (const point of props.points) {
@@ -251,14 +289,19 @@ export default function AtlasScene(props: Props) {
     const fit = () => {
       const o = latest.current.options;
       camera.clearViewOffset();
-      const distance = Math.max(2.9, 1.2 / camera.aspect),
+      const exploded = amount > 0.05 && !o.isolate;
+      const availableAspect = Math.max(0.35, (el.clientWidth - (el.clientWidth < 768 ? 40 : 340)) / Math.max(160, el.clientHeight - (el.clientWidth < 768 ? 350 : 270)));
+      const gridDistance = Math.max(packingHeight, packingWidth / availableAspect) / (2 * Math.tan(T.MathUtils.degToRad(camera.fov / 2))) * 1.1;
+      const distance = exploded ? Math.max(0.2, gridDistance) : Math.max(2.9, 1.2 / camera.aspect),
         direction =
-          o.view === "back"
+          exploded
+            ? new T.Vector3(0, 0, 1)
+            : o.view === "back"
             ? new T.Vector3(0, 0, -1)
             : o.view === "side"
               ? new T.Vector3(1, 0, 0)
               : new T.Vector3(0.08, 0.015, 1).normalize();
-      controls.target.set(0, 0.87, 0);
+      controls.target.set(exploded && el.clientWidth > 767 ? -packingWidth * 0.12 : 0, 0.87, 0);
       camera.position.copy(controls.target).addScaledVector(direction, distance);
       controls.update();
       dirty = true;
@@ -273,10 +316,12 @@ export default function AtlasScene(props: Props) {
       dirty = true;
     };
     const focusPart = () => {
-      const box = pickers.get(latest.current.options.selectedPart)?.geometry.boundingBox;
-      if (!box) return;
-      const center = box.getCenter(new T.Vector3());
-      const size = box.getSize(new T.Vector3());
+      const target = pickers.get(latest.current.options.selectedPart);
+      const part = target?.userData.part as Part | undefined;
+      if (!target || !part) return;
+      const translated = translatedBounds(part.bounds, offsets[props.atlas.parts.indexOf(part)] ?? [0, 0, 0]);
+      const box = new T.Box3(new T.Vector3().fromArray(translated[0]), new T.Vector3().fromArray(translated[1]));
+      const center = box.getCenter(new T.Vector3()), size = box.getSize(new T.Vector3());
       const distance = Math.max(0.18, Math.max(size.y, size.x / camera.aspect, size.z) * 2.8);
       controls.target.copy(center);
       camera.position.copy(center).add(new T.Vector3(0.2, 0.1, 1).normalize().multiplyScalar(distance));
@@ -284,6 +329,7 @@ export default function AtlasScene(props: Props) {
       dirty = true;
     };
     const resize = () => {
+      layoutKey = "";
       camera.aspect = el.clientWidth / Math.max(1, el.clientHeight);
       camera.updateProjectionMatrix();
       renderer.setSize(el.clientWidth, el.clientHeight);
@@ -306,7 +352,8 @@ export default function AtlasScene(props: Props) {
           const buffer = await decodeModelResponse(response, chunk.bytes, gzip);
           if (stopped) return;
           const groups = new Map<SystemId, T.BufferGeometry[]>();
-          for (const part of props.atlas.parts) {
+          for (let partIndex = 0; partIndex < props.atlas.parts.length; partIndex++) {
+            const part = props.atlas.parts[partIndex];
             if (part.chunk !== ci) continue;
             const g = new T.BufferGeometry();
             g.setAttribute(
@@ -328,9 +375,11 @@ export default function AtlasScene(props: Props) {
               new T.BufferAttribute(new Uint32Array(buffer, part.indices, part.indexCount), 1),
             );
             g.computeBoundingSphere();
-            g.computeBoundingBox();
+            g.boundingBox = new T.Box3(new T.Vector3().fromArray(part.bounds[0]), new T.Vector3().fromArray(part.bounds[1]));
+            g.setAttribute("partIndex", new T.BufferAttribute(new Float32Array(part.vertexCount).fill(partIndex), 1));
             geometries.push(g);
             const mesh = new T.Mesh(g, materials.get(part.system));
+            mesh.matrixAutoUpdate = false;
             mesh.userData.part = part;
             pickers.set(part.id, mesh);
             if (part.name === "Skin") surface = mesh;
@@ -368,9 +417,38 @@ export default function AtlasScene(props: Props) {
       }
     })();
     const tap = new PointerTap();
-    const down = (e: PointerEvent) =>
+    type Target = { part: Part; x: number; y: number; left: number; right: number; top: number; bottom: number };
+    let targets: Target[] = [];
+    const findTarget = (x: number, y: number, radius: number) => {
+      let best: Target | undefined, score = Infinity;
+      for (const target of targets) {
+        const dx = Math.max(target.left - x, 0, x - target.right), dy = Math.max(target.top - y, 0, y - target.bottom);
+        const distance = Math.hypot(dx, dy);
+        if (distance > radius) continue;
+        const candidate = distance + Math.hypot(target.x - x, target.y - y) * 0.025;
+        if (candidate < score) { best = target; score = candidate; }
+      }
+      return best;
+    };
+    const down = (e: PointerEvent) => {
+      anatomyHover.hidden = true;
       tap.down(e.pointerId, e.clientX, e.clientY, e.pointerType === "touch" ? 12 : 5);
-    const move = (e: PointerEvent) => tap.move(e.pointerId, e.clientX, e.clientY);
+    };
+    const move = (e: PointerEvent) => {
+      tap.move(e.pointerId, e.clientX, e.clientY);
+      if (e.buttons || amount < 0.45 || e.pointerType === "touch" || latest.current.options.anatomyLabels === false) {
+        anatomyHover.hidden = true;
+        return;
+      }
+      const rect = el.getBoundingClientRect(), x = e.clientX - rect.left, y = e.clientY - rect.top, target = findTarget(x, y, 12);
+      anatomyHover.hidden = !target;
+      renderer.domElement.style.cursor = target ? "pointer" : "grab";
+      if (target) {
+        anatomyHover.textContent = `${anatomyZh(target.part.name)} · ${target.part.name}`;
+        anatomyHover.style.left = `${Math.max(8, Math.min(x + 14, el.clientWidth - 260))}px`;
+        anatomyHover.style.top = `${Math.max(8, Math.min(y + 18, el.clientHeight - 55))}px`;
+      }
+    };
     const cancel = (e: PointerEvent) => tap.cancel(e.pointerId);
     const up = (e: PointerEvent) => {
       if (!tap.up(e.pointerId, e.clientX, e.clientY) || !ready) return;
@@ -384,14 +462,20 @@ export default function AtlasScene(props: Props) {
         ),
         camera,
       );
-      const meshes = [...pickers.values()].filter((mesh) =>
-        o.isolate
-          ? mesh.userData.part.id === o.selectedPart
-          : layers[o.layer].includes(mesh.userData.part.system) &&
-            mesh.userData.part.system !== "integumentary",
-      );
+      const systems = new Set(o.visibleSystems ?? layers[o.layer]);
+      const hasSolid = props.atlas.parts.some((part, index) => part.system !== "integumentary" && partData[index * 4 + 3] > 0.5);
+      const meshes = [...pickers.values()].filter((mesh) => {
+        const part = mesh.userData.part as Part, index = props.atlas.parts.indexOf(part);
+        return partData[index * 4 + 3] > 0.5 && !(hasSolid && part.system === "integumentary") &&
+          (o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart);
+      });
       const hit = ray.intersectObjects(meshes, false)[0];
-      if (hit) latest.current.onPart(hit.object.userData.part as Part);
+      const fallback = amount > 0.45 ? findTarget(e.clientX - rect.left, e.clientY - rect.top, e.pointerType === "touch" ? 24 : 16) : undefined;
+      const part = (hit?.object.userData.part as Part | undefined) ?? fallback?.part;
+      if (part) {
+        anatomyHover.hidden = true;
+        latest.current.onPart(part);
+      }
     };
     renderer.domElement.addEventListener("pointerdown", down);
     renderer.domElement.addEventListener("pointermove", move);
@@ -399,16 +483,66 @@ export default function AtlasScene(props: Props) {
     renderer.domElement.addEventListener("pointercancel", cancel);
     const projected = new T.Vector3(),
       toCamera = new T.Vector3();
+    const clock = new T.Clock(), reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
     let lastProjection = 0;
     const render = () => {
       if (stopped) return;
       frame = requestAnimationFrame(render);
       const o = latest.current.options;
+      const targetAmount = Math.max(0, Math.min(1, o.explode ?? 0));
+      const previousAmount = amount;
+      amount = reducedMotion.matches ? targetAmount : T.MathUtils.damp(amount, targetAmount, 8, Math.min(clock.getDelta(), 0.05));
+      if (Math.abs(amount - targetAmount) < 0.0001) amount = targetAmount;
+      const systems = new Set(o.visibleSystems ?? layers[o.layer]);
+      const visibleParts = props.atlas.parts.filter((part) =>
+        o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart,
+      );
+      const nextLayoutKey = visibleParts.map((part) => part.id).join(",") + ":" + camera.aspect.toFixed(3);
+      if (nextLayoutKey !== layoutKey) {
+        const layout = createExplosionLayout(visibleParts, camera.aspect);
+        packingWidth = layout.width;
+        packingHeight = layout.height;
+        layoutCells = layout.cells;
+        props.atlas.parts.forEach((part, index) => {
+          const cell = layout.cells.get(part.id);
+          offsets[index] = cell ? explosionOffset(part, cell, amount) : [0, 0, 0];
+        });
+        layoutKey = nextLayoutKey;
+        if (amount > 0.05 && !o.isolate) fit();
+      }
+      if (amount !== previousAmount || o !== lastOptions) {
+        props.atlas.parts.forEach((part, index) => {
+          const cell = layoutCells.get(part.id);
+          const offset = cell ? explosionOffset(part, cell, amount) : [0, 0, 0] as Vec3Tuple;
+          offsets[index] = offset;
+          const visible = o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart;
+          partData.set([offset[0], offset[1], offset[2], visible ? 1 : 0], index * 4);
+          const picker = pickers.get(part.id);
+          if (picker) { picker.position.fromArray(offset); picker.updateMatrix(); picker.updateMatrixWorld(true); }
+        });
+        partTexture.needsUpdate = true;
+        if (highlight) {
+          const index = props.atlas.parts.findIndex((part) => part.id === o.selectedPart);
+          highlight.position.fromArray(offsets[index] ?? [0, 0, 0]);
+        }
+        if (amount !== previousAmount && !o.isolate) fit();
+        else if (amount !== previousAmount && o.isolate) focusPart();
+        dirty = true;
+      }
       if (o !== lastOptions) {
-        if (!lastOptions || o.layer !== lastOptions.layer || o.isolate !== lastOptions.isolate) {
+        if (
+          !lastOptions ||
+          o.layer !== lastOptions.layer ||
+          o.isolate !== lastOptions.isolate ||
+          o.visibleSystems !== lastOptions.visibleSystems ||
+          o.selectedPart !== lastOptions.selectedPart
+        ) {
           for (const [system, meshes] of batches)
             for (const mesh of meshes)
-              mesh.visible = !o.isolate && layers[o.layer].includes(system);
+              mesh.visible =
+                !o.isolate &&
+                ((o.visibleSystems ?? layers[o.layer]).includes(system) ||
+                  props.atlas.parts.some((part) => part.id === o.selectedPart && part.system === system));
           const skin = materials.get("integumentary")!;
           skin.transparent = o.layer === "transparent";
           skin.opacity = o.layer === "transparent" ? 0.12 : 1;
@@ -421,6 +555,7 @@ export default function AtlasScene(props: Props) {
           const target = pickers.get(o.selectedPart);
           if (target) {
             highlight = new T.Mesh(target.geometry, highlightMaterial);
+            highlight.position.copy(target.position);
             scene.add(highlight);
           }
         }
@@ -449,19 +584,25 @@ export default function AtlasScene(props: Props) {
         }
         for (const line of lineGroup.children)
           line.visible =
+            overlaysAllowed(amount) &&
             o.routes &&
             !o.quiz &&
             (line.userData.ids as string[]).every((id) => o.pointIds.includes(id));
-        ground.visible = ring.visible = !o.isolate;
+        ground.visible = ring.visible = !o.isolate && amount < 0.5;
         lastOptions = o;
         dirty = true;
       }
-      controls.autoRotate = o.rotate && !o.isolate;
+      controls.enableRotate = amount < 0.8;
+      controls.mouseButtons.LEFT = amount < 0.8 ? T.MOUSE.ROTATE : T.MOUSE.PAN;
+      controls.touches.ONE = amount < 0.8 ? T.TOUCH.ROTATE : T.TOUCH.PAN;
+      controls.autoRotate = o.rotate && !o.isolate && amount < 0.4;
+      lineGroup.visible = overlaysAllowed(amount);
+      overlay.hidden = !overlaysAllowed(amount);
       controls.update();
       if (controls.autoRotate) dirty = true;
       if (dirty) {
         renderer.render(scene, camera);
-        proportionGuide.update(props.points.find(p=>p.id===o.activeId),camera,o.guide&&!o.quiz&&!o.isolate,el.clientWidth,el.clientHeight);
+        proportionGuide.update(props.points.find(p=>p.id===o.activeId),camera,o.guide&&!o.quiz&&!o.isolate&&overlaysAllowed(amount),el.clientWidth,el.clientHeight);
         const now = performance.now();
         if (now - lastProjection > 30) {
           for (const marker of markers) {
@@ -470,6 +611,7 @@ export default function AtlasScene(props: Props) {
             let visible =
               ready &&
               !o.isolate &&
+              overlaysAllowed(amount) &&
               o.pointIds.includes(marker.id) &&
               projected.z > -1 &&
               projected.z < 1 &&
@@ -487,6 +629,23 @@ export default function AtlasScene(props: Props) {
               marker.button.style.left = `${((projected.x + 1) * el.clientWidth) / 2}px`;
               marker.button.style.top = `${((1 - projected.y) * el.clientHeight) / 2}px`;
             }
+          }
+          targets = [];
+          if (amount > 0.45) {
+            const hasSolid = props.atlas.parts.some((part, index) => part.system !== "integumentary" && partData[index * 4 + 3] > 0.5);
+            props.atlas.parts.forEach((part, index) => {
+              if (partData[index * 4 + 3] < 0.5 || (hasSolid && part.system === "integumentary")) return;
+              const offset = offsets[index];
+              let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
+              for (let corner = 0; corner < 8; corner++) {
+                projected.set(part.bounds[corner & 1 ? 1 : 0][0] + offset[0], part.bounds[corner & 2 ? 1 : 0][1] + offset[1], part.bounds[corner & 4 ? 1 : 0][2] + offset[2]).project(camera);
+                const x = (projected.x + 1) * el.clientWidth / 2, y = (1 - projected.y) * el.clientHeight / 2;
+                left = Math.min(left, x); right = Math.max(right, x); top = Math.min(top, y); bottom = Math.max(bottom, y);
+              }
+              projected.copy(centers[index]).add(new T.Vector3().fromArray(offset)).project(camera);
+              if (projected.z < -1 || projected.z > 1) return;
+              targets.push({ part, x: (projected.x + 1) * el.clientWidth / 2, y: (1 - projected.y) * el.clientHeight / 2, left, right, top, bottom });
+            });
           }
           lastProjection = now;
           dirty = false;
@@ -508,6 +667,7 @@ export default function AtlasScene(props: Props) {
       geometries.forEach((g) => g.dispose());
       materials.forEach((m) => m.dispose());
       highlightMaterial.dispose();
+      partTexture.dispose();
       lineResources.forEach((r) => {
         r.geometry.dispose();
         r.material.dispose();
@@ -519,6 +679,7 @@ export default function AtlasScene(props: Props) {
       environment.dispose();
       renderer.dispose();
       overlay.remove();
+      anatomyHover.remove();
       proportionGuide.dispose();
       renderer.domElement.remove();
     };
