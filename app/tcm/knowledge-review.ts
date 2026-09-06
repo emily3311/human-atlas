@@ -6,8 +6,14 @@ export type KnowledgeReviewStore = { version: 1; reviews: Record<string, Review>
 
 const emptyKnowledgeReviewStore = (): KnowledgeReviewStore => ({ version: 1, reviews: {} });
 const unsafeKeys = new Set(['__proto__', 'prototype', 'constructor']);
-const cardId = /^(?:point|anatomy|exam):/;
 const ratings: readonly Rating[] = ['again', 'hard', 'good'];
+
+/** The only persistence IDs emitted by the four knowledge-card builders. */
+export function isKnowledgeCardId(id: string): boolean {
+  return /^point:[^:\s]+:(?:location|meridian|tags|identify|effects)$/.test(id)
+    || /^anatomy:[^:\s]+:(?:zh-to-en|en-to-zh)$/.test(id)
+    || /^exam:[a-f0-9]{64}$/.test(id);
+}
 
 function isReview(value: unknown): value is Review {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
@@ -29,9 +35,9 @@ export function parseKnowledgeReviewStore(
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return store;
     const value = parsed as Record<string, unknown>;
     if (value.version !== 1 || !value.reviews || typeof value.reviews !== 'object' || Array.isArray(value.reviews)) return store;
-    const available = new Set(availableCardIds.filter((id) => cardId.test(id)));
+    const available = new Set(availableCardIds.filter(isKnowledgeCardId));
     for (const [id, review] of Object.entries(value.reviews as Record<string, unknown>)) {
-      if (unsafeKeys.has(id) || !available.has(id) || !cardId.test(id) || !isReview(review)) continue;
+      if (unsafeKeys.has(id) || !available.has(id) || !isKnowledgeCardId(id) || !isReview(review)) continue;
       store.reviews[id] = { ...review };
     }
     return store;
@@ -45,7 +51,7 @@ export function knowledgeReviewQueue(
   reviews: Record<string, Review>,
   now = Date.now(),
 ): string[] {
-  return [...new Set(cardIds.filter((id) => cardId.test(id)))]
+  return [...new Set(cardIds.filter(isKnowledgeCardId))]
     .filter((id) => !reviews[id] || reviews[id].due <= now)
     .sort((left, right) => (reviews[left]?.due ?? 0) - (reviews[right]?.due ?? 0));
 }
@@ -55,9 +61,10 @@ export function rateKnowledgeCard(
   store: KnowledgeReviewStore,
   cardIdValue: string,
   rating: Rating,
+  availableCardIds: ReadonlySet<string>,
   now = Date.now(),
 ): KnowledgeReviewStore {
-  if (!cardId.test(cardIdValue)) return store;
+  if (!isKnowledgeCardId(cardIdValue) || !availableCardIds.has(cardIdValue)) return store;
   return {
     ...store,
     reviews: { ...store.reviews, [cardIdValue]: scheduleReview(store.reviews[cardIdValue], rating, now) },

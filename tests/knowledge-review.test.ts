@@ -9,7 +9,8 @@ import {
   rateKnowledgeCard,
 } from '../app/tcm/knowledge-review.ts';
 
-const cardIds = ['point:ST36:location', 'anatomy:mesh-heart:zh-to-en', 'exam:q-card'];
+const examId = `exam:${'a'.repeat(64)}`;
+const cardIds = ['point:ST36:location', 'anatomy:mesh-heart:zh-to-en', examId];
 
 test('knowledge review storage uses its own key and ignores non-card or unavailable IDs', () => {
   assert.equal(KNOWLEDGE_REVIEW_KEY, 'jingwei-knowledge-cards:v1');
@@ -36,8 +37,11 @@ test('knowledge review parser rejects malformed state and cannot change the old 
 });
 
 test('knowledge review queue and rating use schedule semantics without mutating the old store', () => {
-  const first = rateKnowledgeCard({ version: 1, reviews: {} }, 'point:ST36:location', 'again', 0);
+  const available = new Set(cardIds);
+  const first = rateKnowledgeCard({ version: 1, reviews: {} }, 'point:ST36:location', 'again', available, 0);
   assert.equal(first.reviews['point:ST36:location'].due, 600000);
-  assert.deepEqual(knowledgeReviewQueue(cardIds, first.reviews, 100), ['anatomy:mesh-heart:zh-to-en', 'exam:q-card']);
-  assert.deepEqual(rateKnowledgeCard(first, 'LI4', 'good', 1), first);
+  assert.deepEqual(knowledgeReviewQueue([...cardIds, 'exam:', 'point:ST36:invented'], first.reviews, 100), ['anatomy:mesh-heart:zh-to-en', examId]);
+  assert.deepEqual(rateKnowledgeCard(first, 'exam:', 'good', available, 1), first);
+  assert.deepEqual(rateKnowledgeCard(first, 'point:ST36:invented', 'good', available, 1), first);
+  assert.deepEqual(rateKnowledgeCard(first, 'anatomy:missing:zh-to-en', 'good', available, 1), first);
 });
