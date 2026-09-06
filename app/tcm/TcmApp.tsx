@@ -26,13 +26,16 @@ import {
   ArrowUpRight,
   Menu,
 } from "lucide-react";
-import type { Atlas, Part } from "../anatomy";
+import { DEFAULT_VISIBLE, type Atlas, type Part, type SystemId } from "../anatomy";
 import { ACUPOINTS, MERIDIANS } from "./data";
 import AtlasScene, { type Layer, type SceneOptions } from "./AtlasScene";
 import StudyPanel, { type CardType } from "./StudyPanel";
 import CoursePanel from "./CoursePanel";
 import CasesPanel from "./CasesPanel";
 import { anatomyZh, SYSTEM_ZH } from "./anatomy-zh";
+import { AnatomyCatalogue, AnatomyDetails } from './AnatomyPanel';
+import { hasPlacement, questionAvailable } from './catalogue';
+import { inCatalogue, examBadges, EXAM_SOURCE, PRACTICAL_NAMES, WRITTEN_NAMES, type CatalogueScope } from './exam-scope';
 import {
   STORE_KEY,
   parseStore,
@@ -46,10 +49,12 @@ import {
 import type { Acupoint } from "./types";
 import "./tcm.css";
 
-type Mode = "explore" | "cards" | "quiz" | "course" | "cases";
+type Mode = "anatomy" | "explore" | "cards" | "quiz" | "course" | "cases";
 type Scope = "all" | "favorites" | "review" | "course";
 const ids = ACUPOINTS.map((p) => p.id);
+const studyIds=ACUPOINTS.filter(p=>!!p.location).map(p=>p.id);
 const nav = [
+  { id: "anatomy", label: "解剖图谱", icon: Layers },
   { id: "explore", label: "经穴图谱", icon: Compass },
   { id: "cards", label: "记忆卡片", icon: Brain },
   { id: "quiz", label: "取穴自测", icon: Target },
@@ -98,6 +103,8 @@ export default function TcmApp() {
     [region, setRegion] = useState("all"),
     [tag, setTag] = useState("all"),
     [scope, setScope] = useState<Scope>("all");
+  const [catalogueScope,setCatalogueScope]=useState<CatalogueScope>('all');
+  const [exploded,setExploded]=useState(false),[anatomySystems,setAnatomySystems]=useState<SystemId[]>(DEFAULT_VISIBLE);
   const [layer, setLayer] = useState<Layer>("surface"),
     [labels, setLabels] = useState(true),
     [routes, setRoutes] = useState(false),
@@ -187,7 +194,11 @@ export default function TcmApp() {
   }, []);
   const point = ACUPOINTS.find((p) => p.id === activeId) ?? ACUPOINTS[0],
     currentMeridian = MERIDIANS.find((m) => m.id === point.meridian)!;
-  const dueIds = useMemo(() => reviewQueue(ids, store.reviews, now), [store.reviews, now]);
+  const hasModel=hasPlacement(point.id);
+  useEffect(()=>{
+    if(!questionAvailable(point,cardType)) {setCardType('location');setRevealed(false);}
+  },[point.id,cardType]);
+  const dueIds = useMemo(() => reviewQueue(studyIds, store.reviews, now), [store.reviews, now]);
   const reviewedCount = Object.keys(store.reviews).length,
     masteredCount = Object.values(store.reviews).filter((r) => r.lastRating === "good").length;
   const filtered = useMemo(
@@ -205,6 +216,9 @@ export default function TcmApp() {
             ].join(" "),
           ).includes(normalize(query));
         return (
+          inCatalogue(p,catalogueScope) &&
+          (mode!=='quiz'||hasPlacement(p.id)) &&
+          (mode!=='cards'||!!p.location) &&
           matches &&
           (meridian === "all" || p.meridian === meridian) &&
           (region === "all" || p.region === region) &&
@@ -215,7 +229,7 @@ export default function TcmApp() {
             (scope === "course" && store.course.pointIds.includes(p.id)))
         );
       }),
-    [query, meridian, region, tag, scope, store.favorites, store.course.pointIds, dueIds],
+    [query, meridian, region, tag, scope, catalogueScope, mode, store.favorites, store.course.pointIds, dueIds],
   );
   const filteredIds = useMemo(() => filtered.map((p) => p.id), [filtered]);
   const displayedIds = useMemo(
@@ -244,6 +258,7 @@ export default function TcmApp() {
     setSidebarOpen(false);
   };
   const chooseGlobal = (id: string) => {
+    setCatalogueScope('all');
     setQuery("");
     setMeridian("all");
     setRegion("all");
@@ -288,6 +303,8 @@ export default function TcmApp() {
     setChosenPart(null);
     setIsolate(false);
     setRotate(false);
+    setExploded(false);
+    setReset(v=>v+1);
     if (next === "quiz") {
       setLabels(false);
       setLayer("surface");
@@ -302,8 +319,8 @@ export default function TcmApp() {
       setNotice("最多比较三个穴位，请先移除一个。");
   };
   const sceneIds = useMemo(
-    () => (concealed ? [activeId] : displayedIds),
-    [concealed, activeId, displayedIds],
+    () => mode==='anatomy'||!hasModel ? [] : (concealed ? [activeId] : displayedIds),
+    [mode,hasModel,concealed, activeId, displayedIds],
   );
   const sceneOptions = useMemo<SceneOptions>(
     () => ({
@@ -321,6 +338,9 @@ export default function TcmApp() {
       reset,
       selectedPart: chosenPart?.id ?? "",
       isolate,
+      explode:exploded?1:0,
+      visibleSystems:mode==='anatomy'?anatomySystems:undefined,
+      anatomyLabels:true,
     }),
     [
       layer,
@@ -339,6 +359,7 @@ export default function TcmApp() {
       reset,
       chosenPart,
       isolate,
+      exploded,anatomySystems,
     ],
   );
   const reportProgress = useCallback((n: number) => setProgress(n), []);
@@ -385,7 +406,7 @@ export default function TcmApp() {
             <strong>
               经纬<span> · </span>人体图谱
             </strong>
-            <small>中医经络学习工作台</small>
+            <small>解剖 · 经穴 · 执医针灸专项</small>
           </span>
         </a>
         <nav className="main-nav" aria-label="学习模式">
@@ -412,7 +433,7 @@ export default function TcmApp() {
             className="progress-ring"
             style={
               {
-                "--progress": `${(masteredCount / ACUPOINTS.length) * 100}%`,
+                "--progress": `${(masteredCount / studyIds.length) * 100}%`,
               } as React.CSSProperties
             }
           >
@@ -421,7 +442,7 @@ export default function TcmApp() {
           <span>
             我的学习
             <small>
-              {reviewedCount} / {ACUPOINTS.length} 穴
+              {reviewedCount} / {studyIds.length} 可练
             </small>
           </span>
         </button>
@@ -431,6 +452,7 @@ export default function TcmApp() {
           className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
           aria-label="穴位目录"
         >
+          {mode==='anatomy'&&atlas?<AnatomyCatalogue atlas={atlas} visible={anatomySystems} onVisible={systems=>{setAnatomySystems(systems);setChosenPart(null);setIsolate(false);}} onSelect={part=>{setChosenPart(part);setIsolate(false);setSidebarOpen(false);}} selected={chosenPart?.id??''}/>:<>
           <div className="sidebar-title">
             <span>经络与腧穴</span>
             <button
@@ -460,6 +482,18 @@ export default function TcmApp() {
             </div>
           ) : (
             <>
+              <div className="exam-catalogue-control">
+                <label htmlFor="catalogue-scope">学习范围</label>
+                <select id="catalogue-scope" value={catalogueScope} onChange={e=>{setCatalogueScope(e.target.value as CatalogueScope);setQuizAnswer(null);setRevealed(false);}}>
+                  <option value="all">全部学习条目 · {ACUPOINTS.length}</option>
+                  <option value="standard">十四经穴 · 362</option>
+                  <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
+                  <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
+                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
+                </select>
+                <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
+                <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
+              </div>
               <div className="search-field">
                 <Search size={16} />
                 <input
@@ -561,7 +595,7 @@ export default function TcmApp() {
                     setRevealed(false);
                   }}
                 >
-                  <option value="all">十四经 · 全部</option>
+                  <option value="all">全部经脉与奇穴</option>
                   {MERIDIANS.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name}
@@ -570,7 +604,7 @@ export default function TcmApp() {
                 </select>
               </div>
               <div className="catalogue-summary">
-                <span>{filtered.length} 个穴位</span>
+                <span>{filtered.length} 个条目</span>
                 <span>名称 / 编码</span>
               </div>
               <div className="point-list">
@@ -601,7 +635,7 @@ export default function TcmApp() {
                             {m.shortName} · {p.region}
                           </small>
                         </span>
-                        <span className="point-code">{p.id}</span>
+                        <span className="point-code">{p.displayCode??p.id}</span>
                         <ChevronRight size={13} />
                       </button>
                     );
@@ -623,6 +657,7 @@ export default function TcmApp() {
                         setMeridian("all");
                         setTag("all");
                         setScope("all");
+                        setCatalogueScope('all');
                       }}
                     >
                       显示全部穴位
@@ -634,11 +669,12 @@ export default function TcmApp() {
           )}
           <div className="sidebar-footer">
             <span className="tiny-dot" />
-            39 穴学习集 · 逐步扩充
+            362 经穴 · 考纲分组学习
             <button onClick={() => setAbout(true)} aria-label="了解数据范围">
               <Info size={14} />
             </button>
           </div>
+          </>}
         </aside>
         <main className="model-workspace">
           <div className="model-topbar">
@@ -651,7 +687,7 @@ export default function TcmApp() {
                     : "EXPLORE · 三维探索"}
               </span>
               <h1>
-                {concealed
+                {mode==='anatomy' ? '一键散开，逐处认识。' : concealed
                   ? cardType === "meridian"
                     ? "循其所归，忆其经脉。"
                     : "这个穴位，你认识吗？"
@@ -669,6 +705,10 @@ export default function TcmApp() {
             </button>
           </div>
           <div className="model-controls">
+            {mode==='anatomy'?<div className="anatomy-explode-controls">
+              <button className={exploded?'primary-button':'outline-button'} onClick={()=>{setExploded(v=>!v);setIsolate(false);setRotate(false);}}><Layers size={16}/>{exploded?'一键复原':'一键散开'}</button>
+              <span>{exploded?'拖动平移 · 滚轮缩放 · 悬停/点选看名称':'拖动旋转 · 点击结构 · 可单独查看'}</span>
+            </div>:
             <div className="layer-switch" role="group" aria-label="人体图层">
               {layerChoices.map(([id, label]) => (
                 <button
@@ -683,7 +723,7 @@ export default function TcmApp() {
                   {label}
                 </button>
               ))}
-            </div>
+            </div>}
             <button
               className="mobile-catalogue outline-button"
               onClick={() => setSidebarOpen(true)}
@@ -709,7 +749,7 @@ export default function TcmApp() {
             )}
             <div className="stage-label">
               <span className="tiny-dot" />
-              {concealed ? (cardType === "meridian" ? "归经练习" : "辨认练习") : currentMeridian.name}
+              {mode==='anatomy'?'完整解剖结构':concealed ? (cardType === "meridian" ? "归经练习" : "辨认练习") : currentMeridian.name}
               <small>{mode === "quiz" ? "点击候选点作答" : "BodyParts3D · 成人男性参考"}</small>
             </div>
             <div className="stage-side-label">
@@ -719,7 +759,7 @@ export default function TcmApp() {
                   ? "POSTERIOR / 后面"
                   : "LATERAL / 侧面"}
             </div>
-            {!concealed && mode !== "quiz" && filtered.length > 0 && (
+            {!concealed && mode !== "quiz" && mode!=='anatomy' && hasModel && filtered.length > 0 && (
               <div className="selected-floating">
                 <span className="active-orbit" />
                 <div>
@@ -740,7 +780,11 @@ export default function TcmApp() {
                 </button>
               </div>
             )}
-            {guide && mode === "explore" && (
+            {!hasModel && mode!=='anatomy' && mode!=='quiz' && filtered.length>0 && <div className="unmapped-caption" role="status">
+              <span className="section-kicker">{point.location?'定位资料已收录 · 三维定位待校准':'考纲已收录 · 定位资料待核验'}</span>
+              <strong>{point.name}</strong><p>{point.location?'此穴暂不显示三维标记，避免误导定位。可在右侧查看文字来源、练习记忆卡。':'已核实考纲包含此条目，尚未开放定位练习。不会用猜测的位置补点。'}</p>
+            </div>}
+            {guide && hasModel && point.landmarks.length>0 && mode === "explore" && (
               <div className="guide-caption">
                 <span>定位辅助 {guideStep + 1} / 3</span>
                 {point.landmarks[guideStep]}
@@ -800,6 +844,7 @@ export default function TcmApp() {
                   setChosenPart(null);
                   setIsolate(false);
                   setRotate(false);
+                  setExploded(false);
                 }}
               >
                 <RotateCcw size={16} />
@@ -807,6 +852,7 @@ export default function TcmApp() {
             </div>
           </div>
           <div className="model-bottom">
+            {mode==='anatomy'?<p>原版逐部位点选与名称 · {exploded?'散开时暂停显示经穴，复原后恢复':'可切回经穴图谱叠加中医知识'}</p>:<>
             <div className="display-toggles">
               <button
                 className={labels ? "active" : ""}
@@ -825,7 +871,7 @@ export default function TcmApp() {
               </button>
               <button
                 className={guide ? "active" : ""}
-                disabled={mode !== "explore"}
+                disabled={mode !== "explore" || !hasModel || !point.landmarks.length}
                 onClick={() => setGuide((v) => !v)}
               >
                 <Target size={15} />
@@ -837,6 +883,8 @@ export default function TcmApp() {
                 ? "虚线仅连接已收录穴位，不表示完整经络循行。"
                 : "拖动旋转 · 滚轮缩放 · 点击穴位查看"}
             </p>
+            <button className="text-button anatomy-entry" onClick={()=>{changeMode('anatomy');setExploded(true);}}><Layers size={14}/>一键散开解剖结构</button>
+            </>}
           </div>
           <div className="model-scope">
             <Info size={12} />
@@ -848,7 +896,7 @@ export default function TcmApp() {
           </div>
         </main>
         <aside className="detail-panel" aria-label="学习内容">
-          {!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
+          {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
               <BookOpen size={32} />
               <h2>{mode === "quiz" && scope === "review" ? "本轮待复习已完成" : "调整筛选，开始学习"}</h2>
@@ -971,6 +1019,7 @@ export default function TcmApp() {
                 </div>
               </div>
               <p className="quiet-note">
+                三维认穴仅使用已有示意标记的穴位，不覆盖全部考纲。{' '}
                 本模式练习穴位辨认，不以模型坐标评分真人取穴精度。错题会进入复习计划。
               </p>
             </section>
@@ -1004,7 +1053,7 @@ export default function TcmApp() {
                   <span className="pinyin">{point.pinyin}</span>
                   <h2>
                     {point.name}
-                    <span>{point.id}</span>
+                    <span>{point.displayCode??point.id}</span>
                   </h2>
                   <p>
                     <i style={{ background: currentMeridian.color }} />
@@ -1014,14 +1063,17 @@ export default function TcmApp() {
                 <div className="detail-seal">{point.name.slice(-1)}</div>
               </div>
               <div className="point-tags">
+                {examBadges(point).map(label=><span className="exam-tag" key={label}>{label}</span>)}
                 {point.tags.map((t) => (
                   <span key={t}>{t}</span>
                 ))}
-                <span>{point.bilateral ? "双侧穴" : "正中单穴"}</span>
+                <span>{point.groupNote??(point.bilateral ? "双侧穴" : "正中单穴")}</span>
               </div>
+              {point.codeNote&&<p className="quiet-note code-note">{point.codeNote}</p>}
               <div className="detail-shortcuts">
                 <button
                   className="primary-button"
+                  disabled={!point.location}
                   onClick={() => {
                     changeMode("cards");
                     setCardType("location");
@@ -1044,9 +1096,10 @@ export default function TcmApp() {
                   <Target size={15} />
                   体表定位
                 </h3>
-                <p className="location-text">{point.location}</p>
+                <p className="location-text">{point.location||'定位资料待指定教材核验，暂不提供定位答案。'}</p>
                 <button
                   className="text-button"
+                  disabled={!hasModel||!point.landmarks.length}
                   onClick={() => {
                     setGuide((v) => !v);
                     setGuideStep(0);
@@ -1059,7 +1112,7 @@ export default function TcmApp() {
                   <ArrowUpRight size={14} />
                 </button>
               </section>
-              <section className="detail-section landmark-section">
+              {point.landmarks.length>0&&<section className="detail-section landmark-section">
                 <h3>
                   怎样找到它<span>3 步对照</span>
                 </h3>
@@ -1080,14 +1133,14 @@ export default function TcmApp() {
                   ))}
                 </ol>
                 <p className="mini-note">骨度分寸是相对比例，不是固定厘米数。</p>
-              </section>
+              </section>}
               <section className="detail-section">
                 <h3>
                   <BookOpen size={15} />
                   传统功用与主治
                 </h3>
-                <p>{point.traditional}</p>
-                <span className="content-status">传统理论学习 · 待教师审校</span>
+                <p>{point.traditional||'此条目已补齐标准命名与定位。主治要点、特定穴分类及操作知识尚待逐条教材核验，不以自动生成内容充当备考答案。'}</p>
+                <span className="content-status">{point.annotationsReady?'传统理论学习 · 待教师审校':'定位资料条目 · 临床知识待补充'}</span>
               </section>
               <section className="detail-section anatomy-section">
                 <h3>
@@ -1285,17 +1338,17 @@ export default function TcmApp() {
             <div className="brand-seal">经</div>
             <h2 id="about-title">经纬 · 中医经络学习图谱</h2>
             <p>
-              基于 Human Atlas 与 BodyParts3D 的中文教学扩展。当前学习集含 39
-              个常用经穴，覆盖十四经，尚非完整经穴全集。
+              基于 Human Atlas 与 BodyParts3D 的中文教学扩展。当前包含362个十四经穴及21个考纲奇穴名称条目；原版一键散开、逐结构点选和名称浏览已集成。
             </p>
             <h3>内容与模型</h3>
             <p>
               名称、体表定位参考 GB/T 12346—2021 与 WHO 定位资料。2021 国标收录 362 穴，与 WHO 361
-              穴口径不同。每张卡保留来源，传统理论内容待教师复核。
+              穴口径不同。实践技能明列90个名称、医学综合明列180个名称，两者与标准经穴总库不是同一个集合。每张卡保留来源，传统理论内容待教师复核。
             </p>
             <p>
-              三维坐标为这一个成人男性模型上的近似标记；投射到皮肤表面不等于医学定位校准。选点虚线只连接当前收录穴位，不是完整经络循行。不同体型、女性模型和体位变化尚未加入。
+              三维坐标仍只有39个穴位的近似示意，其他条目不显示猜测标记。投射到皮肤表面不等于医学定位校准。选点虚线不是完整经络循行。不同体型、女性模型和体位变化尚未加入。
             </p>
+            <p>新增条目主要补齐命名与定位，主治、操作和禁忌并未全部完成；三角灸仅登记考纲范围、定位待核验。奇穴大学公开文本有排印异常，已在来源标注待正式版对校。本工具不是全科执医题库或实操考核替代品。</p>
             <h3>学习记录与课堂</h3>
             <p>
               收藏、复习与个人课程保存在本浏览器。课程可以通过 JSON

@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
+import { CURATED_ACUPOINTS as ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
 
 const REQUIRED = 'LU1 LU5 LU7 LU9 LI4 LI10 LI11 LI20 ST25 ST36 ST40 ST44 SP6 SP9 SP10 HT7 SI3 SI11 BL13 BL20 BL23 BL40 BL60 KI1 KI3 PC6 PC7 TE5 TE14 GB20 GB21 GB34 LR3 GV14 GV20 CV4 CV6 CV12 CV17'.split(' ');
 
 test('exports the complete curated catalogue', () => {
-  assert.equal(MERIDIANS.length, 14);
+  assert.equal(MERIDIANS.filter(m=>m.id!=='EX').length, 14);
   assert.equal(ACUPOINTS.length, 39);
   assert.equal(CASES.length, 3);
   assert.deepEqual(ACUPOINTS.map((p) => p.id).sort(), REQUIRED.sort());

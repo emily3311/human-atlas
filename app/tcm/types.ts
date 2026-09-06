@@ -9,6 +9,11 @@ export interface Acupoint {
   sources: Source[];
   classificationEvidence: ClassificationEvidence[];
   pendingClassificationTags: string[];
+  catalogueKind?: 'standard' | 'extra';
+  annotationsReady?: boolean;
+  codeNote?: string;
+  displayCode?: string;
+  groupNote?: string;
 }
 export interface LearningCase {
   id: string; title: string; level: string; prompt: string;

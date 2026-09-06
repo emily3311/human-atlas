@@ -1,4 +1,6 @@
 import type { Acupoint, ClassificationEvidence, LearningCase, Meridian, Region, Source } from './types.ts';
+import { STANDARD_POINTS } from './standard-points.ts';
+import { EXTRA_POINTS } from './extra-points.ts';
 
 const GB_URL = 'https://zynj.shutcm.edu.cn/_upload/article/files/66/b4/b34a95604d04b0bf686251b2d317/368ea8b0-187c-48a7-a402-ffdf1e11bb99.pdf';
 const GB: Source = { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:'第4章定位方法；第5章经穴名称与定位' };
@@ -13,8 +15,9 @@ export const MERIDIANS: Meridian[] = [
   ['LU','手太阴肺经','肺经','#60a5fa'],['LI','手阳明大肠经','大肠经','#f59e0b'],['ST','足阳明胃经','胃经','#eab308'],
   ['SP','足太阴脾经','脾经','#f97316'],['HT','手少阴心经','心经','#ef4444'],['SI','手太阳小肠经','小肠经','#fb7185'],
   ['BL','足太阳膀胱经','膀胱经','#2563eb'],['KI','足少阴肾经','肾经','#6366f1'],['PC','手厥阴心包经','心包经','#dc2626'],
-  ['TE','手少阳三焦经','三焦经','#14b8a6'],['GB','足少阳胆经','胆经','#22c55e'],['LR','足厥阴肝经','肝经','#16a34a'],
+  ['TE','手少阳三焦经','三焦经','#a78065'],['GB','足少阳胆经','胆经','#df8c40'],['LR','足厥阴肝经','肝经','#8c6248'],
   ['GV','督脉','督脉','#8b5cf6'],['CV','任脉','任脉','#ec4899'],
+  ['EX','经外奇穴','经外奇穴','#98755d'],
 ].map(([id,name,shortName,color]) => ({ id, name, shortName, color, description: `${name}学习路径；传统经络分类，不等同于现代解剖结构。` }));
 
 type Seed = [string,string,string,string,Region,string,string[]];
@@ -115,7 +118,7 @@ const anatomy: Record<string,string[]> = {
 };
 const chapter: Record<string,number> = {LU:1,LI:2,ST:3,SP:4,HT:5,SI:6,BL:7,KI:8,PC:9,TE:10,GB:11,LR:12,GV:13,CV:14};
 
-export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => {
+export const CURATED_ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => {
   const classificationEvidence = classEvidence[id] ?? [];
   const supportedClassifications = new Set(classificationEvidence.flatMap((item) => item.tags));
   return ({
@@ -135,6 +138,26 @@ export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,
     ...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[]),
   ],
 });});
+
+const annotatedById = new Map(CURATED_ACUPOINTS.map(point=>[point.id,point]));
+export const ACUPOINTS: Acupoint[] = STANDARD_POINTS.map(record=>{
+  const annotated=annotatedById.get(record.id);
+  const shortName=MERIDIANS.find(m=>m.id===record.meridian)!.shortName;
+  return {
+    id:record.id,name:record.name,pinyin:record.pinyin,meridian:record.meridian,region:record.region,
+    location:record.location, bilateral:!['GV','CV'].includes(record.meridian),
+    landmarks:annotated?.landmarks??[],traditional:annotated?.traditional??'',
+    caution:annotated?.caution??'此条目当前提供标准定位事实；针灸操作、禁忌及邻近危险结构须结合指定教材和带教指导学习，不能由三维示意推断。',
+    tags:[shortName,record.region,...(annotated?.tags.slice(2)??[])],
+    anatomy:annotated?.anatomy??[],classificationEvidence:annotated?.classificationEvidence??[],
+    pendingClassificationTags:annotated?.pendingClassificationTags??[],
+    catalogueKind:'standard',annotationsReady:!!annotated,
+    sources:[{title:GB.title,url:`${GB_URL}#page=${record.page}`,section:`第${record.section}条 ${record.id} ${record.name}；PDF第${record.page}页`},...(annotated?.sources.slice(1)??[])],
+    ...(record.id==='GV24+'?{codeNote:'国标第5.13.25条编码为GV24+；不是GV29。旧资料可见EX-HN3。'}:{}),
+  };
+});
+
+ACUPOINTS.push(...EXTRA_POINTS);
 
 export const CASES: LearningCase[] = [
   { id:'case-landmark', title:'骨度分寸与固定标志', level:'入门', prompt:'学习定位足三里时，哪种做法最符合本应用的教学顺序？', options:['先找犊鼻，再量3寸并核对胫骨前嵴','直接按自己的三横指固定换算所有人','只看三维坐标，不触认标志','根据症状猜位置'], answer:0, explanation:'原创、未审阅教学案例。国标定位强调体表解剖标志与骨度分寸；个体比例不能被固定厘米数替代。', pointIds:['ST36'], sources:[GB,WHO] },

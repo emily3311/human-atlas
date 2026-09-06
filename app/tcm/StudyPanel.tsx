@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, RotateCcw, Check, Eye, BookOpen, Brain } from "lucide-react";
 import type { Acupoint, Meridian } from "./types";
 import type { Rating, Review } from "./study";
+import { questionAvailable } from './catalogue';
 export type CardType = "location" | "meridian" | "tags" | "identify";
 export default function StudyPanel({
   point,
@@ -69,11 +70,12 @@ export default function StudyPanel({
             ["identify", "认穴"],
           ] as const
         ).map(([id, name]) => (
-          <button key={id} className={type === id ? "active" : ""} onClick={() => onType(id)}>
+          <button key={id} disabled={!questionAvailable(point,id)} title={!questionAvailable(point,id)?'此题型的资料或三维定位尚未就绪':undefined} className={type === id ? "active" : ""} onClick={() => onType(id)}>
             {name}
           </button>
         ))}
       </div>
+      <p className="quiet-note">灰色题型尚未具备可核对答案或三维示意；不会作为考试答案练习。</p>
       <div className="card-counter">
         <span>
           学习卡 {index + 1} / {total}
@@ -93,7 +95,7 @@ export default function StudyPanel({
                 ? "辨认练习"
                 : type === "meridian"
                   ? "归经练习"
-                  : `${point.id} · 知识卡`}
+                  : `${point.displayCode??point.id} · 知识卡`}
             </span>
             <span className="flashcard-seal">{type === "identify" ? "辨" : "忆"}</span>
             <strong>{question}</strong>

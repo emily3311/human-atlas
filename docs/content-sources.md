@@ -6,6 +6,14 @@
 - [全国标准信息公共服务平台标准页](https://std.samr.gov.cn/gb/search/gbDetailed?id=D1E86BE73ADD430EE05397BE0A0A206B)，基础信息与标准状态。用于核验 GB/T 12346—2021 为现行标准、主管部门为国家中医药局。
 - [WHO Standard Acupuncture Point Locations in the Western Pacific Region](https://iris.who.int/bitstream/handle/10665/353407/9789290613831-eng.pdf)，General Guidelines、各经穴条目。用于核对国际编码、英文解剖方向和骨度分寸方法。该标准收录 361 点，不能替代 2021 中国国标的 362 点口径。
 
+## 本轮扩充与考纲口径
+
+362个经穴的名称、拼音、编码与简短定位现已按国标第5章逐条导入，并附小节号与PDF页码。印堂为第5.13.25条 `GV24+`，不是 `GV29`。原39条教学笔记保留；未完成逐条核验的新条目不补写传统主治、分类或模型坐标。
+
+另补入21个考纲奇穴/相关条目，20条定位取自大学公开的GB/T 40997—2021文本，三角灸定位待核验。该公开文本存在引用编号与排字问题，页面明确提示待正式版本对校；不将内部ID当成国家标准编码。详见 [奇穴来源核查](extras-source-research.md)。
+
+实践技能90个、医学综合180个穴名筛选依官方2025版大纲（2026沿用），详见 [考纲来源与完整名单](exam-scope-research.md)。这些是指定章节的穴名范围，不代表完整考试覆盖或已完成临床审校。
+
 ## 安全来源
 
 - [WHO benchmarks for the practice of acupuncture](https://www.who.int/publications/i/item/978-92-4-001688-0)，Safe practice，pp. 9–13。用于“应由受训人员实施、风险评估和安全边界”的总体原则。
