@@ -38,6 +38,11 @@ test('strict core lookup leaves unknown and malformed inputs unchanged',()=>{
   assert.equal(anatomyZh('Imaginary branch of left platysma'),'Imaginary branch of left platysma');
   assert.equal(anatomyZh('Left  platysma'),'Left  platysma');
 });
+test('Fudan batch keeps literal vessel evidence while unknown names remain unresolved',()=>{
+  assert.equal(anatomyZh('Accessory hemiazygos vein'), '副半奇静脉');
+  assert.equal(anatomyZh('invented posterior branch'), 'invented posterior branch');
+  assert.equal(anatomyNameEvidence('Accessory hemiazygos vein')?.sourceTerm.includes('05.1144'), true);
+});
 test('source-backed expansion covers unambiguous muscle, bone, sensory, and nervous cores',()=>{
   assert.equal(anatomyZh('Left abductor pollicis longus'),'\u5de6\u62c7\u957f\u5c55\u808c');
   assert.equal(anatomyZh('Left maxilla'),'\u5de6\u4e0a\u988c\u9aa8');

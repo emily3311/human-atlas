@@ -5,6 +5,8 @@ export interface AnatomyTerm {
   note?: string;
 }
 
+import { FUDAN_BATCH_1_TERMS } from './anatomy-terms-fudan-batch-1.ts';
+
 const NAER_DATASET = "https://data.gov.tw/en/datasets/14549";
 const simplifiedNote = "已逐条核对 NAER 记录；繁体字形已转为简体中文。";
 const modernizedNote = "已逐条核对 NAER 记录；已按当前中国大陆解剖学词序规范化。";
@@ -36,7 +38,7 @@ const sourcedDirect = (zh: string, english: string, entry: string, page: number)
 });
 
 /** Exact atlas-name cores whose correspondence was checked against the cited source row. */
-export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
+export const EXISTING_ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   "levator scapulae": sourcedDirect("肩胛提肌", "levator scapulae", "02.1514", 116),
   "serratus posterior inferior": sourcedDirect("下后锯肌", "serratus posterior inferior", "02.1515", 116),
   "serratus posterior superior": sourcedDirect("上后锯肌", "serratus posterior superior", "02.1516", 116),
@@ -244,4 +246,9 @@ export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   iliacus: bridged("髂肌", 2594, "iliacus muscle", "musculus iliacus", 3553, "髂肌"),
   semimembranosus: bridged("半膜肌", 2642, "semimembranosus muscle", "musculus semimembranosus", 3624, "半膜肌"),
   semitendinosus: bridged("半腱肌", 2641, "semitendinosus muscle", "musculus semitendinosus", 3628, "半腱肌"),
+};
+
+export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
+  ...EXISTING_ANATOMY_TERMS,
+  ...FUDAN_BATCH_1_TERMS,
 };
