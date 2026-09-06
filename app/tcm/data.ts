@@ -5,7 +5,7 @@ const GB: Source = { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL
 const WHO: Source = { title: 'WHO Standard Acupuncture Point Locations in the Western Pacific Region', url: 'https://iris.who.int/bitstream/handle/10665/353407/9789290613831-eng.pdf', section: 'General Guidelines; point-specific entries' };
 const SAFETY: Source = { title: 'WHO benchmarks for the practice of acupuncture', url: 'https://www.who.int/publications/i/item/978-92-4-001688-0', section: 'Safe practice, pp. 9–13' };
 const NCCIH: Source = { title: 'Acupuncture: Effectiveness and Safety', url: 'https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety', section: 'Is acupuncture safe?' };
-const TEACHING: Source = { title: '湖北中医药大学《经络腧穴学》参考书目', url: 'https://zybbg.hbucm.edu.cn/info/1017/1142.htm', section: '第二章第二、三节；下篇各经腧穴各论' };
+const CLASSIFICATION: Source = { title:'广西中医药大学《针灸学》教学大纲', url:'https://www.gxtcmu.edu.cn/zjtn/jysjs/zjtncfjfx/jxyhygl1/zjx/88xszyctzydwzyzxyxl/jxdg12/content_26039', section:'特定穴分类；八脉交会穴、八会穴及下合穴教学内容' };
 
 export const MERIDIANS: Meridian[] = [
   ['LU','手太阴肺经','肺经','#60a5fa'],['LI','手阳明大肠经','大肠经','#f59e0b'],['ST','足阳明胃经','胃经','#eab308'],
@@ -72,6 +72,16 @@ const traditional: Record<string,string> = {
  LR3:'疏肝理气、平息肝阳；传统常用于头目、情志及足部不适。', GV14:'清热解表、振奋阳气；传统常用于发热、头项及脊背不适。', GV20:'醒脑开窍、升阳举陷；传统常用于头痛、眩晕及神志不适。',
  CV4:'培补元气、温肾固本；传统常用于下腹、泌尿生殖及虚弱。', CV6:'益气固本、调理下焦；传统常用于下腹、气虚及泌尿生殖不适。', CV12:'和胃健脾、降逆化痰；传统常用于上腹胀痛、恶心及食欲不振。', CV17:'宽胸理气、调畅气机；传统常用于胸闷、气短及乳部不适。',
 };
+const traditionalSources: Partial<Record<string,Source[]>> = {
+ LI4:[{title:'上海中医药大学护理学院：吃吃喝喝的春节到了',url:'https://hl.shutcm.edu.cn/2018/0705/c2501a28044/page.htm',section:'“牙疼：按揉合谷和偏历穴”合谷条目'}],
+ PC6:[{title:'上海中医药大学创新创业学院：中医药文化探索之旅',url:'https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm',section:'内关穴：心慌、晕车、呕吐、胃痛等传统保健用途'}],
+ KI1:[{title:'上海中医药大学创新创业学院：中医药文化探索之旅',url:'https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm',section:'涌泉穴：劳累、头晕、潮热、腰痛等传统保健用途'}],
+ ST36:[{title:'香港中文大学中医学院：Staff Appreciation Day 2025',url:'https://www.hro.cuhk.edu.hk/en-gb/about/events-highlights/823-staff-appreciation-day-2025',section:'Qi and Blood Activation Technique—Zusanli (ST36)'}],
+ GV20:[{title:'上海中医药大学国际教育学院：趣味穴位课',url:'https://iec.shutcm.edu.cn/2026/0611/c179a174108/page.htm',section:'百会穴：提神醒脑的传统保健用途'}],
+ BL13:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肺俞、脾俞等背俞穴的传统配伍说明'}],
+ BL20:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肺俞、脾俞等背俞穴的传统配伍说明'}],
+ BL23:[{title:'清华大学附属北京清华长庚医院中医科：过敏性鼻炎科普',url:'https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm',section:'肾俞温补肾阳的传统理论说明'}],
+};
 const classes: Record<string,string[]> = {
  LU1:['募穴'],LU5:['合穴'],LU7:['络穴','八脉交会穴'],LU9:['输穴','原穴','八会穴'], LI4:['原穴'],LI11:['合穴'],LI20:['交会穴'],
  ST25:['募穴'],ST36:['合穴','下合穴'],ST40:['络穴'],ST44:['荥穴'], SP6:['交会穴'],SP9:['合穴'], HT7:['输穴','原穴'],SI3:['输穴','八脉交会穴'],
@@ -94,14 +104,15 @@ const chapter: Record<string,number> = {LU:1,LI:2,ST:3,SP:4,HT:5,SI:6,BL:7,KI:8,
 export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => ({
   id,name,pinyin,meridian,region,location,landmarks,
   bilateral: !['GV','CV'].includes(meridian),
-  traditional: `传统功用（未审阅）：${traditional[id]}仅作理论学习，不代表现代临床疗效结论。`,
+  traditional: `${traditionalSources[id] ? '传统功用（机构资料已交叉核对，仍未经课程教师审阅）' : '传统教材常见提要（待逐条来源核验、未经课程教师审阅）'}：${traditional[id]}仅作理论学习，不代表现代临床疗效结论。`,
   caution: `${sensitive.has(id) ? '邻近重要深部结构，仅作体表定位学习；' : ''}${pregnancy.has(id) ? '孕期相关操作须先由合格专业人员评估；' : ''}本资料不提供针刺深度或操作建议，请勿自行针刺。`,
   tags: [MERIDIANS.find((m)=>m.id===meridian)!.shortName,region,...(classes[id] ?? [])],
   anatomy: anatomy[id],
   sources: [
     { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:`第5.${chapter[meridian]}节 ${id} ${name}` },
     { ...WHO, section:`Point ${id} ${name}; general location guidelines` },
-    { ...TEACHING, section:`腧穴各论：${id} ${name}；特定穴与主治规律` },
+    ...(classes[id]?.length ? [CLASSIFICATION] : []),
+    ...(traditionalSources[id] ?? []),
     ...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[]),
   ],
 }));

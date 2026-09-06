@@ -29,12 +29,16 @@ test('every point is source-linked and structured for landmark learning', () => 
   }
 });
 
-test('traditional summaries contain named functions and a non-location teaching source', () => {
+test('traditional summaries declare whether point-specific support was verified', () => {
+  const verified = new Set(['LI4','PC6','KI1','ST36','GV20','BL13','BL20','BL23']);
   for (const point of ACUPOINTS) {
     assert.match(point.traditional, /传统常用于|传统功用/);
     assert.doesNotMatch(point.traditional, /相关传统主治须/);
-    assert.ok(point.sources.some((s) => /经络腧穴学|教学设计/.test(s.title)), `${point.id} traditional source`);
     assert.ok(point.sources.some((s) => s.section?.includes(point.id)), `${point.id} point-specific section`);
+    if (verified.has(point.id)) {
+      assert.match(point.traditional, /机构资料已交叉核对/);
+      assert.ok(point.sources.some((s) => /大学|医院/.test(s.title) && !/GB\/T|WHO/.test(s.title)), `${point.id} institution source`);
+    } else assert.match(point.traditional, /待逐条来源核验/);
   }
 });
 
