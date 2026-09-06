@@ -1,10 +1,10 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import atlas from '../public/models/atlas.json' with { type: 'json' };
 import evidence from '../data/sources/fudan-anatomy-terms-batch-1.json' with { type: 'json' };
-import { anatomyNameCoverage } from '../app/tcm/anatomy-zh.ts';
-import { EXISTING_ANATOMY_TERMS, type AnatomyTerm } from '../app/tcm/anatomy-terms.ts';
+import { EXISTING_ANATOMY_TERMS, type AnatomyTerm } from '../app/tcm/anatomy-terms-existing.ts';
+import { anatomyZhWithTerms } from '../app/tcm/anatomy-zh-base.ts';
 
 export type FudanEvidenceRow = {
   core: string;
@@ -16,7 +16,11 @@ export type FudanEvidenceRow = {
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const FUDAN_SOURCE = 'https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf';
-const EXCLUDED_ROWS = 3;
+const EXCLUDED_CANDIDATES: Readonly<Record<string, string>> = {
+  'arcuate artery': 'Chinese source term is contextual to the fibular artery',
+  'central canal of spinal cord': 'Chinese source term is context-bound and cannot be proven from the atlas core',
+  'inferior pulmonary vein': 'source row is right-specific while the core is not',
+};
 
 /** Remove only the atlas' leading laterality prefix. */
 export function atlasCore(name: string): string {
@@ -24,6 +28,11 @@ export function atlasCore(name: string): string {
 }
 
 const normalized = (value: string) => value.trim().toLocaleLowerCase();
+
+export function excludedRowsForFudanBatch(rows: readonly FudanEvidenceRow[]): number {
+  const importedCores = new Set(rows.map(row => normalized(row.core)));
+  return Object.keys(EXCLUDED_CANDIDATES).filter(core => !importedCores.has(core)).length;
+}
 
 export function validateFudanBatch(
   rows: readonly FudanEvidenceRow[],
@@ -51,6 +60,10 @@ export function validateFudanBatch(
       errors.push(`${label}: source English differs from core`);
       valid = false;
     }
+    if (Object.hasOwn(EXCLUDED_CANDIDATES, core)) {
+      errors.push(`${label}: excluded candidate (${EXCLUDED_CANDIDATES[core]})`);
+      valid = false;
+    }
     if (seen.has(core)) {
       errors.push(`${label}: duplicate core`);
       valid = false;
@@ -75,8 +88,25 @@ export function validateFudanBatch(
   return { errors, matchedCores: validCores.size, matchedParts };
 }
 
+export function coverageForFudanBatch(
+  rows: readonly FudanEvidenceRow[],
+  parts: ReadonlyArray<{ name: string }>,
+): { total: number; translated: number; unresolved: number } {
+  const currentBatch: Record<string, AnatomyTerm> = Object.fromEntries(rows.map(row => [normalized(row.core), {
+    zh: row.zh,
+    source: `${FUDAN_SOURCE}#page=${row.pdfPage}`,
+    sourceTerm: `大陆术语 ${row.sourceEntry}: ${row.zh} / ${row.sourceEnglish}`,
+  }]));
+  const terms = { ...EXISTING_ANATOMY_TERMS, ...currentBatch };
+  const translated = parts.reduce(
+    (count, part) => count + Number(anatomyZhWithTerms(part.name, terms) !== part.name),
+    0,
+  );
+  return { total: parts.length, translated, unresolved: parts.length - translated };
+}
+
 function renderTerms(rows: readonly FudanEvidenceRow[]): string {
-  const sorted = [...rows].sort((left, right) => left.core.localeCompare(right.core));
+  const sorted = [...rows].sort((left, right) => left.core < right.core ? -1 : left.core > right.core ? 1 : 0);
   const record = sorted.map(row => {
     const term: AnatomyTerm = {
       zh: row.zh,
@@ -97,12 +127,12 @@ function run(): void {
   }
 
   writeFileSync(resolve(ROOT, 'app/tcm/anatomy-terms-fudan-batch-1.ts'), renderTerms(rows));
-  const coverage = anatomyNameCoverage(atlas.parts);
+  const coverage = coverageForFudanBatch(rows, atlas.parts);
   const report = {
     sourceRows: rows.length,
     matchedCores: result.matchedCores,
     matchedParts: result.matchedParts,
-    excludedRows: EXCLUDED_ROWS,
+    excludedRows: excludedRowsForFudanBatch(rows),
     translatedTotal: coverage.translated,
     unresolvedTotal: coverage.unresolved,
   };
