@@ -46,3 +46,8 @@ Parent must verify rebuilt dist across all seven modes at 320×568, 375×844, 39
 - After requirement: phone summary is a single nonwrapping row with a flexible ellipsized name (full name retained in title), details action and 44px close target. Category and inline isolation action are hidden only on phone; isolation remains in AnatomyDetails, and desktop actions remain visible.
 - Removed the inherited 130px name minimum so 320px has room for both fixed actions; summary padding is 4px vertically, for a target 54px row including its 44px controls and borders. Selection-details action also exits focus and closes the phone catalogue consistently with the toolbar.
 - This is a focused presentational correction; no source-text test added. Typecheck/build and diff whitespace checks pass. Parent owns the 320/390 rendered measurement; implementer did not operate the browser.
+
+## Review fix round 3
+
+- Scoped phone isolation-action hiding to anatomy mode only. Explore and other phone modes retain their direct isolation control because they do not render anatomy's replacement details action.
+- Typecheck, build and whitespace checks pass. No additional rework or browser operation; parent will verify the explore isolation route.
