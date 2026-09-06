@@ -151,11 +151,11 @@
 }
 .emily-project-link--header {
   flex-shrink: 0;
-  padding: 6px 10px;
+  padding: 8px 14px;
   border: 1px solid #decbbb;
   border-radius: 999px;
   color: #9a542d !important;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   transition: background 0.18s, border-color 0.18s, color 0.18s;
 }
