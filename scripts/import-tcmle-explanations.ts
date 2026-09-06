@@ -8,6 +8,7 @@ import type { ExamExplanation, ExamExplanationBank } from '../app/tcm/exam-expla
 
 const ANSWER_KEYS: readonly AnswerKey[] = ['A', 'B', 'C', 'D', 'E'];
 const EXPECTED_TCMLE_COMMIT = '39e92cda586860c29a0ee00e4e29e15aedabb359';
+const GIT_FIXED_OBJECT_ENV = { ...process.env, GIT_NO_REPLACE_OBJECTS: '1' };
 // Dashes remain meaningful inside medical terms (for example, Q-T), so they
 // are deliberately outside the punctuation equivalence set.
 const AGREED_PUNCTUATION = /[!"#$%&'()*+,./:;<=>?@[\\\]^_`{|}~，。！？、；：‘’“”（）【】《》〈〉〔〕「」『』［］｛｝…]/gu;
@@ -82,12 +83,12 @@ function parseTcmleQuestion(value: unknown, sourceFile: string, sourceQuestionIn
 }
 
 export function readLicensedQuestions(tcmleDir: string, sourceCommit: string): { files: string[]; questions: TcmleQuestion[] } {
-  const files = execFileSync('git', ['-C', tcmleDir, 'ls-tree', '-r', '--name-only', sourceCommit, '--', 'Licensed'], { encoding: 'utf8' })
+  const files = execFileSync('git', ['-C', tcmleDir, 'ls-tree', '-r', '--name-only', sourceCommit, '--', 'Licensed'], { encoding: 'utf8', env: GIT_FIXED_OBJECT_ENV })
     .split('\n')
     .filter((file) => file.endsWith('.json'))
     .sort();
   const questions = files.flatMap((sourceFile) => {
-    const raw = execFileSync('git', ['-C', tcmleDir, 'show', `${sourceCommit}:${sourceFile}`], { encoding: 'utf8', maxBuffer: 160_000_000 });
+    const raw = execFileSync('git', ['-C', tcmleDir, 'show', `${sourceCommit}:${sourceFile}`], { encoding: 'utf8', maxBuffer: 160_000_000, env: GIT_FIXED_OBJECT_ENV });
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) throw new Error(`TCMLE source file must contain an array: ${sourceFile}`);
     return parsed.flatMap((value, index) => {

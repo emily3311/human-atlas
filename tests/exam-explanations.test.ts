@@ -151,3 +151,20 @@ test('licensed questions come only from the committed tree despite ignored workt
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test('licensed questions ignore Git replacement objects for the fixed commit', () => {
+  const { directory, trackedFile } = temporaryGitCheckout();
+  try {
+    const fixedCommit = execFileSync('git', ['-C', directory, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    writeFileSync(trackedFile, licensedFixture.replace('original', 'replacement'));
+    execFileSync('git', ['-C', directory, 'add', '.']);
+    execFileSync('git', ['-C', directory, 'commit', '--quiet', '-m', 'replacement']);
+    const replacementCommit = execFileSync('git', ['-C', directory, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    execFileSync('git', ['-C', directory, 'replace', fixedCommit, replacementCommit]);
+
+    const imported = readLicensedQuestions(directory, fixedCommit);
+    assert.deepEqual(imported.questions.map((question) => question.reason), ['original']);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
