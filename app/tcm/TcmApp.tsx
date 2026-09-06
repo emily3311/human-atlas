@@ -54,6 +54,7 @@ import {
 } from "./study";
 import type { Acupoint } from "./types";
 import ExamPanel from "./ExamPanel";
+import { EmilyAboutSection, EmilyProjectLink } from "./EmilyLinks";
 import "./tcm.css";
 
 type Mode = "anatomy" | "explore" | "cards" | "quiz" | "course" | "cases" | "exam";
@@ -448,6 +449,7 @@ export default function TcmApp() {
             </button>
           ))}
         </nav>
+        <EmilyProjectLink placement="header" />
         <button
           className="header-progress"
           onClick={() => {
@@ -1232,7 +1234,10 @@ export default function TcmApp() {
       </div>
       {mode === 'exam' && <ExamPanel onAbout={() => setAbout(true)} />}
       <footer className="app-footer">
-        <span>经纬 · 让每一次学习，都有迹可循。</span>
+        <span className="footer-intro">
+          <span>经纬 · 让每一次学习，都有迹可循。</span>
+          <EmilyProjectLink placement="footer" />
+        </span>
         <span>
           <span className="tiny-dot" />
           本机学习记录
@@ -1373,6 +1378,7 @@ export default function TcmApp() {
             <p>
               基于 Human Atlas 与 BodyParts3D 的中文教学扩展。当前包含362个十四经穴及21个考纲奇穴名称条目；原版滑杆散开、逐结构点选和名称浏览已集成。
             </p>
+            <EmilyAboutSection />
             <h3>内容与模型</h3>
             <p>
               名称、体表定位参考 GB/T 12346—2021 与 WHO 定位资料。2021 国标收录 362 穴，与 WHO 361
