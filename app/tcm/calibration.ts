@@ -308,8 +308,9 @@ const snapshotDraftStoreForExport = (store: unknown): unknown => {
     const version = store.version;
     const sourceDrafts = store.drafts;
     if (!Array.isArray(sourceDrafts)) throw new Error('draft store must have a drafts array');
+    const draftCount = sourceDrafts.length;
     const drafts: Array<Record<string, unknown>> = [];
-    for (let index = 0; index < sourceDrafts.length; index += 1) {
+    for (let index = 0; index < draftCount; index += 1) {
       const sourceDraft = sourceDrafts[index];
       assertSafeObject(sourceDraft, `draft ${index}`);
       assertOnlyKeys(sourceDraft, ['id', 'pointId', 'side', 'status', 'position', 'normal', 'evidence', 'reviewer', 'modelVersion', 'updatedAt'], `draft ${index}`);

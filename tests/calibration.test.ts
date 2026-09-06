@@ -149,6 +149,40 @@ test('draft export turns a throwing source getter into a validation failure', ()
   assert.throws(() => exportCalibrationDraftPackage(store, context), /export snapshot failed/i);
 });
 
+test('draft export cannot let a shrinking Proxy length hide a second illegal draft', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const illegalDraft = { ...draft, id: 'draft-st36-right', side: 'right', status: 'calibrated' };
+  let lengthReads = 0;
+  const sourceDrafts = new Proxy([draft, illegalDraft], {
+    get: (target, property, receiver) => property === 'length'
+      ? (++lengthReads === 1 ? 2 : 1)
+      : Reflect.get(target, property, receiver),
+  });
+  (store as unknown as { drafts: unknown }).drafts = sourceDrafts;
+  assert.throws(() => exportCalibrationDraftPackage(store, context), /draft status/i);
+  assert.equal(lengthReads, 1);
+});
+
+test('draft export reads source collection length and draft fields exactly once before validation', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const reads = { length: 0, pointId: 0, position: 0, normal: 0 };
+  const getterDraft: Record<string, unknown> = { ...draft };
+  Object.defineProperties(getterDraft, {
+    pointId: { enumerable: true, get: () => { reads.pointId += 1; return 'ST36'; } },
+    position: { enumerable: true, get: () => { reads.position += 1; return [1, 2, 3]; } },
+    normal: { enumerable: true, get: () => { reads.normal += 1; return [0, 0, 1]; } },
+  });
+  const sourceDrafts = new Proxy([getterDraft], {
+    get: (target, property, receiver) => {
+      if (property === 'length') reads.length += 1;
+      return Reflect.get(target, property, receiver);
+    },
+  });
+  (store as unknown as { drafts: unknown }).drafts = sourceDrafts;
+  assert.deepEqual(JSON.parse(exportCalibrationDraftPackage(store, context)).drafts, [draft]);
+  assert.deepEqual(reads, { length: 1, pointId: 1, position: 1, normal: 1 });
+});
+
 test('draft exports reject mutated vectors and strings instead of serializing illegal JSON', () => {
   const invalidFields: Array<[string, (store: { drafts: Array<Record<string, unknown>> }) => void, RegExp]> = [
     ['position', (store) => { store.drafts[0].position = [Infinity, 0, 0]; }, /position.*finite/i],
