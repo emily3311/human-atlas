@@ -19,6 +19,10 @@ export function overlaysAllowed(amount: number): boolean {
   return amount <= 0.001;
 }
 
+export function sceneDecorVisibility(amount: number, isolate: boolean) {
+  return { overlays: overlaysAllowed(amount), stage: !isolate && amount < 0.5 };
+}
+
 export function translatedBounds(
   bounds: [number[], number[]],
   offset: Vec3Tuple,

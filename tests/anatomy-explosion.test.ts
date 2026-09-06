@@ -5,6 +5,7 @@ import { createExplosionLayout } from "../app/explosion-layout.ts";
 import {
   explosionOffset,
   overlaysAllowed,
+  sceneDecorVisibility,
   translatedBounds,
 } from "../app/tcm/anatomy-explosion.ts";
 
@@ -38,6 +39,12 @@ test("TCM overlays remain suppressed until the explosion has returned to zero", 
   assert.equal(overlaysAllowed(0.0005), true);
   assert.equal(overlaysAllowed(0.002), false);
   assert.equal(overlaysAllowed(1), false);
+});
+
+test("routes and stage decorations restore as the explosion animation returns", () => {
+  assert.deepEqual(sceneDecorVisibility(0.4, false), { overlays: false, stage: true });
+  assert.deepEqual(sceneDecorVisibility(0, false), { overlays: true, stage: true });
+  assert.deepEqual(sceneDecorVisibility(0, true), { overlays: true, stage: false });
 });
 
 test("selected-part bounds translate with its rendered offset", () => {

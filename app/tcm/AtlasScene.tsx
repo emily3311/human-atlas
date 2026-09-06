@@ -11,7 +11,7 @@ import { PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
 import { anatomyZh } from "./anatomy-zh";
-import { explosionOffset, overlaysAllowed, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
+import { explosionOffset, overlaysAllowed, sceneDecorVisibility, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
@@ -87,7 +87,7 @@ export default function AtlasScene(props: Props) {
       return;
     }
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor("#edf0e9", 0);
+    renderer.setClearColor("#f1efeb", 0);
     renderer.outputColorSpace = T.SRGBColorSpace;
     renderer.toneMapping = T.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
@@ -113,17 +113,17 @@ export default function AtlasScene(props: Props) {
     scene.environment = environment.texture;
     room.dispose();
     pmrem.dispose();
-    scene.add(new T.HemisphereLight(0xffffff, 0x9fada0, 1.7));
+    scene.add(new T.HemisphereLight(0xffffff, 0xa6a19a, 1.7));
     const light = new T.DirectionalLight(0xfff9ee, 2);
     light.position.set(-2, 3, 3);
     scene.add(light);
-    const rim = new T.DirectionalLight(0xd9e9df, 1.4);
+    const rim = new T.DirectionalLight(0xe7e7e7, 1.4);
     rim.position.set(2, 2, -3);
     scene.add(rim);
     const ground = new T.Mesh(
       new T.CircleGeometry(0.56, 80),
       new T.MeshStandardMaterial({
-        color: 0xd6ded1,
+        color: 0xdad5ce,
         roughness: 1,
         transparent: true,
         opacity: 0.4,
@@ -135,7 +135,7 @@ export default function AtlasScene(props: Props) {
     const ring = new T.Mesh(
       new T.RingGeometry(0.41, 0.413, 80),
       new T.MeshBasicMaterial({
-        color: 0x94a78f,
+        color: 0xa3978a,
         transparent: true,
         opacity: 0.3,
         side: T.DoubleSide,
@@ -154,7 +154,7 @@ export default function AtlasScene(props: Props) {
     partTexture.needsUpdate = true;
     for (const system of SYSTEMS) {
       const material = new T.MeshStandardMaterial({
-          color: system.id === "integumentary" ? 0xcbd3b8 : system.color,
+          color: system.id === "integumentary" ? 0xc9c8c5 : system.color,
           roughness: 0.67,
           metalness: 0.025,
           side: T.DoubleSide,
@@ -179,15 +179,15 @@ export default function AtlasScene(props: Props) {
       batches.set(system.id, []);
     }
     const highlightMaterial = new T.MeshStandardMaterial({
-      color: 0xd4a257,
-      emissive: 0x725220,
+      color: 0xe38a42,
+      emissive: 0x754124,
       emissiveIntensity: 0.3,
       transparent: true,
       opacity: 0.8,
       depthTest: false,
     });
     let highlight: T.Mesh | undefined;
-    let surface: T.Mesh | undefined;
+    let surfaceProjection: T.Mesh | undefined;
     const centers = props.atlas.parts.map((p) =>
         new T.Vector3().fromArray(p.bounds[0]).add(new T.Vector3().fromArray(p.bounds[1])).multiplyScalar(0.5),
       ),
@@ -213,7 +213,7 @@ export default function AtlasScene(props: Props) {
         button.dataset.side = side === 1 ? "left" : "right";
         button.style.setProperty(
           "--point-color",
-          MERIDIANS.find((m) => m.id === point.meridian)?.color ?? "#438579",
+          MERIDIANS.find((m) => m.id === point.meridian)?.color ?? "#c06b32",
         );
         const dot = document.createElement("i");
         const label = document.createElement("span");
@@ -248,14 +248,14 @@ export default function AtlasScene(props: Props) {
     const lineResources: { geometry: T.BufferGeometry; material: T.Material }[] = [];
     const ray = new T.Raycaster();
     const placeMarkers = () => {
-      if (!surface) return;
+      if (!surfaceProjection) return;
       for (const marker of markers) {
         ray.set(
           marker.position.clone().addScaledVector(marker.normal, 0.25),
           marker.normal.clone().negate(),
         );
         const hits = ray
-          .intersectObject(surface, false)
+          .intersectObject(surfaceProjection, false)
           .filter((hit) => hit.point.distanceTo(marker.position) < 0.15)
           .sort(
             (a, b) =>
@@ -382,7 +382,7 @@ export default function AtlasScene(props: Props) {
             mesh.matrixAutoUpdate = false;
             mesh.userData.part = part;
             pickers.set(part.id, mesh);
-            if (part.name === "Skin") surface = mesh;
+            if (part.name === "Skin") surfaceProjection = new T.Mesh(g, materials.get(part.system));
             const list = groups.get(part.system) ?? [];
             list.push(g);
             groups.set(part.system, list);
@@ -582,13 +582,6 @@ export default function AtlasScene(props: Props) {
           );
           marker.button.querySelector("span")!.textContent = caption;
         }
-        for (const line of lineGroup.children)
-          line.visible =
-            overlaysAllowed(amount) &&
-            o.routes &&
-            !o.quiz &&
-            (line.userData.ids as string[]).every((id) => o.pointIds.includes(id));
-        ground.visible = ring.visible = !o.isolate && amount < 0.5;
         lastOptions = o;
         dirty = true;
       }
@@ -596,8 +589,16 @@ export default function AtlasScene(props: Props) {
       controls.mouseButtons.LEFT = amount < 0.8 ? T.MOUSE.ROTATE : T.MOUSE.PAN;
       controls.touches.ONE = amount < 0.8 ? T.TOUCH.ROTATE : T.TOUCH.PAN;
       controls.autoRotate = o.rotate && !o.isolate && amount < 0.4;
-      lineGroup.visible = overlaysAllowed(amount);
-      overlay.hidden = !overlaysAllowed(amount);
+      const decor = sceneDecorVisibility(amount, o.isolate);
+      lineGroup.visible = decor.overlays;
+      for (const line of lineGroup.children)
+        line.visible =
+          decor.overlays &&
+          o.routes &&
+          !o.quiz &&
+          (line.userData.ids as string[]).every((id) => o.pointIds.includes(id));
+      overlay.hidden = !decor.overlays;
+      ground.visible = ring.visible = decor.stage;
       controls.update();
       if (controls.autoRotate) dirty = true;
       if (dirty) {
@@ -618,10 +619,10 @@ export default function AtlasScene(props: Props) {
               Math.abs(projected.x) < 1 &&
               Math.abs(projected.y) < 1 &&
               marker.normal.dot(toCamera) > -0.06;
-            if (visible && surface) {
+            if (visible && surfaceProjection) {
               const distance = camera.position.distanceTo(marker.position);
               ray.set(camera.position, marker.position.clone().sub(camera.position).normalize());
-              const hit = ray.intersectObject(surface, false)[0];
+              const hit = ray.intersectObject(surfaceProjection, false)[0];
               if (hit && hit.distance < distance - 0.016) visible = false;
             }
             marker.button.hidden = !visible;
