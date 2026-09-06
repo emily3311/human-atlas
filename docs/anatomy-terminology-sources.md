@@ -34,6 +34,8 @@ Platysma 使用 IMAIOS 确认的中国大陆术语：<https://www.imaios.cn/cn/e
 - 之后：490 / 2,234 已翻译；1,744 未解析。
 - 新增 158 个经复核的精确核心词，覆盖 305 个实际网格项。
 
+眼部与下肢续核证批次的逐项证据与后续覆盖率见 [anatomy-terminology-continuation-evidence.md](anatomy-terminology-continuation-evidence.md)。该批在上述历史值基础上新增 27 个精确核心，覆盖 58 个实际网格条目；现为 548 / 2,234 已翻译、1,686 未解析。
+
 | 系统 | 未解析 |
 | --- | ---: |
 | arterial | 577 |

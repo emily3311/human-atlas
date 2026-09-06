@@ -56,6 +56,38 @@ test('audited source terms preserve the plantar character and middle-colic word 
   assert.equal(anatomyZh('Right plantaris'),'\u53f3\u8dd6\u808c');
   assert.equal(anatomyZh('Left middle colic artery'),'\u5de6\u4e2d\u7ed3\u80a0\u52a8\u8109');
 });
+test('source-backed eye and lower-limb cores preserve exact anatomical distinctions',()=>{
+  assert.equal(anatomyZh('Left choroid'),'\u5de6\u8109\u7edc\u819c');
+  assert.equal(anatomyZh('Left lacrimal canaliculus'),'\u5de6\u6cea\u5c0f\u7ba1');
+  assert.equal(anatomyZh('Right lacrimal gland'),'\u53f3\u6cea\u817a');
+  assert.equal(anatomyZh('Right lacrimal lake'),'\u53f3\u6cea\u6e56');
+  assert.equal(anatomyZh('Left lens'),'\u5de6\u6676\u72b6\u4f53');
+  assert.equal(anatomyZh('Right inferior oblique'),'\u53f3\u4e0b\u659c\u808c');
+  assert.equal(anatomyZh('Left inferior rectus'),'\u5de6\u4e0b\u76f4\u808c');
+  assert.equal(anatomyZh('Right lateral rectus'),'\u53f3\u5916\u76f4\u808c');
+  assert.equal(anatomyZh('Left levator palpebrae superioris'),'\u5de6\u4e0a\u7751\u63d0\u808c');
+  assert.equal(anatomyZh('Right medial rectus'),'\u53f3\u5185\u76f4\u808c');
+  assert.equal(anatomyZh('Left superior oblique'),'\u5de6\u4e0a\u659c\u808c');
+  assert.equal(anatomyZh('Right superior rectus'),'\u53f3\u4e0a\u76f4\u808c');
+  assert.equal(anatomyZh('Left lacrimal nerve'),'\u5de6\u6cea\u817a\u795e\u7ecf');
+  assert.equal(anatomyZh('Right nasociliary nerve'),'\u53f3\u9f3b\u776b\u795e\u7ecf');
+  assert.equal(anatomyZh('Left optic nerve'),'\u5de6\u89c6\u795e\u7ecf');
+  assert.equal(anatomyZh('Right long ciliary nerve'),'\u53f3\u776b\u72b6\u957f\u795e\u7ecf');
+  assert.equal(anatomyZh('Short ciliary nerve'),'\u776b\u72b6\u77ed\u795e\u7ecf');
+  assert.equal(anatomyZh('Left supra-orbital nerve'),'\u5de6\u7736\u4e0a\u795e\u7ecf');
+  assert.equal(anatomyZh('Left flexor accessorius'),'\u5de6\u8db3\u5e95\u65b9\u808c');
+  assert.equal(anatomyZh('Right gemellus inferior'),'\u53f3\u4e0b\u5b56\u808c');
+  assert.equal(anatomyZh('Left gemellus superior'),'\u5de6\u4e0a\u5b56\u808c');
+  assert.equal(anatomyZh('Right gluteus maximus'),'\u53f3\u81c0\u5927\u808c');
+  assert.equal(anatomyZh('Left gluteus medius'),'\u5de6\u81c0\u4e2d\u808c');
+  assert.equal(anatomyZh('Right gluteus minimus'),'\u53f3\u81c0\u5c0f\u808c');
+  assert.equal(anatomyZh('Left iliacus'),'\u5de6\u9ac2\u808c');
+  assert.equal(anatomyZh('Right semimembranosus'),'\u53f3\u534a\u819c\u808c');
+  assert.equal(anatomyZh('Left semitendinosus'),'\u5de6\u534a\u8171\u808c');
+  assert.ok(anatomyNameEvidence('Left lacrimal canaliculus')?.source.startsWith('https://'));
+  assert.equal(anatomyZh('Imaginary branch of left lacrimal nerve'),'Imaginary branch of left lacrimal nerve');
+  assert.equal(anatomyZh('Left  lacrimal nerve'),'Left  lacrimal nerve');
+});
 test('every sourced mapping has usable provenance and occurs as an exact model-name core',()=>{
   const cores=new Set(atlas.parts.map(part=>part.name.toLowerCase().replace(/^(left|right) /,'')));
   for(const [core,term] of Object.entries(ANATOMY_TERMS)){

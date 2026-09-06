@@ -9,11 +9,24 @@ const NAER_DATASET = "https://data.gov.tw/en/datasets/14549";
 const simplifiedNote = "已逐条核对 NAER 记录；繁体字形已转为简体中文。";
 const modernizedNote = "已逐条核对 NAER 记录；已按当前中国大陆解剖学词序规范化。";
 const TA2_SOURCE = "https://libraries.dal.ca/Fipat/ta2.html";
+const MAINLAND_TERMS = "https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf";
 const bridged = (zh: string, ta2Id: number, english: string, latin: string, row: number, sourceChinese: string): AnatomyTerm => ({
   zh,
   source: TA2_SOURCE,
   sourceTerm: `TA2 ${ta2Id}: ${english} / ${latin}; NAER row ${row}: ${sourceChinese}`,
   note: `已将 FIPAT TA2 公共领域术语桥接与 NAER ${NAER_DATASET} 逐条核对；中文字形已规范化。`,
+});
+const mainlandBridged = (zh: string, entry: string, page: number, ta2Id: number, english: string, latin: string, row: number, sourceLatin: string, sourceChinese: string): AnatomyTerm => ({
+  zh,
+  source: `${MAINLAND_TERMS}#page=${page}`,
+  sourceTerm: `大陆术语 ${entry}: ${zh}; TA2 ${ta2Id}: ${english} / ${latin}; NAER row ${row}: ${sourceLatin} — ${sourceChinese}`,
+  note: "已核对 FIPAT TA2、NAER 记录及复旦大学托管的《人体解剖学名词》参考副本；未宣称专业审校。",
+});
+const mainlandDirect = (zh: string, entry: string, page: number, ta2Id: number, english: string, latin: string): AnatomyTerm => ({
+  zh,
+  source: `${MAINLAND_TERMS}#page=${page}`,
+  sourceTerm: `大陆术语 ${entry}: ${zh} / ${english}; TA2 ${ta2Id}: ${english} / ${latin}`,
+  note: "NAER 无该整体结构的可用对应行；已核对 FIPAT TA2 及复旦大学托管的《人体解剖学名词》参考副本，未宣称专业审校。",
 });
 
 /** Exact atlas-name cores whose correspondence was checked against the cited source row. */
@@ -176,4 +189,31 @@ export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   "lacrimal sac": bridged("泪囊", 6857, "lacrimal sac", "saccus lacrimalis", 5169, "淚囊"),
   "nasolacrimal duct": bridged("鼻泪管", 6859, "nasolacrimal duct", "ductus nasolacrimalis", 2330, "鼻淚管"),
   "external ear": bridged("外耳", 6862, "external ear", "auris externa", 1580, "外耳"),
+  choroid: bridged("脉络膜", 6774, "choroid", "chorioidea", 1881, "脈絡膜"),
+  "lacrimal canaliculus": mainlandBridged("泪小管", "07.0146", 390, 6855, "lacrimal canaliculus", "canaliculus lacrimalis", 2312, "Ductuli lacrimales", "淚管"),
+  "lacrimal gland": mainlandDirect("泪腺", "07.0137", 390, 6846, "lacrimal gland", "glandula lacrimalis"),
+  "lacrimal lake": mainlandBridged("泪湖", "07.0143", 390, 6852, "lacrimal lake", "lacus lacrimalis", 3141, "Lacus lacrimalis", "淚湖"),
+  lens: bridged("晶状体", 6798, "lens", "lens", 3219, "晶狀體"),
+  "inferior oblique": mainlandBridged("下斜肌", "07.0099", 388, 2051, "inferior oblique muscle", "musculus obliquus inferior bulbi oculi", 630, "*M. obliquus bulbi inferior", "眼球下斜肌"),
+  "inferior rectus": mainlandBridged("下直肌", "07.0093", 388, 2043, "inferior rectus muscle", "musculus rectus inferior", 637, "*M. rectus bulbi inferior", "眼球下直肌"),
+  "lateral rectus": mainlandBridged("外直肌", "07.0095", 388, 2045, "lateral rectus muscle", "musculus rectus lateralis bulbi oculi", 640, "*M. rectus bulbi temporalis", "眼球顬側直肌"),
+  "levator palpebrae superioris": mainlandBridged("上睑提肌", "07.0100", 388, 2052, "levator palpebrae superioris", "levator palpebrae superioris", 3563, "M. levator palpebræ superioris", "提上瞼肌"),
+  "medial rectus": mainlandBridged("内直肌", "07.0094", 388, 2044, "medial rectus muscle", "musculus rectus medialis", 638, "*M. rectus bulbi nasalis", "眼球鼻側直肌"),
+  "superior oblique": mainlandBridged("上斜肌", "07.0097", 388, 2048, "superior oblique muscle", "musculus obliquus superior bulbi oculi", 631, "*M. obliquus bulbi superior", "眼球上斜肌"),
+  "superior rectus": mainlandBridged("上直肌", "07.0092", 388, 2042, "superior rectus muscle", "musculus rectus superior", 639, "*M. rectus bulbi superior", "眼球上直肌"),
+  "lacrimal nerve": bridged("泪腺神经", 6198, "lacrimal nerve", "nervus lacrimalis", 3911, "淚腺神經"),
+  "nasociliary nerve": mainlandBridged("鼻睫神经", "06.1061", 367, 6204, "nasociliary nerve", "nervus nasociliaris", 3922, "N. nasociliaris", "鼻睫[狀]神經"),
+  "optic nerve": mainlandDirect("视神经", "06.1032", 366, 6183, "optic nerve", "nervus opticus"),
+  "long ciliary nerve": mainlandBridged("睫状长神经", "06.1063", 368, 6206, "long ciliary nerves", "nervi ciliares longi", 3994, "Nn. ciliares longi", "睫狀長神經"),
+  "short ciliary nerve": mainlandBridged("睫状短神经", "06.1048", 367, 6664, "short ciliary nerves", "nervi ciliares breves", 3993, "Nn. ciliares breves", "睫狀短神經"),
+  "supra-orbital nerve": mainlandDirect("眶上神经", "06.1059", 367, 6200, "supra-orbital nerve", "nervus supraorbitalis"),
+  "flexor accessorius": mainlandBridged("足底方肌", "02.1799", 133, 2684, "flexor accessorius muscle", "flexor accessorius", 3611, "M. quadratus plantæ", "蹠方肌"),
+  "gemellus inferior": mainlandBridged("下孖肌", "02.1747", 130, 2607, "inferior gemellus muscle", "musculus gemellus inferior", 626, "*M. gemellus tuberalis", "孖結節肌"),
+  "gemellus superior": mainlandBridged("上孖肌", "02.1746", 130, 2606, "superior gemellus muscle", "musculus gemellus superior", 625, "*M. gemellus spinalis", "孖棘肌"),
+  "gluteus maximus": bridged("臀大肌", 2598, "gluteus maximus muscle", "musculus gluteus maximus", 3546, "臀大肌"),
+  "gluteus medius": bridged("臀中肌", 2599, "gluteus medius muscle", "musculus gluteus medius", 3547, "臀中肌"),
+  "gluteus minimus": bridged("臀小肌", 2600, "gluteus minimus muscle", "musculus gluteus minimus", 3548, "臀小肌"),
+  iliacus: bridged("髂肌", 2594, "iliacus muscle", "musculus iliacus", 3553, "髂肌"),
+  semimembranosus: bridged("半膜肌", 2642, "semimembranosus muscle", "musculus semimembranosus", 3624, "半膜肌"),
+  semitendinosus: bridged("半腱肌", 2641, "semitendinosus muscle", "musculus semitendinosus", 3628, "半腱肌"),
 };
