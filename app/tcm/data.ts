@@ -1,9 +1,11 @@
 import type { Acupoint, LearningCase, Meridian, Region, Source } from './types.ts';
 
-const GB: Source = { title: 'GB/T 12346—2021 经穴名称与定位', url: 'https://www.ntcamsac.ac.cn/upload/std_info/202306192125376309.pdf', section: '第4章、附录A（经穴名称与定位）' };
+const GB_URL = 'https://zynj.shutcm.edu.cn/_upload/article/files/66/b4/b34a95604d04b0bf686251b2d317/368ea8b0-187c-48a7-a402-ffdf1e11bb99.pdf';
+const GB: Source = { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:'第4章定位方法；第5章经穴名称与定位' };
 const WHO: Source = { title: 'WHO Standard Acupuncture Point Locations in the Western Pacific Region', url: 'https://iris.who.int/bitstream/handle/10665/353407/9789290613831-eng.pdf', section: 'General Guidelines; point-specific entries' };
 const SAFETY: Source = { title: 'WHO benchmarks for the practice of acupuncture', url: 'https://www.who.int/publications/i/item/978-92-4-001688-0', section: 'Safe practice, pp. 9–13' };
 const NCCIH: Source = { title: 'Acupuncture: Effectiveness and Safety', url: 'https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety', section: 'Is acupuncture safe?' };
+const TEACHING: Source = { title: '湖北中医药大学《经络腧穴学》参考书目', url: 'https://zybbg.hbucm.edu.cn/info/1017/1142.htm', section: '第二章第二、三节；下篇各经腧穴各论' };
 
 export const MERIDIANS: Meridian[] = [
   ['LU','手太阴肺经','肺经','#60a5fa'],['LI','手阳明大肠经','大肠经','#f59e0b'],['ST','足阳明胃经','胃经','#eab308'],
@@ -52,26 +54,56 @@ const seeds: Seed[] = [
  ['GV20','百会','Bǎihuì','GV','头颈','头顶部，前发际正中直上5寸，或两耳尖连线与头正中线交点。',['建立头正中线','连接两耳尖','取两线交点并核对前发际5寸']],
  ['CV4','关元','Guānyuán','CV','胸腹','下腹部，脐中下3寸，前正中线上。',['找到脐中央','沿前正中线向下','量3寸取点']],
  ['CV6','气海','Qìhǎi','CV','胸腹','下腹部，脐中下1.5寸，前正中线上。',['找到脐中央','沿前正中线向下','量1.5寸取点']],
- ['CV12','中脘','Zhōngwǎn','CV','胸腹','上腹部，脐中上4寸，前正中线上。',['找到脐中央','找到胸剑联合','在前正中线脐上4寸取点']],
+ ['CV12','中脘','Zhōngwǎn','CV','胸腹','上腹部，脐中上4寸，前正中线上。',['找到脐中央','找到剑突尖','在脐中与剑突尖连线中点取点']],
  ['CV17','膻中','Dànzhōng','CV','胸腹','前胸部，横平第4肋间隙，前正中线上。',['找到胸骨正中线','辨认第4肋间隙水平','取该水平与正中线交点']],
 ];
 
 const sensitive = new Set(['LU1','GB20','GB21','CV17','BL13','BL20','BL23']);
 const pregnancy = new Set(['LI4','SP6','GB21','CV4','CV6']);
-const anatomyByRegion: Record<Region,string[]> = {
-  '头颈':['skull','facial muscles','cervical muscles'], '胸腹':['thorax','abdominal wall','sternum'],
-  '背腰':['vertebral column','back muscles','scapula'], '上肢':['upper limb','forearm muscles','hand bones'],
-  '下肢':['lower limb','leg muscles','foot bones'],
+const traditional: Record<string,string> = {
+ LU1:'宣肺止咳、清泻肺热；传统常用于咳嗽、气喘及胸部胀满。', LU5:'清肺泻火、降逆止咳；传统常用于咳嗽、气喘及肘臂不利。', LU7:'宣肺解表、利咽通络；传统常用于咳嗽、头项不适及腕痛。', LU9:'补肺益气、止咳化痰；传统常用于咳嗽、气喘及腕痛。',
+ LI4:'疏风解表、通络止痛；传统常用于头面五官不适及手部疼痛。', LI10:'疏经通络、调理肠胃；传统常用于肘臂疼痛及腹部不适。', LI11:'清热疏风、调和气血；传统常用于发热、皮肤不适及肘臂疼痛。', LI20:'宣通鼻窍、疏散风热；传统常用于鼻塞、鼻部及面部不适。',
+ ST25:'调理肠腑、理气消滞；传统常用于腹痛、腹胀及排便异常。', ST36:'健脾和胃、补益气血；传统常用于胃肠不适、下肢不利及虚弱。', ST40:'健脾化痰、和胃降逆；传统常用于痰多、眩晕及下肢不适。', ST44:'清胃泄热、理气止痛；传统常用于齿痛、面部及胃肠不适。',
+ SP6:'健脾化湿、调补肝肾；传统常用于腹部、泌尿生殖及下肢不适。', SP9:'健脾利湿、通利水道；传统常用于水湿、膝胫及腹部不适。', SP10:'活血化瘀、凉血调血；传统常用于皮肤、月经及股膝不适。',
+ HT7:'养心安神、清心调气；传统常用于心悸、失眠及腕部不适。', SI3:'通督舒筋、清心安神；传统常用于头项、腰背及手部不适。', SI11:'舒筋通络、理气止痛；传统常用于肩胛及上肢活动不利。',
+ BL13:'宣肺理气、止咳平喘；传统常用于咳嗽、气喘及背部不适。', BL20:'健脾益气、和胃化湿；传统常用于食少、腹胀及背部不适。', BL23:'补肾强腰、调利水道；传统常用于腰部、泌尿及生殖系统不适。', BL40:'舒筋活络、清热利湿；传统常用于腰背、膝后及下肢不适。', BL60:'舒筋活络、清利头目；传统常用于头项、腰背及踝部不适。',
+ KI1:'苏厥开窍、清降虚火；传统常用于神志、头面及足底不适。', KI3:'滋肾益阴、强腰健骨；传统常用于腰膝、耳及泌尿生殖不适。', PC6:'宁心安神、和胃降逆；传统常用于胸闷心悸、恶心及腕臂不适。', PC7:'宁心安神、清心和胃；传统常用于心悸、失眠及腕部不适。',
+ TE5:'疏风解表、通络止痛；传统常用于头面五官、发热及前臂不适。', TE14:'舒筋利节、通络止痛；传统常用于肩臂疼痛及活动受限。', GB20:'疏风清热、清利头目；传统常用于头痛、眩晕及颈项不适。', GB21:'舒筋通络、理气散结；传统常用于颈肩不适。', GB34:'疏肝利胆、舒筋通络；传统常用于胁肋、膝腿及筋脉不适。',
+ LR3:'疏肝理气、平息肝阳；传统常用于头目、情志及足部不适。', GV14:'清热解表、振奋阳气；传统常用于发热、头项及脊背不适。', GV20:'醒脑开窍、升阳举陷；传统常用于头痛、眩晕及神志不适。',
+ CV4:'培补元气、温肾固本；传统常用于下腹、泌尿生殖及虚弱。', CV6:'益气固本、调理下焦；传统常用于下腹、气虚及泌尿生殖不适。', CV12:'和胃健脾、降逆化痰；传统常用于上腹胀痛、恶心及食欲不振。', CV17:'宽胸理气、调畅气机；传统常用于胸闷、气短及乳部不适。',
 };
+const classes: Record<string,string[]> = {
+ LU1:['募穴'],LU5:['合穴'],LU7:['络穴','八脉交会穴'],LU9:['输穴','原穴','八会穴'], LI4:['原穴'],LI11:['合穴'],LI20:['交会穴'],
+ ST25:['募穴'],ST36:['合穴','下合穴'],ST40:['络穴'],ST44:['荥穴'], SP6:['交会穴'],SP9:['合穴'], HT7:['输穴','原穴'],SI3:['输穴','八脉交会穴'],
+ BL13:['背俞穴'],BL20:['背俞穴'],BL23:['背俞穴'],BL40:['合穴','下合穴'],BL60:['经穴'], KI1:['井穴'],KI3:['输穴','原穴'],
+ PC6:['络穴','八脉交会穴'],PC7:['输穴','原穴'],TE5:['络穴','八脉交会穴'], GB20:['交会穴'],GB21:['交会穴'],GB34:['合穴','下合穴','八会穴'],
+ LR3:['输穴','原穴'],GV14:['交会穴'],GV20:['交会穴'],CV4:['募穴','交会穴'],CV12:['募穴','八会穴'],CV17:['募穴','八会穴'],
+};
+const anatomy: Record<string,string[]> = {
+ LU1:['clavicle','pectoralis major','first rib'],LU5:['biceps brachii','radius'],LU7:['radius','brachioradialis'],LU9:['radius','radial artery'],
+ LI4:['second metacarpal bone'],LI10:['radius','brachioradialis'],LI11:['humerus','brachioradialis'],LI20:['nasal bone','lateral nasal cartilage'],
+ ST25:['external oblique','abdominal aorta'],ST36:['tibia','tibialis anterior','patella'],ST40:['tibia','tibialis anterior','fibula'],ST44:['second metatarsal bone','third metatarsal bone'],
+ SP6:['tibia','tibialis posterior'],SP9:['tibia','gastrocnemius'],SP10:['patella','vastus medialis'],HT7:['ulna','flexor carpi ulnaris'],SI3:['fifth metacarpal bone'],SI11:['scapula','infraspinatus'],
+ BL13:['third thoracic vertebra','rib'],BL20:['eleventh thoracic vertebra'],BL23:['second lumbar vertebra'],BL40:['gastrocnemius','popliteal artery'],BL60:['fibula','calcaneus','calcaneal tendon'],
+ KI1:['second metatarsal bone','long plantar ligament'],KI3:['tibia','calcaneus','calcaneal tendon'],PC6:['radius','ulna','palmaris longus'],PC7:['radius','flexor carpi radialis'],TE5:['radius','ulna'],TE14:['scapula','humerus','deltoid'],
+ GB20:['occipital bone','trapezius','sternocleidomastoid'],GB21:['seventh cervical vertebra','scapula','trapezius'],GB34:['fibula','tibialis anterior'],LR3:['first metatarsal bone','second metatarsal bone'],
+ GV14:['seventh cervical vertebra','first thoracic vertebra'],GV20:['parietal bone'],CV4:['external oblique','urinary bladder'],CV6:['external oblique','abdominal aorta'],CV12:['body of sternum','stomach'],CV17:['body of sternum','fourth rib'],
+};
+const chapter: Record<string,number> = {LU:1,LI:2,ST:3,SP:4,HT:5,SI:6,BL:7,KI:8,PC:9,TE:10,GB:11,LR:12,GV:13,CV:14};
 
 export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => ({
   id,name,pinyin,meridian,region,location,landmarks,
   bilateral: !['GV','CV'].includes(meridian),
-  traditional: `传统理论提要：${name}归属${MERIDIANS.find((m)=>m.id===meridian)?.shortName}，相关传统主治须结合教材辨证理解；待教师核对。`,
+  traditional: `传统功用（未审阅）：${traditional[id]}仅作理论学习，不代表现代临床疗效结论。`,
   caution: `${sensitive.has(id) ? '邻近重要深部结构，仅作体表定位学习；' : ''}${pregnancy.has(id) ? '孕期相关操作须先由合格专业人员评估；' : ''}本资料不提供针刺深度或操作建议，请勿自行针刺。`,
-  tags: [MERIDIANS.find((m)=>m.id===meridian)!.shortName,region,'定位学习'],
-  anatomy: anatomyByRegion[region],
-  sources: [GB,WHO,...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[])],
+  tags: [MERIDIANS.find((m)=>m.id===meridian)!.shortName,region,...(classes[id] ?? [])],
+  anatomy: anatomy[id],
+  sources: [
+    { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:`第5.${chapter[meridian]}节 ${id} ${name}` },
+    { ...WHO, section:`Point ${id} ${name}; general location guidelines` },
+    { ...TEACHING, section:`腧穴各论：${id} ${name}；特定穴与主治规律` },
+    ...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[]),
+  ],
 }));
 
 export const CASES: LearningCase[] = [

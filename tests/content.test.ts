@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
-// @ts-expect-error Node's strip-types runner requires the explicit extension; the app tsconfig disallows it.
 import { ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
 
 const REQUIRED = 'LU1 LU5 LU7 LU9 LI4 LI10 LI11 LI20 ST25 ST36 ST40 ST44 SP6 SP9 SP10 HT7 SI3 SI11 BL13 BL20 BL23 BL40 BL60 KI1 KI3 PC6 PC7 TE5 TE14 GB20 GB21 GB34 LR3 GV14 GV20 CV4 CV6 CV12 CV17'.split(' ');
@@ -26,6 +26,32 @@ test('every point is source-linked and structured for landmark learning', () => 
     assert.ok(point.sources.every((s) => /^https:\/\//.test(s.url) && s.title), `${point.id} source quality`);
     assert.ok(point.anatomy.length > 0, `${point.id} anatomy keywords`);
     assert.equal(point.bilateral, !['GV', 'CV'].includes(point.meridian), `${point.id} laterality`);
+  }
+});
+
+test('traditional summaries contain named functions and a non-location teaching source', () => {
+  for (const point of ACUPOINTS) {
+    assert.match(point.traditional, /传统常用于|传统功用/);
+    assert.doesNotMatch(point.traditional, /相关传统主治须/);
+    assert.ok(point.sources.some((s) => /经络腧穴学|教学设计/.test(s.title)), `${point.id} traditional source`);
+    assert.ok(point.sources.some((s) => s.section?.includes(point.id)), `${point.id} point-specific section`);
+  }
+});
+
+test('representative specific-point classifications are filterable', () => {
+  const byId = new Map(ACUPOINTS.map((p) => [p.id, p]));
+  for (const [id, tag] of [['LI4','原穴'],['LU7','络穴'],['ST36','下合穴'],['BL13','背俞穴'],['ST25','募穴'],['PC6','八脉交会穴'],['GB34','八会穴']]) {
+    assert.ok(byId.get(id)?.tags.includes(tag), `${id} ${tag}`);
+  }
+});
+
+test('anatomy keywords are concrete atlas structure names', () => {
+  const vague = new Set(['skull','facial muscles','cervical muscles','thorax','abdominal wall','sternum','vertebral column','back muscles','upper limb','forearm muscles','hand bones','lower limb','leg muscles','foot bones']);
+  const atlas = JSON.parse(readFileSync(new URL('../public/models/atlas.json', import.meta.url), 'utf8')) as { parts:{name:string}[] };
+  const names = atlas.parts.map((part) => part.name.toLowerCase());
+  for (const point of ACUPOINTS) {
+    assert.ok(point.anatomy.every((name) => !vague.has(name)), `${point.id} anatomy specificity`);
+    assert.ok(point.anatomy.every((keyword) => names.some((name) => name.includes(keyword))), `${point.id} anatomy atlas match`);
   }
 });
 
