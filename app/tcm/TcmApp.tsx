@@ -39,6 +39,7 @@ import {
   ratePoint,
   reviewQueue,
   nextId,
+  quizDisplayIds,
   type StudyStore,
   type Rating,
 } from "./study";
@@ -217,14 +218,19 @@ export default function TcmApp() {
     [query, meridian, region, tag, scope, store.favorites, store.course.pointIds, dueIds],
   );
   const filteredIds = useMemo(() => filtered.map((p) => p.id), [filtered]);
+  const displayedIds = useMemo(
+    () => mode === "quiz" ? quizDisplayIds(filteredIds, activeId, quizAnswer) : filteredIds,
+    [mode, filteredIds, activeId, quizAnswer],
+  );
   useEffect(() => {
-    if (filtered.length && !filteredIds.includes(activeId)) {
+    if (displayedIds.length && !displayedIds.includes(activeId)) {
       setActiveId(filtered[0].id);
       setQuizAnswer(null);
       setRevealed(false);
     }
-  }, [filteredIds]);
-  const concealed = mode === "cards" && cardType === "identify" && !revealed;
+  }, [displayedIds]);
+  const concealed =
+    mode === "cards" && (cardType === "identify" || cardType === "meridian") && !revealed;
   useEffect(()=>{if(concealed){setFocus(v=>v+1);setRotate(false);}},[concealed,activeId]);
   const quizPending = mode === "quiz" && !quizAnswer;
   const selectPoint = (id: string) => {
@@ -261,6 +267,7 @@ export default function TcmApp() {
   const showNext = () => {
     const next = nextId(filteredIds, activeId);
     if (next) selectPoint(next);
+    else if (mode === "quiz") setQuizAnswer(null);
   };
   const rate = (rating: Rating) => {
     setStore((s) => ratePoint(s, activeId, rating));
@@ -295,8 +302,8 @@ export default function TcmApp() {
       setNotice("最多比较三个穴位，请先移除一个。");
   };
   const sceneIds = useMemo(
-    () => (concealed ? [activeId] : filteredIds),
-    [concealed, activeId, filteredIds],
+    () => (concealed ? [activeId] : displayedIds),
+    [concealed, activeId, displayedIds],
   );
   const sceneOptions = useMemo<SceneOptions>(
     () => ({
@@ -457,11 +464,22 @@ export default function TcmApp() {
                   id="point-search"
                   placeholder="搜索穴名、拼音或编码"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setQuizAnswer(null);
+                    setRevealed(false);
+                  }}
                   aria-label="搜索穴位"
                 />
                 {query ? (
-                  <button aria-label="清空搜索" onClick={() => setQuery("")}>
+                  <button
+                    aria-label="清空搜索"
+                    onClick={() => {
+                      setQuery("");
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
+                  >
                     <X size={13} />
                   </button>
                 ) : (
@@ -480,7 +498,11 @@ export default function TcmApp() {
                   <button
                     key={id}
                     className={scope === id ? "active" : ""}
-                    onClick={() => setScope(id)}
+                    onClick={() => {
+                      setScope(id);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
                   >
                     {name}
                     {id === "review" && <sup>{dueIds.length}</sup>}
@@ -493,7 +515,11 @@ export default function TcmApp() {
                   <select
                     aria-label="身体部位"
                     value={region}
-                    onChange={(e) => setRegion(e.target.value)}
+                    onChange={(e) => {
+                      setRegion(e.target.value);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
                   >
                     <option value="all">全部部位</option>
                     {["头颈", "胸腹", "背腰", "上肢", "下肢"].map((r) => (
@@ -506,7 +532,11 @@ export default function TcmApp() {
                   <select
                     aria-label="特定穴分类"
                     value={tag}
-                    onChange={(e) => setTag(e.target.value)}
+                    onChange={(e) => {
+                      setTag(e.target.value);
+                      setQuizAnswer(null);
+                      setRevealed(false);
+                    }}
                   >
                     <option value="all">全部分类</option>
                     {tags.map((t) => (
@@ -523,7 +553,11 @@ export default function TcmApp() {
                 <select
                   id="meridian-select"
                   value={meridian}
-                  onChange={(e) => setMeridian(e.target.value)}
+                  onChange={(e) => {
+                    setMeridian(e.target.value);
+                    setQuizAnswer(null);
+                    setRevealed(false);
+                  }}
                 >
                   <option value="all">十四经 · 全部</option>
                   {MERIDIANS.map((m) => (
@@ -671,7 +705,7 @@ export default function TcmApp() {
             )}
             <div className="stage-label">
               <span className="tiny-dot" />
-              {concealed ? "辨认练习" : currentMeridian.name}
+              {concealed ? (cardType === "meridian" ? "归经练习" : "辨认练习") : currentMeridian.name}
               <small>{mode === "quiz" ? "点击候选点作答" : "BodyParts3D · 成人男性参考"}</small>
             </div>
             <div className="stage-side-label">
@@ -810,11 +844,22 @@ export default function TcmApp() {
           </div>
         </main>
         <aside className="detail-panel" aria-label="学习内容">
-          {!filtered.length && mode !== 'course' && mode !== 'cases' ? (
+          {!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
               <BookOpen size={32} />
-              <h2>调整筛选，开始学习</h2>
-              <p>学习卡与人体标记会同步到左侧目录。</p>
+              <h2>{mode === "quiz" && scope === "review" ? "本轮待复习已完成" : "调整筛选，开始学习"}</h2>
+              <p>{mode === "quiz" && scope === "review" ? "可以切换到全部题目继续练习，或稍后回来复习。" : "学习卡与人体标记会同步到左侧目录。"}</p>
+              {mode === "quiz" && scope === "review" && (
+                <button
+                  className="primary-button"
+                  onClick={() => {
+                    setScope("all");
+                    setQuizAnswer(null);
+                  }}
+                >
+                  练习全部题目
+                </button>
+              )}
             </div>
           ) : mode === "cards" ? (
             <StudyPanel
@@ -862,7 +907,9 @@ export default function TcmApp() {
                   <strong>{quizAnswer === point.id ? "找对了！" : "再对照一下定位"}</strong>
                   <p>
                     {quizAnswer !== point.id &&
-                      `你选择了${ACUPOINTS.find((p) => p.id === quizAnswer)?.name}。`}
+                      (quizAnswer === "skipped"
+                        ? "已查看答案。"
+                        : `你选择了${ACUPOINTS.find((p) => p.id === quizAnswer)?.name}。`)}
                     {point.location}
                   </p>
                   <button

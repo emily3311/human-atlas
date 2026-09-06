@@ -43,7 +43,7 @@ export default function StudyPanel({
       : type === "meridian"
         ? `${point.name}属于哪条经脉？`
         : type === "tags"
-          ? `${point.name}有哪些分类标签？`
+          ? `${point.name}有哪些特定穴分类？`
           : "模型中标记的穴位叫什么？";
   const answer =
     type === "location"
@@ -51,7 +51,7 @@ export default function StudyPanel({
       : type === "meridian"
         ? meridian.name
         : type === "tags"
-          ? point.tags.join(" · ")
+          ? point.tags.slice(2).join(" · ") || "暂无特定穴分类"
           : `${point.name} · ${point.id}`;
   return (
     <section className="study-panel">
@@ -89,7 +89,11 @@ export default function StudyPanel({
         <span className="flip-inner">
           <span className="card-face front" aria-hidden={flipped}>
             <span className="flashcard-eyebrow">
-              {type === "identify" ? "辨认练习" : `${point.id} · 知识卡`}
+              {type === "identify"
+                ? "辨认练习"
+                : type === "meridian"
+                  ? "归经练习"
+                  : `${point.id} · 知识卡`}
             </span>
             <span className="flashcard-seal">{type === "identify" ? "辨" : "忆"}</span>
             <strong>{question}</strong>
@@ -170,11 +174,33 @@ export default function StudyPanel({
           <ArrowRight size={15} />
         </button>
       </div>
-      {flipped && (
+      {flipped && type === "tags" ? (
+        <div>
+          {point.classificationEvidence.map(({ source, tags }) => (
+            <a
+              className="small-source"
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              key={`${source.url}-${tags.join("-")}`}
+            >
+              已核对 {tags.join("、")}：{source.title}
+            </a>
+          ))}
+          {point.pendingClassificationTags.length > 0 && (
+            <p className="quiet-note">
+              待逐项核验：{point.pendingClassificationTags.join("、")}
+            </p>
+          )}
+          {!point.classificationEvidence.length && !point.pendingClassificationTags.length && (
+            <p className="quiet-note">当前无特定穴分类标签。</p>
+          )}
+        </div>
+      ) : flipped ? (
         <a className="small-source" href={point.sources[0].url} target="_blank" rel="noreferrer">
           答案依据：{point.sources[0].title}
         </a>
-      )}
+      ) : null}
     </section>
   );
 }

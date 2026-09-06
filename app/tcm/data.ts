@@ -1,4 +1,4 @@
-import type { Acupoint, LearningCase, Meridian, Region, Source } from './types.ts';
+import type { Acupoint, ClassificationEvidence, LearningCase, Meridian, Region, Source } from './types.ts';
 
 const GB_URL = 'https://zynj.shutcm.edu.cn/_upload/article/files/66/b4/b34a95604d04b0bf686251b2d317/368ea8b0-187c-48a7-a402-ffdf1e11bb99.pdf';
 const GB: Source = { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:'第4章定位方法；第5章经穴名称与定位' };
@@ -90,11 +90,11 @@ const traditionalSources: Partial<Record<string,Source[]>> = {
  LR3:[{title:'北京中医药大学远程教育《针灸学》课程',url:'https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c2/c2_9b_2.htm',section:'太冲疏肝解郁的传统配穴说明'}],
  CV4:[{title:'湖北中医药大学王华名老中医传承工作室',url:'https://www.hbucm.edu.cn/wanghua/info/1004/1047.htm',section:'足三里、关元配伍：关元益精补气、扶助人体之本'}],
 };
-const classSources: Partial<Record<string,Source[]>> = {
- LU1:[BUCM_SHU_MU],ST25:[BUCM_SHU_MU],CV4:[BUCM_SHU_MU],BL13:[BUCM_SHU_MU],BL20:[BUCM_SHU_MU],BL23:[BUCM_SHU_MU],
- LU7:[CLASSIFICATION,AHTCM_CLASSES],SI3:[CLASSIFICATION,AHTCM_CLASSES],PC6:[CLASSIFICATION,AHTCM_CLASSES],TE5:[CLASSIFICATION,AHTCM_CLASSES],
- LU9:[CLASSIFICATION,AHTCM_CLASSES],GB34:[CLASSIFICATION,AHTCM_CLASSES],CV12:[BUCM_SHU_MU,CLASSIFICATION],CV17:[CLASSIFICATION],
- LI4:[AHTCM_CLASSES],HT7:[AHTCM_CLASSES],KI3:[AHTCM_CLASSES],PC7:[AHTCM_CLASSES],LR3:[AHTCM_CLASSES],ST36:[AHTCM_CLASSES],ST40:[AHTCM_CLASSES],BL40:[AHTCM_CLASSES],
+const classEvidence: Partial<Record<string,ClassificationEvidence[]>> = {
+ LU1:[{source:BUCM_SHU_MU,tags:['募穴']}],ST25:[{source:BUCM_SHU_MU,tags:['募穴']}],CV4:[{source:BUCM_SHU_MU,tags:['募穴']}],BL13:[{source:BUCM_SHU_MU,tags:['背俞穴']}],BL20:[{source:BUCM_SHU_MU,tags:['背俞穴']}],BL23:[{source:BUCM_SHU_MU,tags:['背俞穴']}],
+ LU7:[{source:CLASSIFICATION,tags:['八脉交会穴']},{source:AHTCM_CLASSES,tags:['络穴','八脉交会穴']}],SI3:[{source:CLASSIFICATION,tags:['八脉交会穴']},{source:AHTCM_CLASSES,tags:['八脉交会穴']}],PC6:[{source:CLASSIFICATION,tags:['八脉交会穴']},{source:AHTCM_CLASSES,tags:['络穴','八脉交会穴']}],TE5:[{source:CLASSIFICATION,tags:['八脉交会穴']},{source:AHTCM_CLASSES,tags:['络穴','八脉交会穴']}],
+ LU9:[{source:CLASSIFICATION,tags:['八会穴']},{source:AHTCM_CLASSES,tags:['原穴']}],GB34:[{source:CLASSIFICATION,tags:['下合穴','八会穴']},{source:AHTCM_CLASSES,tags:['下合穴']}],CV12:[{source:BUCM_SHU_MU,tags:['募穴']},{source:CLASSIFICATION,tags:['八会穴']}],CV17:[{source:CLASSIFICATION,tags:['八会穴']}],
+ LI4:[{source:AHTCM_CLASSES,tags:['原穴']}],HT7:[{source:AHTCM_CLASSES,tags:['原穴']}],KI3:[{source:AHTCM_CLASSES,tags:['原穴']}],PC7:[{source:AHTCM_CLASSES,tags:['原穴']}],LR3:[{source:AHTCM_CLASSES,tags:['原穴']}],ST36:[{source:AHTCM_CLASSES,tags:['下合穴']}],ST40:[{source:AHTCM_CLASSES,tags:['络穴']}],BL40:[{source:AHTCM_CLASSES,tags:['下合穴']}],
 };
 const classes: Record<string,string[]> = {
  LU1:['募穴'],LU5:['合穴'],LU7:['络穴','八脉交会穴'],LU9:['输穴','原穴','八会穴'], LI4:['原穴'],LI11:['合穴'],LI20:['交会穴'],
@@ -115,21 +115,26 @@ const anatomy: Record<string,string[]> = {
 };
 const chapter: Record<string,number> = {LU:1,LI:2,ST:3,SP:4,HT:5,SI:6,BL:7,KI:8,PC:9,TE:10,GB:11,LR:12,GV:13,CV:14};
 
-export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => ({
+export const ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian,region,location,landmarks]) => {
+  const classificationEvidence = classEvidence[id] ?? [];
+  const supportedClassifications = new Set(classificationEvidence.flatMap((item) => item.tags));
+  return ({
   id,name,pinyin,meridian,region,location,landmarks,
   bilateral: !['GV','CV'].includes(meridian),
   traditional: `${traditionalSources[id] ? '传统功用（机构资料已交叉核对，仍未经课程教师审阅）' : '传统教材常见提要（待逐条来源核验、未经课程教师审阅）'}：${traditional[id]}仅作理论学习，不代表现代临床疗效结论。`,
   caution: `${sensitive.has(id) ? '邻近重要深部结构，仅作体表定位学习；' : ''}${pregnancy.has(id) ? '孕期相关操作须先由合格专业人员评估；' : ''}本资料不提供针刺深度或操作建议，请勿自行针刺。`,
   tags: [MERIDIANS.find((m)=>m.id===meridian)!.shortName,region,...(classes[id] ?? [])],
   anatomy: anatomy[id],
+  classificationEvidence,
+  pendingClassificationTags: (classes[id] ?? []).filter((item) => !supportedClassifications.has(item)),
   sources: [
     { title:'GB/T 12346—2021 经穴名称与定位', url:GB_URL, section:`第5.${chapter[meridian]}节 ${id} ${name}` },
     { ...WHO, section:`Point ${id} ${name}; general location guidelines` },
-    ...(classSources[id] ?? []),
+    ...classificationEvidence.map((item) => item.source),
     ...(traditionalSources[id] ?? []),
     ...(sensitive.has(id)||pregnancy.has(id)?[SAFETY,NCCIH]:[]),
   ],
-}));
+});});
 
 export const CASES: LearningCase[] = [
   { id:'case-landmark', title:'骨度分寸与固定标志', level:'入门', prompt:'学习定位足三里时，哪种做法最符合本应用的教学顺序？', options:['先找犊鼻，再量3寸并核对胫骨前嵴','直接按自己的三横指固定换算所有人','只看三维坐标，不触认标志','根据症状猜位置'], answer:0, explanation:'原创、未审阅教学案例。国标定位强调体表解剖标志与骨度分寸；个体比例不能被固定厘米数替代。', pointIds:['ST36'], sources:[GB,WHO] },

@@ -56,6 +56,30 @@ test('representative specific-point classifications are filterable', () => {
   }
 });
 
+test('classification evidence names supported tags and leaves every remainder pending', () => {
+  for (const point of ACUPOINTS) {
+    const classifications = point.tags.slice(2);
+    const supported = new Set(point.classificationEvidence.flatMap((item) => item.tags));
+    assert.ok(
+      point.classificationEvidence.every((item) =>
+        item.tags.length > 0 && item.tags.every((tag) => classifications.includes(tag)),
+      ),
+      `${point.id} evidence scope`,
+    );
+    assert.deepEqual(
+      point.pendingClassificationTags,
+      classifications.filter((tag) => !supported.has(tag)),
+      `${point.id} pending classifications`,
+    );
+  }
+
+  const byId = new Map(ACUPOINTS.map((point) => [point.id, point]));
+  assert.deepEqual(byId.get('LU9')!.classificationEvidence.flatMap((item) => item.tags).sort(), ['八会穴', '原穴'].sort());
+  assert.deepEqual(byId.get('LU9')!.pendingClassificationTags, ['输穴']);
+  assert.deepEqual(byId.get('GB34')!.pendingClassificationTags, ['合穴']);
+  assert.deepEqual(byId.get('LU5')!.pendingClassificationTags, ['合穴']);
+});
+
 test('anatomy keywords are concrete atlas structure names', () => {
   const vague = new Set(['skull','facial muscles','cervical muscles','thorax','abdominal wall','sternum','vertebral column','back muscles','upper limb','forearm muscles','hand bones','lower limb','leg muscles','foot bones']);
   const atlas = JSON.parse(readFileSync(new URL('../public/models/atlas.json', import.meta.url), 'utf8')) as { parts:{name:string}[] };

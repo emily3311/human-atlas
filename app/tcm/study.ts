@@ -118,3 +118,11 @@ export function ratePoint(
 export function nextId(ids: string[], current: string): string | undefined {
   return ids.length ? ids[(ids.indexOf(current) + 1) % ids.length] : undefined;
 }
+
+export function quizDisplayIds(
+  dueIds: string[],
+  current: string,
+  answer: string | null,
+): string[] {
+  return answer && !dueIds.includes(current) ? [current, ...dueIds] : dueIds;
+}

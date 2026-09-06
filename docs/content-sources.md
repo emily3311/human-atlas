@@ -14,7 +14,7 @@
 ## 传统理论与特定穴分类来源
 
 - [广西中医药大学《针灸学》教学大纲](https://www.gxtcmu.edu.cn/zjtn/jysjs/zjtncfjfx/jxyhygl1/zjx/88xszyctzydwzyzxyxl/jxdg12/content_26039)，特定穴分类及八脉交会穴、八会穴、下合穴正文。它直接列出列缺、内关、后溪、外关等八脉交会穴，以及太渊、中脘、膻中、阳陵泉等八会穴。[北京中医药大学课程正文](https://jxjyxb.bucm.edu.cn/BZYAttachs/courseware/zhenjiuxue/c1/c1_62a.htm)直接说明肺俞、脾俞、肾俞等背俞穴及中府、天枢、关元、中脘等募穴。[安徽中医药大学论文表 3](https://xinan.ahtcm.edu.cn/xiaran.pdf)直接列出原穴、络穴、下合穴与八脉交会穴的具体穴名。数据仅在相应点附上实际覆盖它的分类来源；其余类别仍待教材逐项复核。
-- [上海中医药大学护理学院：合谷条目](https://hl.shutcm.edu.cn/2018/0705/c2501a28044/page.htm)、[上海中医药大学社区课程：内关与涌泉](https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm)、[香港中文大学中医学院：足三里](https://www.hro.cuhk.edu.hk/en-gb/about/events-highlights/823-staff-appreciation-day-2025)、[上海中医药大学国际教育学院：百会](https://iec.shutcm.edu.cn/2026/0611/c179a174108/page.htm)、[清华大学附属北京清华长庚医院中医科：肺俞、脾俞、肾俞](https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm)。这些页面正文直接描述相应穴位的传统用途；数据内只对其明确覆盖的 8 个穴位标记“机构资料已交叉核对”。
+- [上海中医药大学护理学院：合谷条目](https://hl.shutcm.edu.cn/2018/0705/c2501a28044/page.htm)、[上海中医药大学社区课程：内关与涌泉](https://cxy.shutcm.edu.cn/2023/1205/c3664a157123/page.htm)、[香港中文大学中医学院：足三里](https://www.hro.cuhk.edu.hk/en-gb/about/events-highlights/823-staff-appreciation-day-2025)、[上海中医药大学国际教育学院：百会](https://iec.shutcm.edu.cn/2026/0611/c179a174108/page.htm)、[清华大学附属北京清华长庚医院中医科：肺俞、脾俞、肾俞](https://www.btch.edu.cn/ksdh/zkb/zyk/jkjy_zyk/b8dfd41993d74b65a8e083c92609fdff.htm)。这些页面正文直接描述相应穴位的传统用途；数据内只对其明确覆盖的 14 个穴位标记“机构资料已交叉核对”。
 
 ## 内容策略与已知限制
 

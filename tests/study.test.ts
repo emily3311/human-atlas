@@ -7,6 +7,7 @@ import {
   reviewQueue,
   scheduleReview,
   nextId,
+  quizDisplayIds,
 } from "../app/tcm/study.ts";
 test("spaced practice repeats lapses in ten minutes, grows only after good recall", () => {
   const a = scheduleReview(undefined, "again", 100);
@@ -51,4 +52,10 @@ test("empty and filtered card navigation does not produce phantom points", () =>
   assert.equal(nextId([], "LI4"), undefined);
   assert.equal(nextId(["ST36"], "LI4"), "ST36");
   assert.equal(nextId(["LI4", "ST36"], "ST36"), "LI4");
+});
+
+test("answered review target stays visible without making scheduled cards due again", () => {
+  assert.deepEqual(quizDisplayIds([], "ST36", "LI4"), ["ST36"]);
+  assert.deepEqual(quizDisplayIds(["LI4"], "ST36", "LI4"), ["ST36", "LI4"]);
+  assert.deepEqual(quizDisplayIds(["LI4"], "ST36", null), ["LI4"]);
 });
