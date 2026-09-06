@@ -1,4 +1,5 @@
 import { scheduleReview, type Rating, type Review } from './study.ts';
+import type { KnowledgeDeck } from './knowledge-cards.ts';
 
 export const KNOWLEDGE_REVIEW_KEY = 'jingwei-knowledge-cards:v1';
 
@@ -44,6 +45,34 @@ export function parseKnowledgeReviewStore(
   } catch {
     return store;
   }
+}
+
+/** Preserve validated raw records for decks whose complete ID list is not known yet.
+ * The returned payload is for persistence only: unresolved records never become
+ * current review state or expand the available IDs accepted by rateKnowledgeCard.
+ */
+export function mergeKnowledgeReviewForPersistence(
+  raw: string | null,
+  current: KnowledgeReviewStore,
+  knownCardIds: ReadonlySet<string>,
+  unresolvedDecks: ReadonlySet<KnowledgeDeck>,
+): KnowledgeReviewStore {
+  const retainedIds = new Set(knownCardIds);
+  try {
+    const parsed: unknown = JSON.parse(raw ?? 'null');
+    if (parsed && typeof parsed === 'object' && 'reviews' in parsed && parsed.reviews && typeof parsed.reviews === 'object') {
+      for (const id of Object.keys(parsed.reviews)) {
+        if (!isKnowledgeCardId(id)) continue;
+        const deck: KnowledgeDeck = id.startsWith('exam:') ? 'exam-wrong'
+          : id.startsWith('anatomy:') ? 'anatomy'
+          : id.endsWith(':effects') ? 'point-effects' : 'point';
+        if (unresolvedDecks.has(deck)) retainedIds.add(id);
+      }
+    }
+  } catch { /* The shared parser below handles malformed storage. */ }
+  const saved = parseKnowledgeReviewStore(raw, [...retainedIds]);
+  const verifiedCurrent = parseKnowledgeReviewStore(JSON.stringify(current), [...knownCardIds]);
+  return { version: 1, reviews: { ...saved.reviews, ...verifiedCurrent.reviews } };
 }
 
 export function knowledgeReviewQueue(

@@ -77,6 +77,55 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
   const browser = await chromium.launch({ headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   try {
+    const hydrationFailures = [];
+    for (const scenario of ['delayed', 'offline']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      const questionId = 'a'.repeat(64);
+      let release;
+      const gate = new Promise(resolve => { release = resolve; });
+      try {
+        await page.addInitScript(({ questionId }) => {
+          const memory = new Map([
+            ['jingwei-cmb-progress-v1', JSON.stringify({ [questionId]: { answer: 'B', correct: false, attempts: 3 } })],
+            ['jingwei-knowledge-cards:v1', JSON.stringify({ version: 1, reviews: { [`exam:${questionId}`]: { due: 0, interval: 2, repetitions: 7, lapses: 1, lastReviewed: 20, lastRating: 'good' } } })],
+          ]);
+          Storage.prototype.getItem = key => memory.get(key) ?? null;
+          Storage.prototype.setItem = (key, value) => { memory.set(key, String(value)); };
+          Storage.prototype.removeItem = key => { memory.delete(key); };
+        }, { questionId });
+        await page.route('**/data/cmb-tcm.json', async route => {
+          if (scenario === 'offline') return route.fulfill({ status: 503, body: 'offline' });
+          await gate;
+          await route.fulfill({ json: { schemaVersion: 1, source: 'CMB', sourceSha256: 'b'.repeat(64), questions: [{ id: questionId, sourceIndex: 0, question: '延迟加载题干', options: { A: '正确', B: '错误', C: '丙', D: '丁', E: '戊' }, answer: 'A' }] } });
+        });
+        await page.route('**/data/cmb-tcmle-explanations.json', route => route.fulfill({ json: { schemaVersion: 1, source: 'TCMLE', sourceCommit: 'c'.repeat(40), explanations: [] } }));
+        await page.goto(process.env.INTERACTION_BROWSER_URL);
+        await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
+        const decks = page.getByRole('group', { name: '知识卡组' });
+        if (scenario === 'offline') {
+          await decks.getByRole('button', { name: '执医错题 0', exact: true }).click();
+          await page.getByText('执医错题题库暂时无法加载，请重新进入记忆卡重试。', { exact: true }).waitFor();
+          assert.equal(await page.getByText('本机当前没有未改正的 CMB 错题。', { exact: true }).count(), 0, 'offline is not a successful empty deck');
+        }
+        await decks.getByRole('button', { name: /^解剖 [1-9]\d*$/ }).click();
+        await page.locator('.flip-card').click();
+        await page.getByRole('button', { name: /记住了/ }).click();
+        assert.equal(await page.evaluate(questionId => JSON.parse(localStorage.getItem('jingwei-knowledge-cards:v1')).reviews[`exam:${questionId}`]?.repetitions, questionId), 7, `${scenario}: anatomy rating preserves unhydrated exam review`);
+        if (scenario === 'delayed') {
+          await decks.getByRole('button', { name: '执医错题 0', exact: true }).click();
+          await page.getByText('正在读取本机错题…', { exact: true }).waitFor();
+          assert.equal(await page.getByText('本机当前没有未改正的 CMB 错题。', { exact: true }).count(), 0, 'loading is not a successful empty deck');
+          release();
+          await page.getByText('已练习 7 次', { exact: true }).waitFor();
+          assert.equal(await page.evaluate(() => Object.entries(JSON.parse(localStorage.getItem('jingwei-knowledge-cards:v1')).reviews).filter(([id, review]) => id.startsWith('anatomy:') && review.repetitions === 1).length), 1, 'hydration retains the new anatomy rating');
+          await decks.getByRole('button', { name: /^解剖 [1-9]\d*$/ }).click();
+          await page.getByText('已练习 1 次', { exact: true }).waitFor();
+        }
+      } catch (error) { hydrationFailures.push(`${scenario}: ${error.message}`); }
+      finally { release(); await page.unrouteAll({ behavior: 'ignoreErrors' }); await page.close(); }
+    }
+    assert.deepEqual(hydrationFailures, [], 'partial hydration and empty-state regression');
+    console.log('Cards hydration: delayed and failed CMB preserve exam repetitions=7; loading/error never claim an empty deck.');
     for (const [width, height] of [[1440, 1000], [390, 844], [320, 568]]) {
       const page = await browser.newPage({ viewport: { width, height } });
       const questionId = 'a'.repeat(64);
@@ -147,6 +196,7 @@ if (process.env.INTERACTION_BROWSER_URL && process.env.PLAYWRIGHT_MODULE) {
       await page.route('**/data/cmb-tcm.json', route => route.fulfill({ status: 503, body: 'offline' }));
       await page.getByRole('button', { name: '记忆卡片', exact: true }).click();
       await page.getByText('执医错题题库暂时无法加载，请重新进入记忆卡重试。', { exact: true }).waitFor();
+      assert.equal(await page.getByText('本机当前没有未改正的 CMB 错题。', { exact: true }).count(), 0);
       for (const label of ['穴位', '解剖', '穴位作用']) {
         await decks.getByRole('button', { name: new RegExp(`^${label} \\d+$`) }).click();
         assert.equal(await card.isVisible(), true, `${label} survives CMB failure`);

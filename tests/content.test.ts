@@ -30,13 +30,20 @@ test('card resource loader isolates failed banks and rereads progress without ch
   const fetcher = async (url: string) => ({ ok: true, json: async () => url.includes('explanations') ? {} : bank });
   const first = await ui.loadWrongCardResources(fetcher, storage);
   assert.equal(first.cards.length, 1);
+  assert.equal(first.status, 'ready');
+  assert.deepEqual(first.validCardIds, [`exam:${id}`]);
   assert.match(first.warning, /解析/);
   assert.equal(first.cards[0].meta.attempts, '3');
   raw = JSON.stringify({ [id]: { answer: 'A', correct: true, attempts: 4 } });
-  assert.equal((await ui.loadWrongCardResources(fetcher, storage)).cards.length, 0);
+  const corrected = await ui.loadWrongCardResources(fetcher, storage);
+  assert.equal(corrected.cards.length, 0);
+  assert.equal(corrected.status, 'ready');
+  assert.deepEqual(corrected.validCardIds, [`exam:${id}`], 'corrected questions remain valid persistence IDs');
   assert.equal(JSON.parse(raw)[id].attempts, 4);
   const failed = await ui.loadWrongCardResources(async () => { throw Error('offline'); }, storage);
   assert.deepEqual(failed.cards, []);
+  assert.equal(failed.status, 'error');
+  assert.equal(failed.validCardIds, null);
   assert.match(failed.warning, /错题.*题库/);
 });
 

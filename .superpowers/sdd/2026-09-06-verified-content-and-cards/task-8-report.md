@@ -45,3 +45,73 @@ node scripts/validate-interactions.mjs
 四组浏览器覆盖：真实 builder 计数、鼠标翻面、Enter / Space 翻面、卡片外键盘不翻面、背面/正面互斥 DOM、超长解析不溢出卡片、评分后首张到期卡、旧/新 store 路由、改正后重新进入错题数量归零且 attempts=4、CMB 503 时其它三组正常、穴位过滤为空时解剖卡正常、手机无横向页面溢出及 44px 控件/来源链接。
 
 所有自动化浏览器使用新建的临时 Chromium context。卡片流程把 Storage API 注入为内存 Map，CMB 题目/解析来自完整格式的 route fixture；未读取、清空或提交真实用户 localStorage。
+
+## 审查修复 Round 1 / 5 — 未完成加载的记录保留与错题空态
+
+审查发现两项 Important：CMB 未完成加载时，解剖评分整库保存会删除此前尚未进入 available IDs 的 exam review；加载中或 CMB 503 也会同时显示“本机当前没有未改正的 CMB 错题”。
+
+### RED
+
+先增加真实纯函数/资源契约用例，以及临时浏览器真实组件回归，再修改实现。
+
+```text
+node --experimental-strip-types --test tests/knowledge-cards.test.ts tests/content.test.ts
+# tests 25 / pass 22 / fail 3 / exit 1
+resource status: undefined !== 'ready'
+mergeKnowledgeReviewForPersistence: undefined !== 'function'
+
+INTERACTION_BROWSER_URL=http://127.0.0.1:3028/ PLAYWRIGHT_MODULE=<同上> node scripts/validate-interactions.mjs
+AssertionError: partial hydration and empty-state regression
+delayed: anatomy rating preserves unhydrated exam review
+undefined !== 7
+offline: offline is not a successful empty deck
+1 !== 0
+exit 1
+```
+
+浏览器用完整格式的内存记录预置 exam `repetitions=7`，将 CMB route 挂起，实际切到解剖卡并点击评分后直接检查 raw 存储。另一独立 context 返回 CMB 503，验证错误提示与空态互斥。未接触真实用户存储。
+
+### 实现与自审
+
+- `availableIds` 仍只来自当前可用卡片，传给 `rateKnowledgeCard` 的评分资格不变；队列继续只接收当前 deck IDs。
+- 新增实际持久化路径使用的纯函数 `mergeKnowledgeReviewForPersistence`。保存前重读当前 raw，原有 `parseKnowledgeReviewStore` 负责版本、ID 和 Review 字段验证；只有属于未完成加载 deck 的合法旧条目才可在完整已知 ID 集合之外透传。透传内容仅进入保存 payload，不进入当前 review state，也不扩大评分集合。
+- loader 返回明确的 `ready/error` 和完整 CMB card IDs；成功时包括当前已答对题目，供完整记录 hydration 使用。CMB 失败时 IDs 为 null，保持 deck 未完成状态，后续其它组评分不会删除未知 exam 记录。
+- 完整已知 IDs 与当前过滤结果分离：解剖 atlas 的 null 明确表示尚未加载；功用卡持久化依据完整穴位 catalogue，展示和评分仍使用当前筛选范围，避免同类过滤覆盖问题。完整 ID 集合就绪时重新读取 raw，当前会话评分优先合并，避免延迟 hydration 覆盖新评分。
+- 错题空态现在要求 `!loading && status === 'ready'` 且没有当前卡片。加载中仅显示加载提示，CMB/本机进度读取错误不再声称没有错题；CMB 与本机进度成功确认空集合时仍显示原空态文案。可选解析失败仍能使用已核对 CMB 答案，其解析警示不改变已知的错题数量。
+- 自审验证未完成 deck 的结构无效记录、非法 Review 和错误 schema version 均不能透传；完整 ID 清单完成后，外来 ID 可正常过滤。未修改旧 `ratePoint`、Task 6 坐标策略或正式资料。
+
+### GREEN 与最终命令输出
+
+```text
+node --experimental-strip-types --test tests/knowledge-cards.test.ts tests/content.test.ts
+# tests 25 / pass 25 / fail 0 / exit 0
+
+npm test
+# tests 142 / pass 142 / fail 0 / exit 0
+
+npm run check
+> tsc --noEmit
+exit 0
+
+npm run build
+✓ 2521 modules transformed.
+✓ built in 711ms
+exit 0（已有 bundle >500kB 提示保留）
+
+node scripts/validate-interactions.mjs
+exit 0；默认明确提示浏览器需环境变量
+
+INTERACTION_BROWSER_URL=http://127.0.0.1:3028/ PLAYWRIGHT_MODULE=<同上> node scripts/validate-interactions.mjs
+Cards hydration: delayed and failed CMB preserve exam repetitions=7; loading/error never claim an empty deck.
+Cards browser 1440×1000: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Cards browser 390×844: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Cards browser 320×568: four decks, DOM isolation, pointer/keyboard, ratings, correction refresh and layout passed.
+Browser 1440px: default and opt-in rendering, panel lifecycle, surface pick, undo, Blob download and layout passed.
+Browser 390px: default and opt-in rendering, panel lifecycle, surface pick, undo, Blob download and layout passed.
+exit 0
+
+git diff --check
+exit 0
+```
+
+新增浏览器 GREEN 还检查：释放延迟 CMB 后错题显示“已练习 7 次”；重新切到已评分解剖卡显示“已练习 1 次”，且 raw anatomy review 保留；CMB 503 后实际评分 anatomy 也不会丢失原 exam review；成功改正后的空集合仍显示正确空态。

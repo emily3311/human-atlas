@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import * as knowledgeReview from '../app/tcm/knowledge-review.ts';
 
 import type { Part } from '../app/anatomy.ts';
 import type { Acupoint, Meridian, Source } from '../app/tcm/types.ts';
@@ -39,6 +40,40 @@ const question = {
   id: 'q-card', sourceIndex: 1, question: '哪项正确？',
   options: { A: '正确答案文本', B: '错误选项文本', C: '丙', D: '丁', E: '戊' }, answer: 'A' as const,
 };
+
+test('pending deck reviews survive another deck rating without entering current review state', () => {
+  assert.equal(typeof knowledgeReview.mergeKnowledgeReviewForPersistence, 'function');
+  const examId = `exam:${'a'.repeat(64)}`;
+  const invalidExamId = `exam:${'b'.repeat(64)}`;
+  const anatomyId = 'anatomy:mesh-platysma:zh-to-en';
+  const review = { due: 0, interval: 2, repetitions: 7, lapses: 1, lastReviewed: 20, lastRating: 'good' as const };
+  const raw = JSON.stringify({ version: 1, reviews: { [examId]: review, [invalidExamId]: { ...review, repetitions: -1 }, 'exam:garbage': review, 'point:unknown:effects': review } });
+  const available = new Set([anatomyId]);
+  const current = knowledgeReview.rateKnowledgeCard(knowledgeReview.parseKnowledgeReviewStore(raw, [...available]), anatomyId, 'good', available, 100);
+  const merged = knowledgeReview.mergeKnowledgeReviewForPersistence(raw, current, available, new Set(['exam-wrong']));
+  assert.deepEqual(Object.keys(merged.reviews).sort(), [anatomyId, examId]);
+  assert.equal(merged.reviews[examId].repetitions, 7);
+  assert.equal(current.reviews[examId], undefined);
+  assert.equal(knowledgeReview.rateKnowledgeCard(current, examId, 'again', available), current);
+  const hydrated = knowledgeReview.parseKnowledgeReviewStore(JSON.stringify(merged), [anatomyId, examId]);
+  assert.equal(hydrated.reviews[examId].repetitions, 7);
+  assert.equal(hydrated.reviews[anatomyId].repetitions, 1);
+  const again = knowledgeReview.mergeKnowledgeReviewForPersistence(JSON.stringify(merged), current, available, new Set(['exam-wrong']));
+  assert.equal(again.reviews[examId].repetitions, 7, 'failed resources remain unresolved');
+  const completed = knowledgeReview.mergeKnowledgeReviewForPersistence(JSON.stringify(merged), current, available, new Set());
+  assert.equal(completed.reviews[examId], undefined, 'resolved full ID list can reject a foreign ID');
+});
+
+test('persistence distinguishes full known IDs from filters and preserves only validated pending decks', () => {
+  assert.equal(typeof knowledgeReview.mergeKnowledgeReviewForPersistence, 'function');
+  const review = { due: 0, interval: 2, repetitions: 7, lapses: 1, lastReviewed: 20, lastRating: 'good' as const };
+  const knownIds = new Set(['point:LU5:effects', 'point:ST36:effects']);
+  const raw = JSON.stringify({ version: 1, reviews: { 'anatomy:mesh-platysma:zh-to-en': review, 'point:ST36:effects': review, 'point:unknown:effects': review, 'anatomy:bad:typo': review } });
+  const rated = knowledgeReview.rateKnowledgeCard({ version: 1, reviews: {} }, 'point:LU5:effects', 'good', new Set(['point:LU5:effects']), 100);
+  const result = knowledgeReview.mergeKnowledgeReviewForPersistence(raw, rated, knownIds, new Set(['anatomy']));
+  assert.deepEqual(Object.keys(result.reviews).sort(), ['anatomy:mesh-platysma:zh-to-en', 'point:LU5:effects', 'point:ST36:effects']);
+  assert.deepEqual(knowledgeReview.mergeKnowledgeReviewForPersistence(raw.replace('"version":1', '"version":2'), rated, knownIds, new Set(['anatomy'])), rated);
+});
 
 test('view model derives four real counts and renders only the selected face', async () => {
   const ui = await import('../app/tcm/knowledge-card-ui.ts');

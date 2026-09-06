@@ -772,7 +772,7 @@ export default function TcmApp() {
               )}
             </div>
           ) : mode === "cards" ? (
-            <KnowledgeCardsPanel points={filtered} meridians={MERIDIANS} parts={atlas?.parts ?? []} placementDisplayMode={placementDisplayMode} deck={knowledgeDeck} onDeck={deck => { setKnowledgeDeck(deck); setRevealed(false); }} pointPanel={
+            <KnowledgeCardsPanel points={filtered} cataloguePoints={ACUPOINTS} meridians={MERIDIANS} parts={atlas?.parts ?? null} placementDisplayMode={placementDisplayMode} deck={knowledgeDeck} onDeck={deck => { setKnowledgeDeck(deck); setRevealed(false); }} pointPanel={
             <StudyPanel
               placementDisplayMode={placementDisplayMode}
               key={point.id}
