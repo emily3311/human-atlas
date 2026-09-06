@@ -23,6 +23,8 @@ export interface Acupoint {
   bilateral: boolean; location: string; landmarks: string[];
   traditional: string; caution: string; tags: string[]; anatomy: string[];
   sources: Source[];
+  /** Sources that explicitly support the traditional-function summary. */
+  traditionalEvidence: Source[];
   classificationEvidence: ClassificationEvidence[];
   pendingClassificationTags: string[];
   catalogueKind?: 'standard' | 'extra';
