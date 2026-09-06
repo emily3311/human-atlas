@@ -689,10 +689,10 @@ export default function TcmApp() {
         <div className="anatomy-selection">
           <div>
             <span>{SYSTEM_ZH[chosenPart.system]} · 解剖结构</span>
-            <strong>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
+            <strong title={anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
           </div>
-          {mode==='anatomy'&&<button className="outline-button" onClick={()=>setAnatomyDetailsOpen(v=>!v)}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
-          {canIsolateTeachingPart(chosenPart.system)&&<button className="outline-button" onClick={() => setIsolate((v) => !v)}>
+          {mode==='anatomy'&&<button className="outline-button" onClick={()=>{setModelFocus(false);setAnatomyDetailsOpen(v=>!v);if(mobile)setSidebarOpen(false);}}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
+          {canIsolateTeachingPart(chosenPart.system)&&<button className="outline-button selection-isolate" onClick={() => setIsolate((v) => !v)}>
             {isolate ? "显示周围" : "单独查看"}
           </button>}
           <button

@@ -39,3 +39,10 @@ Parent must verify rebuilt dist across all seven modes at 320×568, 375×844, 39
 - Phone camera controls now render as a sibling after the canvas, in normal flow. Desktop retains the camera controls inside the stage. Phone anatomy uses one 44px toolbar for focus/catalogue/details, no redundant heading row, and an inline label/output/collapse row above the slider. Duplicate endpoint/reset UI is hidden on phone (camera reset remains). The anatomy workspace fills the viewport below the 113px app header, with the canvas consuming remaining height and a 180px minimum; Emily remains in the header.
 - Opening catalogue or structure details exits focus before displaying the drawer, preventing invisible targets. The visible focus exit still works and Escape remains unchanged.
 - Parent should repeat its 390×844 measurement and 320×568 checks, then resize desktop-focused cards/course/cases to phone and phone-collapsed anatomy controls to desktop. No browser operated by implementer; small-height and drawer runtime evidence remains with parent.
+
+## Review fix round 2
+
+- Before (parent browser evidence): at 390×844 the selection summary occupied 108px with category/name, details and isolate actions; its close button wrapped to a second row.
+- After requirement: phone summary is a single nonwrapping row with a flexible ellipsized name (full name retained in title), details action and 44px close target. Category and inline isolation action are hidden only on phone; isolation remains in AnatomyDetails, and desktop actions remain visible.
+- Removed the inherited 130px name minimum so 320px has room for both fixed actions; summary padding is 4px vertically, for a target 54px row including its 44px controls and borders. Selection-details action also exits focus and closes the phone catalogue consistently with the toolbar.
+- This is a focused presentational correction; no source-text test added. Typecheck/build and diff whitespace checks pass. Parent owns the 320/390 rendered measurement; implementer did not operate the browser.

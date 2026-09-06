@@ -99,4 +99,9 @@
   .tcm-app.anatomy-focus .anatomy-slider-dock > div:last-child > .text-button { display:none; }
   .tcm-app.anatomy-focus.model-focus .model-workspace { height:100dvh; }
   .tcm-app.anatomy-focus.model-focus .model-stage { height:auto; min-height:180px; flex:1 1 0; }
+  .tcm-app .anatomy-selection, .tcm-app.anatomy-focus .anatomy-selection { flex-wrap:nowrap; flex-shrink:0; gap:6px; padding:4px 8px; margin:0 12px 4px; }
+  .tcm-app .anatomy-selection > div, .tcm-app.anatomy-focus .anatomy-selection > div { flex:1 1 0; min-width:0; }
+  .tcm-app .anatomy-selection > div > span, .tcm-app .anatomy-selection .selection-isolate { display:none; }
+  .tcm-app .anatomy-selection strong { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; overflow-wrap:normal; }
+  .tcm-app .anatomy-selection > button { flex:0 0 auto; white-space:nowrap; padding:4px 8px; }
 }
