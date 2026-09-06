@@ -6,20 +6,20 @@ export interface AnatomyTerm {
 }
 
 const NAER_DATASET = "https://data.gov.tw/en/datasets/14549";
-const simplifiedNote = "NAER row reviewed term-by-term; Traditional Chinese glyphs normalized to Simplified Chinese.";
-const modernizedNote = "NAER row reviewed term-by-term; normalized to the current mainland Chinese anatomical word order.";
+const simplifiedNote = "已逐条核对 NAER 记录；繁体字形已转为简体中文。";
+const modernizedNote = "已逐条核对 NAER 记录；已按当前中国大陆解剖学词序规范化。";
 const TA2_SOURCE = "https://libraries.dal.ca/Fipat/ta2.html";
 const bridged = (zh: string, ta2Id: number, english: string, latin: string, row: number, sourceChinese: string): AnatomyTerm => ({
   zh,
   source: TA2_SOURCE,
   sourceTerm: `TA2 ${ta2Id}: ${english} / ${latin}; NAER row ${row}: ${sourceChinese}`,
-  note: `FIPAT TA2 public-domain term bridge checked against NAER ${NAER_DATASET}; Chinese glyphs normalized term-by-term.`,
+  note: `已将 FIPAT TA2 公共领域术语桥接与 NAER ${NAER_DATASET} 逐条核对；中文字形已规范化。`,
 });
 
 /** Exact atlas-name cores whose correspondence was checked against the cited source row. */
 export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   "longissimus capitis": { zh: "\u5934\u6700\u957f\u808c", source: NAER_DATASET, sourceTerm: "row 27: M. longissimus capitis — (頭最長肌)", note: simplifiedNote },
-  atlas: { zh: "\u5bf0\u690e", source: NAER_DATASET, sourceTerm: "row 1569: Atlas — 寰椎；(第一頸椎)", note: "Selected the source row's formal first term and normalized its glyphs." },
+  atlas: { zh: "\u5bf0\u690e", source: NAER_DATASET, sourceTerm: "row 1569: Atlas — 寰椎；(第一頸椎)", note: "选用来源记录中的首个正式术语，并规范化字形。" },
   cerebellum: { zh: "\u5c0f\u8111", source: NAER_DATASET, sourceTerm: "row 1866: Cerebellum — 小腦", note: simplifiedNote },
   "conus elasticus": { zh: "\u5f39\u529b\u5706\u9525", source: NAER_DATASET, sourceTerm: "row 2016: Conus elasticus — 彈力圓錐", note: simplifiedNote },
   cornea: { zh: "\u89d2\u819c", source: NAER_DATASET, sourceTerm: "row 2028: Cornea — 角膜" },
@@ -27,9 +27,9 @@ export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   "corpus callosum": { zh: "\u80fc\u80dd\u4f53", source: NAER_DATASET, sourceTerm: "row 2046: Corpus callosum — 胼胝體", note: simplifiedNote },
   epididymis: { zh: "\u9644\u777e", source: NAER_DATASET, sourceTerm: "row 2381: Epididymis — \u9644\u776a", note: simplifiedNote },
   epiglottis: { zh: "\u4f1a\u538c", source: NAER_DATASET, sourceTerm: "row 2382: Epiglottis — 會厭", note: simplifiedNote },
-  "glans penis": { zh: "\u9634\u830e\u5934", source: NAER_DATASET, sourceTerm: "row 2869: Glans penis — 陰莖頭；龜頭", note: "Selected the source row's formal first term and normalized its glyphs." },
+  "glans penis": { zh: "\u9634\u830e\u5934", source: NAER_DATASET, sourceTerm: "row 2869: Glans penis — 陰莖頭；龜頭", note: "选用来源记录中的首个正式术语，并规范化字形。" },
   hypothalamus: { zh: "\u4e0b\u4e18\u8111", source: NAER_DATASET, sourceTerm: "row 2974: Hypothalamus — 丘腦下部", note: modernizedNote },
-  insula: { zh: "\u8111\u5c9b", source: NAER_DATASET, sourceTerm: "row 3063: Insula — 島；腦島", note: "Selected the source row's anatomy-specific synonym and normalized its glyphs." },
+  insula: { zh: "\u8111\u5c9b", source: NAER_DATASET, sourceTerm: "row 3063: Insula — 島；腦島", note: "选用来源记录中解剖学专用的同义词，并规范化字形。" },
   iris: { zh: "\u8679\u819c", source: NAER_DATASET, sourceTerm: "row 3092: Iris — 虹膜" },
   "linea alba": { zh: "\u767d\u7ebf", source: NAER_DATASET, sourceTerm: "row 3386: Linea alba — 白線", note: simplifiedNote },
   "abductor hallucis": { zh: "\u62c7\u5c55\u808c", source: NAER_DATASET, sourceTerm: "row 3480: M. abductor hallucis — 外展拇肌", note: modernizedNote },
@@ -94,7 +94,7 @@ export const ANATOMY_TERMS: Record<string, AnatomyTerm> = {
   "vastus intermedius": { zh: "\u80a1\u4e2d\u95f4\u808c", source: NAER_DATASET, sourceTerm: "row 3680: M. vastus intermedius — 股中間肌", note: simplifiedNote },
   maxilla: { zh: "\u4e0a\u988c\u9aa8", source: NAER_DATASET, sourceTerm: "row 3748: Maxilla — 上頜骨", note: simplifiedNote },
   "medulla oblongata": { zh: "\u5ef6\u9ad3", source: NAER_DATASET, sourceTerm: "row 3765: Medulla oblongata — 延髓" },
-  platysma: { zh: "\u9888\u9614\u808c", source: "https://www.imaios.cn/cn/e-anatomy/anatomical-structures/platysma-1541115436", sourceTerm: "Platysma / \u9888\u9614\u808c", note: "Mainland term confirmation; NAER row 4426 records Platysma — 闊肌(頸)." },
+  platysma: { zh: "\u9888\u9614\u808c", source: "https://www.imaios.cn/cn/e-anatomy/anatomical-structures/platysma-1541115436", sourceTerm: "Platysma / \u9888\u9614\u808c", note: "中国大陆术语确认；NAER row 4426 记录为 Platysma — 闊肌(頸)。" },
   pons: { zh: "\u6865\u8111", source: NAER_DATASET, sourceTerm: "row 4584: Pons — 橋腦", note: simplifiedNote },
   sclera: { zh: "\u5de9\u819c", source: NAER_DATASET, sourceTerm: "row 5190: Sclera — 鞏膜", note: simplifiedNote },
   "stria terminalis": { zh: "\u7ec8\u7eb9", source: NAER_DATASET, sourceTerm: "row 5408: Stria terminalis — 終紋", note: simplifiedNote },

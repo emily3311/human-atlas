@@ -38,7 +38,8 @@ import { AnatomyCatalogue, AnatomyDetails } from './AnatomyPanel';
 import { hasPlacement, questionAvailable } from './catalogue';
 import CatalogueResizeHandle from './CatalogueResizeHandle';
 import { catalogueWidth, nextCatalogueExpansion } from './catalogue-layout';
-import { teachingSystems } from './teaching-display';
+import { canIsolateTeachingPart, teachingSystems } from './teaching-display';
+import { normalizeTeachingAtlas } from './teaching-atlas';
 import { inCatalogue, examBadges, EXAM_SOURCE, PRACTICAL_NAMES, WRITTEN_NAMES, type CatalogueScope } from './exam-scope';
 import {
   STORE_KEY,
@@ -151,7 +152,7 @@ export default function TcmApp() {
         if (!r.ok) throw new Error("人体模型目录加载失败");
         return r.json();
       })
-      .then((data) => setAtlas(data as Atlas))
+      .then((data) => setAtlas(normalizeTeachingAtlas(data as Atlas)))
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
       });
@@ -1263,9 +1264,9 @@ export default function TcmApp() {
             <strong>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
           </div>
           {mode==='anatomy'&&<button className="outline-button" onClick={()=>setAnatomyDetailsOpen(v=>!v)}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
-          <button className="outline-button" onClick={() => setIsolate((v) => !v)}>
+          {canIsolateTeachingPart(chosenPart.system)&&<button className="outline-button" onClick={() => setIsolate((v) => !v)}>
             {isolate ? "显示周围" : "单独查看"}
-          </button>
+          </button>}
           <button
             className="icon-button"
             aria-label="关闭解剖结构"
