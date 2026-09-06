@@ -109,6 +109,24 @@ function tcmleCommit(tcmleDir: string): string {
   return execFileSync('git', ['-C', tcmleDir, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 }
 
+export function assertCleanTcmleCheckout(tcmleDir: string): void {
+  let status: string;
+  try {
+    status = execFileSync('git', ['-C', tcmleDir, 'status', '--porcelain=v1', '--untracked-files=all'], { encoding: 'utf8' });
+  } catch {
+    throw new Error(`Unable to verify TCMLE checkout cleanliness: ${tcmleDir}`);
+  }
+  const entries = status.trimEnd().split('\n').filter(Boolean);
+  const trackedChanges = entries.filter((entry) => !entry.startsWith('?? '));
+  if (trackedChanges.length > 0) {
+    throw new Error(`TCMLE checkout has tracked changes; import requires a clean checkout: ${trackedChanges.join(', ')}`);
+  }
+  const untrackedFiles = entries.filter((entry) => entry.startsWith('?? '));
+  if (untrackedFiles.length > 0) {
+    throw new Error(`TCMLE checkout has untracked files; import requires a clean checkout: ${untrackedFiles.join(', ')}`);
+  }
+}
+
 export function buildExplanationArtifacts(cmb: ExamBank, candidates: readonly TcmleQuestion[], sourceCommit: string, subsetFiles: string[]): {
   bank: ExamExplanationBank;
   report: MatchReport;
@@ -167,6 +185,7 @@ function cliDirectory(): string {
 }
 
 function runCli(tcmleDir: string): void {
+  assertCleanTcmleCheckout(tcmleDir);
   const sourceCommit = tcmleCommit(tcmleDir);
   if (sourceCommit !== EXPECTED_TCMLE_COMMIT) {
     throw new Error(`TCMLE commit mismatch: expected ${EXPECTED_TCMLE_COMMIT}, received ${sourceCommit}`);

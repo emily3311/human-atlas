@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
 import { test } from 'node:test';
 
 import { explanationIndex, parseExamExplanationBank } from '../app/tcm/exam-explanations.ts';
-import { classifyMatch, normalizeExamText, strictQuestionMatch } from '../scripts/import-tcmle-explanations.ts';
+import { assertCleanTcmleCheckout, classifyMatch, normalizeExamText, strictQuestionMatch } from '../scripts/import-tcmle-explanations.ts';
 
 const cmbFixture = {
   id: 'a'.repeat(64),
@@ -37,6 +41,19 @@ const validPayload = {
     },
   }],
 };
+
+function temporaryGitCheckout(): { directory: string; trackedFile: string } {
+  const directory = mkdtempSync(resolve(tmpdir(), 'tcmle-cleanliness-'));
+  const trackedFile = resolve(directory, 'Licensed/Theory_Questions/Year_1/Mock.json');
+  mkdirSync(resolve(directory, 'Licensed/Theory_Questions/Year_1'), { recursive: true });
+  writeFileSync(trackedFile, '[{"question_num":1,"reason":"original"}]\n');
+  execFileSync('git', ['init', '--quiet', directory]);
+  execFileSync('git', ['-C', directory, 'config', 'user.email', 'test@example.invalid']);
+  execFileSync('git', ['-C', directory, 'config', 'user.name', 'TCMLE test']);
+  execFileSync('git', ['-C', directory, 'add', '.']);
+  execFileSync('git', ['-C', directory, 'commit', '--quiet', '-m', 'fixture']);
+  return { directory, trackedFile };
+}
 
 test('normalizes width, whitespace and Chinese/ASCII punctuation only', () => {
   assert.equal(normalizeExamText('Ａ。 血 虚'), 'A血虚');
@@ -90,4 +107,26 @@ test('runtime parser rejects duplicate, unsafe, and malformed explanation data w
     () => parseExamExplanationBank(JSON.parse('{"schemaVersion":1,"source":"TCMLE","sourceCommit":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","explanations":[],"__proto__":{}}'), [cmbFixture]),
     /Invalid exam explanations: unsafe prototype key/i,
   );
+});
+
+test('checkout cleanliness rejects tracked changes and untracked candidate JSON files', () => {
+  const { directory, trackedFile } = temporaryGitCheckout();
+  try {
+    assert.doesNotThrow(() => assertCleanTcmleCheckout(directory));
+
+    writeFileSync(trackedFile, '[{"question_num":1,"reason":"changed"}]\n');
+    assert.throws(
+      () => assertCleanTcmleCheckout(directory),
+      /TCMLE checkout has tracked changes/i,
+    );
+
+    writeFileSync(trackedFile, '[{"question_num":1,"reason":"original"}]\n');
+    writeFileSync(resolve(directory, 'Licensed/Theory_Questions/Year_1/Injected.json'), '[]\n');
+    assert.throws(
+      () => assertCleanTcmleCheckout(directory),
+      /TCMLE checkout has untracked files/i,
+    );
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });
