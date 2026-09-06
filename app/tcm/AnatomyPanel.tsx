@@ -1,12 +1,13 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Search, Layers, ChevronRight, Focus, RotateCcw, X } from 'lucide-react';
 import { SYSTEMS, type Atlas, type Part, type SystemId } from '../anatomy';
-import { anatomyZh, anatomyLabel, SYSTEM_ZH } from './anatomy-zh';
+import { anatomyZh, anatomyLabel, anatomyNameCoverage, anatomyNameEvidence, SYSTEM_ZH } from './anatomy-zh';
 
 export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selected}: {
   atlas:Atlas; visible:SystemId[]; onVisible:(ids:SystemId[])=>void; onSelect:(p:Part)=>void; onClose:()=>void; selected:string;
 }) {
   const [query,setQuery]=useState(''),[page,setPage]=useState(0);
+  const coverage=useMemo(()=>anatomyNameCoverage(atlas.parts),[atlas.parts]);
   const matches=useMemo(()=>atlas.parts.filter(p=>
     visible.includes(p.system)&&`${p.name} ${anatomyZh(p.name)} ${p.id}`.toLowerCase().includes(query.toLowerCase().trim())
   ),[atlas,query,visible]);
@@ -19,6 +20,7 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
     </div>
     <h3>从整体，到每一处。</h3>
     <p className="mini-note">{atlas.parts.length.toLocaleString()} 个可选结构 · 可散开、缩放与单独查看</p>
+    <p className="mini-note">已提供中文名称 {coverage.translated} / {coverage.total}；待核对 {coverage.unresolved}。名称对照不等同于专业审校。</p>
     <div className="anatomy-system-actions">
       <button onClick={()=>onVisible(SYSTEMS.filter(s=>s.id!=='integumentary').map(s=>s.id))}>显示内部系统</button>
       <button onClick={()=>onVisible([])}>清空图层</button>
@@ -47,10 +49,12 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
 }
 
 export function AnatomyDetails({part,isolate,onIsolate,onTcm}: {part:Part|null;isolate:boolean;onIsolate:()=>void;onTcm:()=>void}) {
+ const evidence=part?anatomyNameEvidence(part.name):null;
  return <section className="anatomy-detail-content">
    <div className="section-kicker"><Layers size={14}/> 解剖结构档案</div>
    <h2>{part?anatomyLabel(part.name,part.id,part.system):'点选任意解剖结构'}</h2>
    {part&&<details className="anatomy-original" key={part.id}><summary>原始英文名称与编号</summary><p>{part.name}</p><small>{part.id} · {part.conceptId}</small></details>}
+   {part&&evidence&&<details className="anatomy-original"><summary>中文名称对照来源</summary><p>{evidence.sourceTerm}</p>{evidence.note&&<small>{evidence.note}</small>}<p><a href={evidence.source} target="_blank" rel="noreferrer">查看一手来源</a></p></details>}
    {part?<>
     <div className="point-tags"><span>{SYSTEM_ZH[part.system]}</span><span>BodyParts3D</span></div>
     <button className="primary-button full" onClick={onIsolate}><Focus size={16}/>{isolate?'显示周围结构':'单独查看此结构'}</button>

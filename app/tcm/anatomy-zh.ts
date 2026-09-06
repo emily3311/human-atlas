@@ -1,4 +1,5 @@
 import type { SystemId } from "../anatomy";
+import { ANATOMY_TERMS, type AnatomyTerm } from "./anatomy-terms.ts";
 export const SYSTEM_ZH: Record<SystemId, string> = {
   skeletal: "骨骼",
   muscular: "肌肉",
@@ -116,7 +117,7 @@ const terms: Record<string, string> = {
   "achilles tendon": "跟腱",
 };
 export function anatomyZh(name: string): string {
-  const lower = name.toLowerCase();
+  const lower = name.trim().toLowerCase();
   if (terms[lower]) return terms[lower];
   const pectoralis = lower.match(/^(clavicular|sternocostal|abdominal) part of (left|right) pectoralis major$/);
   if (pectoralis) {
@@ -125,6 +126,7 @@ export function anatomyZh(name: string): string {
   }
   const side = lower.startsWith("left ") ? "左" : lower.startsWith("right ") ? "右" : "";
   const core = side ? lower.slice(side === "左" ? 5 : 6) : lower;
+  if (ANATOMY_TERMS[core]) return side + ANATOMY_TERMS[core].zh;
   if (terms[core]) return side + terms[core];
   const digits: Record<string, string> = {
     first: "第1",
@@ -152,6 +154,21 @@ export function anatomyZh(name: string): string {
       if (core === `${en} ${part} vertebra`) return `${zh}${chinese}椎`;
   }
   return name;
+}
+
+export function anatomyNameEvidence(name: string): AnatomyTerm | null {
+  const lower = name.trim().toLowerCase();
+  const core = lower.startsWith("left ") ? lower.slice(5) : lower.startsWith("right ") ? lower.slice(6) : lower;
+  return ANATOMY_TERMS[core] ?? null;
+}
+
+export function anatomyNameCoverage(parts: ReadonlyArray<{ name: string }>): {
+  total: number;
+  translated: number;
+  unresolved: number;
+} {
+  const translated = parts.reduce((count, part) => count + Number(anatomyZh(part.name) !== part.name), 0);
+  return { total: parts.length, translated, unresolved: parts.length - translated };
 }
 
 /** Chinese-first display only; do not pretend untranslated source names were verified. */
