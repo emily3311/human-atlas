@@ -293,9 +293,48 @@ export function undoCalibrationDraft(store: CalibrationDraftStore, draftId: stri
   }, history);
 }
 
+const snapshotVec3 = (value: unknown): unknown => {
+  if (!Array.isArray(value) || value.length !== 3) return null;
+  const x = value[0];
+  const y = value[1];
+  const z = value[2];
+  return [x, y, z];
+};
+
+const snapshotDraftStoreForExport = (store: unknown): unknown => {
+  try {
+    assertSafeObject(store, 'draft store');
+    assertOnlyKeys(store, ['version', 'drafts'], 'draft store');
+    const version = store.version;
+    const sourceDrafts = store.drafts;
+    if (!Array.isArray(sourceDrafts)) throw new Error('draft store must have a drafts array');
+    const drafts: Array<Record<string, unknown>> = [];
+    for (let index = 0; index < sourceDrafts.length; index += 1) {
+      const sourceDraft = sourceDrafts[index];
+      assertSafeObject(sourceDraft, `draft ${index}`);
+      assertOnlyKeys(sourceDraft, ['id', 'pointId', 'side', 'status', 'position', 'normal', 'evidence', 'reviewer', 'modelVersion', 'updatedAt'], `draft ${index}`);
+      const id = sourceDraft.id;
+      const pointId = sourceDraft.pointId;
+      const side = sourceDraft.side;
+      const status = sourceDraft.status;
+      const position = snapshotVec3(sourceDraft.position);
+      const normal = snapshotVec3(sourceDraft.normal);
+      const evidence = sourceDraft.evidence;
+      const reviewer = sourceDraft.reviewer;
+      const modelVersion = sourceDraft.modelVersion;
+      const updatedAt = sourceDraft.updatedAt;
+      drafts.push({ id, pointId, side, status, position, normal, evidence, reviewer, modelVersion, updatedAt });
+    }
+    return { version, drafts };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'unknown snapshot error';
+    throw new Error(`Calibration draft export snapshot failed: ${message}`);
+  }
+};
+
 export function exportCalibrationDraftPackage(store: CalibrationDraftStore, context: CalibrationContext): string {
   checkedContext(context);
-  const verified = parseDraftStoreValue(store, context);
+  const verified = parseDraftStoreValue(snapshotDraftStoreForExport(store), context);
   return JSON.stringify({ version: verified.version, drafts: verified.drafts.map(cloneDraft) });
 }
 

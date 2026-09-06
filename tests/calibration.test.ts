@@ -114,6 +114,41 @@ test('draft exports validate the in-memory store before a tampered toJSON hook c
   assert.throws(() => exportCalibrationDraftPackage(store, context), /draft status/i);
 });
 
+test('draft export snapshots a pointId getter before it can change after validation', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const mutated = store as unknown as { drafts: Array<Record<string, unknown>> };
+  let reads = 0;
+  Object.defineProperty(mutated.drafts[0], 'pointId', {
+    enumerable: true,
+    get: () => (reads += 1) <= 3 ? 'ST36' : 'NOT-A-POINT',
+  });
+  const exported = JSON.parse(exportCalibrationDraftPackage(store, context));
+  assert.equal(exported.drafts[0].pointId, 'ST36');
+});
+
+test('draft export snapshots vector coordinates before a getter can become non-finite', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const mutated = store as unknown as { drafts: Array<Record<string, unknown>> };
+  const position = mutated.drafts[0].position as number[];
+  let reads = 0;
+  Object.defineProperty(position, '0', {
+    enumerable: true,
+    get: () => reads++ === 0 ? 1 : Infinity,
+  });
+  const exported = JSON.parse(exportCalibrationDraftPackage(store, context));
+  assert.deepEqual(exported.drafts[0].position, [1, 2, 3]);
+});
+
+test('draft export turns a throwing source getter into a validation failure', () => {
+  const store = parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  const mutated = store as unknown as { drafts: Array<Record<string, unknown>> };
+  Object.defineProperty(mutated.drafts[0], 'evidence', {
+    enumerable: true,
+    get: () => { throw new Error('source is unavailable'); },
+  });
+  assert.throws(() => exportCalibrationDraftPackage(store, context), /export snapshot failed/i);
+});
+
 test('draft exports reject mutated vectors and strings instead of serializing illegal JSON', () => {
   const invalidFields: Array<[string, (store: { drafts: Array<Record<string, unknown>> }) => void, RegExp]> = [
     ['position', (store) => { store.drafts[0].position = [Infinity, 0, 0]; }, /position.*finite/i],
