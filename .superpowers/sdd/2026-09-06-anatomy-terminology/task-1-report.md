@@ -74,3 +74,11 @@ GREEN:
 - The audit found two additional output defects: `plantaris` had `跛肌` instead of source-normalized `跖肌`, and `middle colic artery` had inverted `结肠中动脉` instead of the cited `中结肠动脉`. A second failing literal regression captured these before correction.
 - No terms were added or removed. Coverage remains exactly 490 / 2,234 translated and 1,744 unresolved; 158 source-backed cores cover 305 mesh entries.
 - Verification: focused anatomy tests 12/12 passing; full suite, TypeScript check, production build, and integrity/coverage checks were rerun after the corrections. The build retains the non-fatal main-chunk-size advisory.
+
+Fix-round verification commands and recorded output:
+
+- `node --experimental-strip-types --test tests/anatomy-zh.test.ts` — exit 0; 12 tests passed, 0 failed.
+- `npm test` — exit 0; 40 tests passed, 0 failed.
+- `npm run check` — exit 0; `tsc --noEmit` completed without diagnostics.
+- `npm run build` — exit 0; Vite transformed 2,496 modules and completed the production build successfully. It emitted the non-fatal advisory that a minified chunk exceeds 500 kB.
+- Post-build integrity/coverage script — exit 0; `{ total: 2234, translated: 490, unresolved: 1744 }`, 158 records, 158 unique keys, 0 invalid records, and 305 matching mesh entries.
