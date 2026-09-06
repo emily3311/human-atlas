@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Search, Layers, ChevronRight, Focus, RotateCcw, X } from 'lucide-react';
 import { SYSTEMS, type Atlas, type Part, type SystemId } from '../anatomy';
-import { anatomyZh, SYSTEM_ZH } from './anatomy-zh';
+import { anatomyZh, anatomyLabel, SYSTEM_ZH } from './anatomy-zh';
 
 export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selected}: {
   atlas:Atlas; visible:SystemId[]; onVisible:(ids:SystemId[])=>void; onSelect:(p:Part)=>void; onClose:()=>void; selected:string;
@@ -15,7 +15,7 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
   return <div className="anatomy-catalogue">
     <div className="anatomy-catalogue-header">
       <div className="section-kicker">HUMAN ATLAS · 原版解剖能力</div>
-      <button className="mobile-close icon-button" aria-label="关闭目录" onClick={onClose}><X size={18}/></button>
+      <button className="icon-button" aria-label="关闭目录" onClick={onClose}><X size={18}/></button>
     </div>
     <h3>从整体，到每一处。</h3>
     <p className="mini-note">{atlas.parts.length.toLocaleString()} 个可选结构 · 可散开、缩放与单独查看</p>
@@ -35,7 +35,7 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
     <div className="catalogue-summary">{matches.length} 个匹配结构 <span>第 {Math.min(page+1,totalPages)} / {totalPages} 页</span></div>
     <div className="anatomy-result-list">
       {matches.slice(page*40,(page+1)*40).map(p=><button key={p.id} className={p.id===selected?'selected':''} onClick={()=>onSelect(p)}>
-        <span>{anatomyZh(p.name)}<small>{p.name}</small></span><ChevronRight size={13}/>
+        <span>{anatomyLabel(p.name,p.id,p.system)}<small>{p.id} · {SYSTEM_ZH[p.system]}</small></span><ChevronRight size={13}/>
       </button>)}
       {!matches.length&&<p className="mini-note">当前系统中没有匹配结构。可显示其他系统或使用英文名搜索。</p>}
     </div>
@@ -49,15 +49,15 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selec
 export function AnatomyDetails({part,isolate,onIsolate,onTcm}: {part:Part|null;isolate:boolean;onIsolate:()=>void;onTcm:()=>void}) {
  return <section className="anatomy-detail-content">
    <div className="section-kicker"><Layers size={14}/> 解剖结构档案</div>
-   <h2>{part?anatomyZh(part.name):'点选任意解剖结构'}</h2>
-   <p className="anatomy-english">{part?.name??'一键散开，查看完整人体结构'}</p>
+   <h2>{part?anatomyLabel(part.name,part.id,part.system):'点选任意解剖结构'}</h2>
+   {part&&<details className="anatomy-original" key={part.id}><summary>原始英文名称与编号</summary><p>{part.name}</p><small>{part.id} · {part.conceptId}</small></details>}
    {part?<>
     <div className="point-tags"><span>{SYSTEM_ZH[part.system]}</span><span>BodyParts3D</span></div>
     <button className="primary-button full" onClick={onIsolate}><Focus size={16}/>{isolate?'显示周围结构':'单独查看此结构'}</button>
     <dl className="anatomy-facts"><dt>原始结构编号</dt><dd>{part.id}</dd><dt>概念编号</dt><dd>{part.conceptId}</dd></dl>
    </>:<p className="muted">在人体或散开的网格中点击部位，也可以从左侧完整目录搜索。悬停显示名称，点选后可单独放大。</p>}
    <section className="detail-section"><h3>解剖与中医，分层学习</h3><p>此处保留原版逐结构浏览。切回经穴图谱后，可继续查标准定位、复习卡与考纲范围。中医脏腑概念不等同于同名解剖器官。</p></section>
-   <p className="quiet-note">常用结构已有中文对照；尚未汉化的细分结构保留原始英文名称，避免误译。散开状态不显示穴位。</p>
+   <p className="quiet-note">中文名称优先；尚未核验的译名会明确提示待校对，原始英文可展开查看。散开状态不显示穴位。</p>
    <button className="outline-button full" onClick={onTcm}><RotateCcw size={15}/>复原并学习经穴</button>
  </section>;
 }

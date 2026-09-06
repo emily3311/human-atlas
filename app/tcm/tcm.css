@@ -18,6 +18,8 @@
   overflow: hidden;
   letter-spacing: 0.015em;
 }
+
+/* Anatomy is a canvas-first workspace; its panels never reserve grid columns. */
 .tcm-app .icon-button { min-width:29px; min-height:29px; }
 .proportion-guide { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:7; }
 .proportion-guide line { stroke:#977761; stroke-width:1; stroke-dasharray:3 3; opacity:.85; }
@@ -2406,4 +2408,57 @@
  .anatomy-explode-controls { flex-direction:column; gap:6px; align-items:flex-start; }
  .anatomy-catalogue { overflow:hidden; }
  .anatomy-detail-content { padding:28px 24px; }
+}
+
+.tcm-app.anatomy-focus .workspace { display:block; position:relative; min-height:0; }
+.tcm-app.anatomy-focus .model-workspace { width:100%; height:100%; min-height:0; position:relative; overflow:hidden; }
+.tcm-app.anatomy-focus .model-stage { position:absolute; inset:0; height:auto; min-height:0; margin:0; }
+.tcm-app.anatomy-focus .model-topbar { position:absolute; left:0; top:0; padding:22px 28px; pointer-events:none; }
+.tcm-app.anatomy-focus .model-topbar .section-kicker,.tcm-app.anatomy-focus .model-topbar .about-button { display:none; }
+.tcm-app.anatomy-focus .model-topbar h1 { font-size:24px; }
+.tcm-app.anatomy-focus .model-controls { position:absolute; right:24px; top:24px; z-index:12; padding:0; }
+.tcm-app.anatomy-focus .anatomy-explode-controls { display:flex; flex-direction:row; gap:8px; align-items:center; }
+.tcm-app.anatomy-focus .model-controls .mobile-catalogue { display:none; }
+.tcm-app.anatomy-focus .stage-label,.tcm-app.anatomy-focus .stage-side-label,.tcm-app.anatomy-focus .model-scope { display:none; }
+.tcm-app.anatomy-focus .atlas-sidebar,.tcm-app.anatomy-focus .detail-panel { display:none; position:absolute; z-index:20; top:82px; bottom:18px; width:300px; max-width:calc(100% - 24px); min-height:0; height:auto; background:#fcfaf6f5; border:1px solid #dfd5c8; border-radius:14px; box-shadow:0 12px 35px #392b2310; }
+.tcm-app.anatomy-focus .atlas-sidebar { left:18px; padding:20px 18px 10px; }
+.tcm-app.anatomy-focus .atlas-sidebar.mobile-open { display:flex; }
+.tcm-app.anatomy-focus .detail-panel { right:18px; padding:0; overflow:auto; }
+.tcm-app.anatomy-focus .detail-panel.anatomy-panel-open { display:block; }
+.tcm-app.anatomy-focus .anatomy-detail-content { padding:38px 23px 24px; }
+.tcm-app.anatomy-focus .anatomy-detail-content h2 { font-size:24px; line-height:1.5; overflow-wrap:anywhere; }
+.anatomy-detail-close { position:absolute; right:10px; top:8px; z-index:1; }
+.anatomy-original { margin:14px 0 20px; font-size:12px; color:#806b59; }
+.anatomy-original summary { cursor:pointer; }
+.anatomy-original p { margin:12px 0 5px; overflow-wrap:anywhere; }
+.tcm-app.anatomy-focus .model-bottom { position:absolute; bottom:14px; left:50%; transform:translateX(-50%); width:min(390px,calc(100% - 28px)); z-index:11; margin:0; padding:0; }
+.tcm-app.anatomy-focus .view-bar { left:auto; right:20px; top:50%; bottom:auto; transform:translateY(-50%); flex-direction:column; background:#fcfaf6e8; }
+.tcm-app.anatomy-focus .view-bar > span { width:22px; height:1px; margin:4px 0; }
+.anatomy-slider-dock { padding:16px 22px 10px; border:1px solid #dfd5c8; border-radius:14px; background:#fcfaf6f5; box-shadow:0 8px 30px #392b230b; }
+.anatomy-slider-dock [data-slot=slider] { width:100%; padding:8px 0; }
+.anatomy-slider-dock [data-slot=slider] > div { position:relative; display:flex; width:100%; align-items:center; min-height:24px; touch-action:none; }
+.anatomy-slider-dock [data-slot=slider-track] { width:100%; height:4px; border-radius:8px; background:#dfd5c8; overflow:hidden; }
+.anatomy-slider-dock [data-slot=slider-range] { height:100%; }
+.anatomy-slider-dock [data-slot=slider-thumb] { width:18px; height:18px; border:3px solid #fffaf4; border-radius:50%; box-shadow:0 0 0 1px #96715350,0 2px 5px #392b2320; }
+.tcm-app .anatomy-slider-dock .explode-label { color:#594333; font-size:12px; }
+.tcm-app .anatomy-slider-dock output { color:#594333; background:#eee6dc; border-color:#dfd5c8; }
+.tcm-app .anatomy-slider-dock [data-slot=slider-range] { background:#967153; }
+.tcm-app .anatomy-slider-dock [data-slot=slider-thumb] { background:#967153; border-color:#fffaf4; }
+.anatomy-slider-dock .slider-endpoints { color:#8b7663; }
+.tcm-app .anatomy-slider-dock .text-button { margin:8px auto 0; font-size:11px; }
+.tcm-app.anatomy-focus .anatomy-selection { left:50%; bottom:205px; width:calc(100vw - 32px); max-width:480px; padding:10px 15px; background:#fcfaf6f5; }
+.tcm-app.anatomy-focus .anatomy-catalogue { padding:0; overflow:auto; }
+.tcm-app.anatomy-focus .anatomy-catalogue > * { flex-shrink:0; }
+.tcm-app.anatomy-focus .anatomy-result-list { min-height:120px; flex:1 0 120px; }
+.tcm-app.anatomy-focus .anatomy-selection strong { font-size:15px; }
+@media(max-width:680px) {
+ .tcm-app.anatomy-focus { height:100dvh; overflow:hidden; }
+ .tcm-app.anatomy-focus .workspace { flex:1; min-height:0; }
+ .tcm-app.anatomy-focus .model-topbar { top:0; left:0; padding:10px 16px; }
+ .tcm-app.anatomy-focus .model-topbar h1 { font-size:18px; margin:0; }
+ .tcm-app.anatomy-focus .model-controls { top:46px; right:14px; }
+ .tcm-app.anatomy-focus .anatomy-explode-controls button { padding:7px 10px; font-size:11px; }
+ .tcm-app.anatomy-focus .atlas-sidebar,.tcm-app.anatomy-focus .detail-panel { top:90px; bottom:155px; width:calc(100% - 28px); left:14px; right:14px; }
+ .tcm-app.anatomy-focus .anatomy-selection { bottom:230px; flex-wrap:wrap; width:calc(100% - 32px); }
+ .tcm-app.anatomy-focus .anatomy-selection>div { flex:1; min-width:130px; }
 }

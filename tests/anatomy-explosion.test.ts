@@ -4,6 +4,7 @@ import type { Part } from "../app/anatomy.ts";
 import { createExplosionLayout } from "../app/explosion-layout.ts";
 import {
   explosionOffset,
+  explosionCameraPose,
   overlaysAllowed,
   sceneDecorVisibility,
   shouldUpdateExplosionTransforms,
@@ -22,6 +23,17 @@ const part = (id: string, bounds: [number[], number[]]): Part => ({
   vertexCount: 3,
   indexCount: 3,
   bounds,
+});
+
+test('explosion camera varies continuously at intermediate slider positions', () => {
+  assert.equal(explosionCameraPose(3, 9, 0, 'back').distance, 3);
+  assert.equal(explosionCameraPose(3, 9, 1, 'back').distance, 9);
+  assert.equal(explosionCameraPose(3, 9, 0.37, 'back').distance, 5.22);
+  const before = explosionCameraPose(3, 9, 0.05, 'back');
+  const after = explosionCameraPose(3, 9, 0.06, 'back');
+  assert.ok(Math.abs(after.distance - before.distance) < 0.1);
+  assert.ok(Math.abs(after.yaw - before.yaw) < 0.04);
+  assert.equal(explosionCameraPose(3, 9, 1, 'side').yaw, 0);
 });
 
 test("explosion endpoints preserve the source and center a part in its packed cell", () => {

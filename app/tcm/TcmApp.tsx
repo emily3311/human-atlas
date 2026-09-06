@@ -32,7 +32,8 @@ import AtlasScene, { type Layer, type SceneOptions } from "./AtlasScene";
 import StudyPanel, { type CardType } from "./StudyPanel";
 import CoursePanel from "./CoursePanel";
 import CasesPanel from "./CasesPanel";
-import { anatomyZh, SYSTEM_ZH } from "./anatomy-zh";
+import { anatomyZh, anatomyLabel, SYSTEM_ZH } from "./anatomy-zh";
+import { Slider } from '@/components/ui/slider';
 import { AnatomyCatalogue, AnatomyDetails } from './AnatomyPanel';
 import { hasPlacement, questionAvailable } from './catalogue';
 import { inCatalogue, examBadges, EXAM_SOURCE, PRACTICAL_NAMES, WRITTEN_NAMES, type CatalogueScope } from './exam-scope';
@@ -104,7 +105,8 @@ export default function TcmApp() {
     [tag, setTag] = useState("all"),
     [scope, setScope] = useState<Scope>("all");
   const [catalogueScope,setCatalogueScope]=useState<CatalogueScope>('all');
-  const [exploded,setExploded]=useState(false),[anatomySystems,setAnatomySystems]=useState<SystemId[]>(DEFAULT_VISIBLE);
+  const [explosionAmount,setExplosionAmount]=useState(0),[anatomySystems,setAnatomySystems]=useState<SystemId[]>(DEFAULT_VISIBLE);
+  const [anatomyDetailsOpen,setAnatomyDetailsOpen]=useState(false);
   const [layer, setLayer] = useState<Layer>("surface"),
     [labels, setLabels] = useState(true),
     [routes, setRoutes] = useState(false),
@@ -176,6 +178,7 @@ export default function TcmApp() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        setAnatomyDetailsOpen(false);
         setComparisonOpen(false);
         setAbout(false);
         setSidebarOpen(false);
@@ -303,7 +306,9 @@ export default function TcmApp() {
     setChosenPart(null);
     setIsolate(false);
     setRotate(false);
-    setExploded(false);
+    setExplosionAmount(0);
+    setAnatomyDetailsOpen(false);
+    setSidebarOpen(false);
     setReset(v=>v+1);
     if (next === "quiz") {
       setLabels(false);
@@ -338,7 +343,7 @@ export default function TcmApp() {
       reset,
       selectedPart: chosenPart?.id ?? "",
       isolate,
-      explode:exploded?1:0,
+      explode:explosionAmount,
       visibleSystems:mode==='anatomy'?anatomySystems:undefined,
       anatomyLabels:true,
     }),
@@ -359,7 +364,7 @@ export default function TcmApp() {
       reset,
       chosenPart,
       isolate,
-      exploded,anatomySystems,
+      explosionAmount,anatomySystems,
     ],
   );
   const reportProgress = useCallback((n: number) => setProgress(n), []);
@@ -398,7 +403,7 @@ export default function TcmApp() {
     [],
   );
   return (
-    <div className="tcm-app">
+    <div className={`tcm-app ${mode==='anatomy'?'anatomy-focus':''}`}>
       <header className="app-header">
         <a className="brand" href="/">
           <span className="brand-seal">经</span>
@@ -687,7 +692,7 @@ export default function TcmApp() {
                     : "EXPLORE · 三维探索"}
               </span>
               <h1>
-                {mode==='anatomy' ? '一键散开，逐处认识。' : concealed
+                {mode==='anatomy' ? '解剖图谱' : concealed
                   ? cardType === "meridian"
                     ? "循其所归，忆其经脉。"
                     : "这个穴位，你认识吗？"
@@ -706,8 +711,9 @@ export default function TcmApp() {
           </div>
           <div className="model-controls">
             {mode==='anatomy'?<div className="anatomy-explode-controls">
-              <button className={exploded?'primary-button':'outline-button'} onClick={()=>{setExploded(v=>!v);setIsolate(false);setRotate(false);}}><Layers size={16}/>{exploded?'一键复原':'一键散开'}</button>
-              <span>{exploded?'拖动平移 · 滚轮缩放 · 悬停/点选看名称':'拖动旋转 · 点击结构 · 可单独查看'}</span>
+              <button className="outline-button" aria-expanded={sidebarOpen} onClick={()=>setSidebarOpen(v=>!v)}><Layers size={16}/>{sidebarOpen?'收起目录':'结构目录'}</button>
+              <button className="outline-button" aria-expanded={anatomyDetailsOpen} onClick={()=>setAnatomyDetailsOpen(v=>!v)}><BookOpen size={16}/>{anatomyDetailsOpen?'收起详情':'结构详情'}</button>
+              {(sidebarOpen||anatomyDetailsOpen)&&<button className="text-button" onClick={()=>{setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>隐藏全部面板</button>}
             </div>:
             <div className="layer-switch" role="group" aria-label="人体图层">
               {layerChoices.map(([id, label]) => (
@@ -724,13 +730,13 @@ export default function TcmApp() {
                 </button>
               ))}
             </div>}
-            <button
+            {mode!=='anatomy'&&<button
               className="mobile-catalogue outline-button"
               onClick={() => setSidebarOpen(true)}
             >
               <Menu size={15} />
               目录
-            </button>
+            </button>}
           </div>
           <div className="model-stage">
             {atlas && (
@@ -844,7 +850,7 @@ export default function TcmApp() {
                   setChosenPart(null);
                   setIsolate(false);
                   setRotate(false);
-                  setExploded(false);
+                  setExplosionAmount(0);
                 }}
               >
                 <RotateCcw size={16} />
@@ -852,7 +858,12 @@ export default function TcmApp() {
             </div>
           </div>
           <div className="model-bottom">
-            {mode==='anatomy'?<p>原版逐部位点选与名称 · {exploded?'散开时暂停显示经穴，复原后恢复':'可切回经穴图谱叠加中医知识'}</p>:<>
+            {mode==='anatomy'?<div className="anatomy-slider-dock">
+              <div className="explode-label"><label id="tcm-explode-label">结构散开</label><output>{Math.round(explosionAmount*100)}%</output></div>
+              <Slider aria-labelledby="tcm-explode-label" min={0} max={100} step={1} value={[explosionAmount*100]} onValueChange={value=>{setExplosionAmount((Array.isArray(value)?value[0]:value)/100);setIsolate(false);setRotate(false);}}/>
+              <div className="slider-endpoints"><span>完整人体</span><span>逐个结构</span></div>
+              <button className="text-button" onClick={()=>{setExplosionAmount(0);setIsolate(false);setRotate(false);setReset(v=>v+1);}}>复原模型</button>
+            </div>:<>
             <div className="display-toggles">
               <button
                 className={labels ? "active" : ""}
@@ -883,7 +894,7 @@ export default function TcmApp() {
                 ? "虚线仅连接已收录穴位，不表示完整经络循行。"
                 : "拖动旋转 · 滚轮缩放 · 点击穴位查看"}
             </p>
-            <button className="text-button anatomy-entry" onClick={()=>{changeMode('anatomy');setExploded(true);}}><Layers size={14}/>一键散开解剖结构</button>
+            <button className="text-button anatomy-entry" onClick={()=>changeMode('anatomy')}><Layers size={14}/>解剖结构浏览</button>
             </>}
           </div>
           <div className="model-scope">
@@ -895,7 +906,8 @@ export default function TcmApp() {
             </button>
           </div>
         </main>
-        <aside className="detail-panel" aria-label="学习内容">
+        <aside className={`detail-panel ${mode==='anatomy'&&anatomyDetailsOpen?'anatomy-panel-open':''}`} aria-label="学习内容">
+          {mode==='anatomy'&&<button className="anatomy-detail-close icon-button" aria-label="关闭结构详情" onClick={()=>setAnatomyDetailsOpen(false)}><X size={18}/></button>}
           {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
               <BookOpen size={32} />
@@ -1173,7 +1185,7 @@ export default function TcmApp() {
                         setIsolate(false);
                       }}
                     >
-                      {anatomyZh(p.name)}
+                      {anatomyLabel(p.name,p.id,p.system)}
                       <ChevronRight size={12} />
                     </button>
                   ))}
@@ -1181,7 +1193,7 @@ export default function TcmApp() {
                     <p className="mini-note">没有匹配结构，可用英文名继续搜索。</p>
                   )}
                 </div>
-                <p className="mini-note">常用结构已有中文对照，细分名称暂保留原文。</p>
+                <p className="mini-note">常用结构已有中文对照；未核验的细分名称标为“中文名待校对”。</p>
               </section>
               <details className="care-details">
                 <summary>
@@ -1233,9 +1245,9 @@ export default function TcmApp() {
         <div className="anatomy-selection">
           <div>
             <span>{SYSTEM_ZH[chosenPart.system]} · 解剖结构</span>
-            <strong>{anatomyZh(chosenPart.name)}</strong>
-            <small>{chosenPart.name}</small>
+            <strong>{anatomyLabel(chosenPart.name,chosenPart.id,chosenPart.system)}</strong>
           </div>
+          {mode==='anatomy'&&<button className="outline-button" onClick={()=>setAnatomyDetailsOpen(v=>!v)}>{anatomyDetailsOpen?'收起详情':'查看详情'}</button>}
           <button className="outline-button" onClick={() => setIsolate((v) => !v)}>
             {isolate ? "显示周围" : "单独查看"}
           </button>
@@ -1338,7 +1350,7 @@ export default function TcmApp() {
             <div className="brand-seal">经</div>
             <h2 id="about-title">经纬 · 中医经络学习图谱</h2>
             <p>
-              基于 Human Atlas 与 BodyParts3D 的中文教学扩展。当前包含362个十四经穴及21个考纲奇穴名称条目；原版一键散开、逐结构点选和名称浏览已集成。
+              基于 Human Atlas 与 BodyParts3D 的中文教学扩展。当前包含362个十四经穴及21个考纲奇穴名称条目；原版滑杆散开、逐结构点选和名称浏览已集成。
             </p>
             <h3>内容与模型</h3>
             <p>

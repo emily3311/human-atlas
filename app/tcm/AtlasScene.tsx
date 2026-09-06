@@ -10,8 +10,8 @@ import { createExplosionLayout } from "../explosion-layout";
 import { PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
-import { anatomyZh } from "./anatomy-zh";
-import { explosionOffset, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
+import { anatomyLabel } from "./anatomy-zh";
+import { explosionOffset, explosionCameraPose, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
@@ -289,19 +289,12 @@ export default function AtlasScene(props: Props) {
     const fit = () => {
       const o = latest.current.options;
       camera.clearViewOffset();
-      const exploded = amount > 0.05 && !o.isolate;
-      const availableAspect = Math.max(0.35, (el.clientWidth - (el.clientWidth < 768 ? 40 : 340)) / Math.max(160, el.clientHeight - (el.clientWidth < 768 ? 350 : 270)));
+      const availableAspect = Math.max(0.35, (el.clientWidth - 40) / Math.max(160, el.clientHeight - 160));
       const gridDistance = Math.max(packingHeight, packingWidth / availableAspect) / (2 * Math.tan(T.MathUtils.degToRad(camera.fov / 2))) * 1.1;
-      const distance = exploded ? Math.max(0.2, gridDistance) : Math.max(2.9, 1.2 / camera.aspect),
-        direction =
-          exploded
-            ? new T.Vector3(0, 0, 1)
-            : o.view === "back"
-            ? new T.Vector3(0, 0, -1)
-            : o.view === "side"
-              ? new T.Vector3(1, 0, 0)
-              : new T.Vector3(0.08, 0.015, 1).normalize();
-      controls.target.set(exploded && el.clientWidth > 767 ? -packingWidth * 0.12 : 0, 0.87, 0);
+      const extent = o.isolate ? 0 : amount;
+      const {distance, yaw} = explosionCameraPose(Math.max(2.9, 1.2 / camera.aspect), Math.max(0.2, gridDistance), extent, o.view);
+      const direction = new T.Vector3(Math.sin(yaw), o.view==='front' ? 0.015 * (1 - extent) : 0, Math.cos(yaw)).normalize();
+      controls.target.set(0, 0.87, 0);
       camera.position.copy(controls.target).addScaledVector(direction, distance);
       controls.update();
       dirty = true;
@@ -444,7 +437,7 @@ export default function AtlasScene(props: Props) {
       anatomyHover.hidden = !target;
       renderer.domElement.style.cursor = target ? "pointer" : "grab";
       if (target) {
-        anatomyHover.textContent = `${anatomyZh(target.part.name)} · ${target.part.name}`;
+        anatomyHover.textContent = anatomyLabel(target.part.name,target.part.id,target.part.system);
         anatomyHover.style.left = `${Math.max(8, Math.min(x + 14, el.clientWidth - 260))}px`;
         anatomyHover.style.top = `${Math.max(8, Math.min(y + 18, el.clientHeight - 55))}px`;
       }

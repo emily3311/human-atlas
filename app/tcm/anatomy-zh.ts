@@ -17,6 +17,56 @@ export const SYSTEM_ZH: Record<SystemId, string> = {
   connective: "结缔组织",
 };
 const terms: Record<string, string> = {
+  "marginal artery of colon": "结肠边缘动脉",
+  "anterior tibial artery": "胫前动脉",
+  "posterior tibial artery": "胫后动脉",
+  "anterior tibial vein": "胫前静脉",
+  "posterior tibial vein": "胫后静脉",
+  "ascending colon": "升结肠",
+  "transverse colon": "横结肠",
+  "descending colon": "降结肠",
+  "sigmoid colon": "乙状结肠",
+  colon: "结肠",
+  rectum: "直肠",
+  cecum: "盲肠",
+  appendix: "阑尾",
+  duodenum: "十二指肠",
+  jejunum: "空肠",
+  ileum: "回肠",
+  esophagus: "食管",
+  gallbladder: "胆囊",
+  kidney: "肾",
+  ureter: "输尿管",
+  urethra: "尿道",
+  lung: "肺",
+  aorta: "主动脉",
+  "ascending aorta": "升主动脉",
+  "arch of aorta": "主动脉弓",
+  "abdominal aorta": "腹主动脉",
+  "superior vena cava": "上腔静脉",
+  "inferior vena cava": "下腔静脉",
+  "femoral artery": "股动脉",
+  "femoral vein": "股静脉",
+  "radial artery": "桡动脉",
+  "ulnar artery": "尺动脉",
+  "brachial artery": "肱动脉",
+  "popliteal artery": "腘动脉",
+  "popliteal vein": "腘静脉",
+  "common carotid artery": "颈总动脉",
+  "internal carotid artery": "颈内动脉",
+  "external carotid artery": "颈外动脉",
+  "superior mesenteric artery": "肠系膜上动脉",
+  "inferior mesenteric artery": "肠系膜下动脉",
+  "renal artery": "肾动脉",
+  "renal vein": "肾静脉",
+  "thyroid gland": "甲状腺",
+  "adrenal gland": "肾上腺",
+  "gingiva of upper jaw": "上颌牙龈",
+  "gingiva of lower jaw": "下颌牙龈",
+  mandible: "下颌骨",
+  sacrum: "骶骨",
+  coccyx: "尾骨",
+  "iliotibial tract": "髂胫束",
   skin: "皮肤",
   eyebrow: "眉毛",
   "hair of head": "头发",
@@ -68,6 +118,11 @@ const terms: Record<string, string> = {
 export function anatomyZh(name: string): string {
   const lower = name.toLowerCase();
   if (terms[lower]) return terms[lower];
+  const pectoralis = lower.match(/^(clavicular|sternocostal|abdominal) part of (left|right) pectoralis major$/);
+  if (pectoralis) {
+    const part = { clavicular: '锁骨部', sternocostal: '胸肋部', abdominal: '腹部' }[pectoralis[1]];
+    return `${pectoralis[2] === 'left' ? '左' : '右'}胸大肌${part}`;
+  }
   const side = lower.startsWith("left ") ? "左" : lower.startsWith("right ") ? "右" : "";
   const core = side ? lower.slice(side === "左" ? 5 : 6) : lower;
   if (terms[core]) return side + terms[core];
@@ -97,4 +152,12 @@ export function anatomyZh(name: string): string {
       if (core === `${en} ${part} vertebra`) return `${zh}${chinese}椎`;
   }
   return name;
+}
+
+/** Chinese-first display only; do not pretend untranslated source names were verified. */
+export function anatomyLabel(name: string, id: string, system?: SystemId): string {
+  const translated = anatomyZh(name);
+  return translated === name && /[a-z]/i.test(name)
+    ? `${system ? SYSTEM_ZH[system] : '解剖'}结构 ${id}（中文名待校对）`
+    : translated;
 }

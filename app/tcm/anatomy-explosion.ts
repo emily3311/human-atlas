@@ -3,6 +3,12 @@ import type { LayoutCell } from "../explosion-layout";
 
 export type Vec3Tuple = [number, number, number];
 
+export function explosionCameraPose(normalDistance: number, gridDistance: number, amount: number, view: string) {
+  const yaw = view === 'back' ? Math.PI : view === 'side' ? Math.PI / 2 : 0.08;
+  const t = Math.max(0, Math.min(1, amount));
+  return { distance: normalDistance + (gridDistance - normalDistance) * t, yaw: yaw * (1 - t) };
+}
+
 export function explosionOffset(part: Part, cell: LayoutCell, amount: number): Vec3Tuple {
   const t = Math.max(0, Math.min(1, amount));
   if (t === 0) return [0, 0, 0];
