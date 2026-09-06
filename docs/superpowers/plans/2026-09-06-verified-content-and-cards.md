@@ -642,10 +642,16 @@ Use:
 export const KNOWLEDGE_REVIEW_KEY = 'jingwei-knowledge-cards:v1';
 export type KnowledgeReviewStore = { version: 1; reviews: Record<string, Review> };
 export function parseKnowledgeReviewStore(raw: string | null, availableCardIds: readonly string[]): KnowledgeReviewStore;
-export function rateKnowledgeCard(store: KnowledgeReviewStore, cardId: string, rating: Rating, now?: number): KnowledgeReviewStore;
+export function rateKnowledgeCard(
+  store: KnowledgeReviewStore,
+  cardId: string,
+  rating: Rating,
+  availableCardIds: ReadonlySet<string>,
+  now?: number,
+): KnowledgeReviewStore;
 ```
 
-Reuse `scheduleReview` but accept only namespaced IDs present in `availableCardIds`. Do not read from or write to `human-atlas-tcm:v1`; point location/meridian/tags/identify ratings continue through the existing `ratePoint` behavior.
+Reuse `scheduleReview` but accept only structurally valid namespaced IDs present in `availableCardIds` at both parse and rating boundaries. `knowledgeReviewQueue` also drops malformed IDs from its supplied current-card list. Do not read from or write to `human-atlas-tcm:v1`; point location/meridian/tags/identify ratings continue through the existing `ratePoint` behavior.
 
 - [ ] **Step 6: Run tests and commit the card domain**
 
@@ -709,7 +715,7 @@ Do not keep the hidden answer face in the DOM with only CSS transforms or `aria-
 
 - [ ] **Step 6: Connect ratings and next-card behavior**
 
-Existing point-card ratings continue to call `ratePoint`. Anatomy, wrong-exam and effect cards call `rateKnowledgeCard`; after a rating, compute the next due ID from the current deck. A user may always click `下一张` without rating. If the currently displayed wrong card disappears because its exam record is now correct, move to the first remaining card without deleting its historical attempts.
+Existing point-card ratings continue to call `ratePoint`. Anatomy, wrong-exam and effect cards call `rateKnowledgeCard` with a `ReadonlySet` built from the current available cards; after a rating, compute the next due ID from the current deck. A user may always click `下一张` without rating. If the currently displayed wrong card disappears because its exam record is now correct, move to the first remaining card without deleting its historical attempts.
 
 - [ ] **Step 7: Add responsive layout**
 
@@ -825,4 +831,5 @@ git commit -m "test: verify content and card integrity"
 - Completeness scan: every implementation step names its files, concrete validation rule, command and expected outcome.
 - Type consistency: `PlacementDisplayMode`, `CalibrationDraft`, `ExamExplanationBank`, `KnowledgeCard`, `KnowledgeDeck`, storage keys and card ID namespaces are defined once and reused by later tasks with the same spelling.
 - Approved plan corrections: Task 1 examples use a genuinely unresolved source term and Tasks 3/6/8 verify pure view-model and rendered behavior rather than searching source text.
+- Approved plan correction: Task 7/8 rating calls must supply the current available-card ID set, so malformed, expired or unavailable IDs cannot enter the new review store.
 - Existing dirty files: do not stage or modify `docs/Claude-Design-界面改版交接.md`, `design-handoff/`, `docs/cmb-question-bank-verification-2026-09-06.md`, or `docs/site-qa-mobile-2026-09-06.md` unless the user explicitly brings them into this implementation.
