@@ -11,7 +11,7 @@ import { PLACEMENTS } from "./placements";
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
 import { anatomyZh } from "./anatomy-zh";
-import { explosionOffset, overlaysAllowed, sceneDecorVisibility, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
+import { explosionOffset, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
 import type { Acupoint } from "./types";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
@@ -498,7 +498,8 @@ export default function AtlasScene(props: Props) {
         o.isolate ? part.id === o.selectedPart : systems.has(part.system) || part.id === o.selectedPart,
       );
       const nextLayoutKey = visibleParts.map((part) => part.id).join(",") + ":" + camera.aspect.toFixed(3);
-      if (nextLayoutKey !== layoutKey) {
+      const layoutChanged = nextLayoutKey !== layoutKey;
+      if (layoutChanged) {
         const layout = createExplosionLayout(visibleParts, camera.aspect);
         packingWidth = layout.width;
         packingHeight = layout.height;
@@ -510,7 +511,7 @@ export default function AtlasScene(props: Props) {
         layoutKey = nextLayoutKey;
         if (amount > 0.05 && !o.isolate) fit();
       }
-      if (amount !== previousAmount || o !== lastOptions) {
+      if (shouldUpdateExplosionTransforms(previousAmount, amount, o !== lastOptions, layoutChanged)) {
         props.atlas.parts.forEach((part, index) => {
           const cell = layoutCells.get(part.id);
           const offset = cell ? explosionOffset(part, cell, amount) : [0, 0, 0] as Vec3Tuple;

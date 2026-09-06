@@ -452,7 +452,7 @@ export default function TcmApp() {
           className={`atlas-sidebar ${sidebarOpen ? "mobile-open" : ""}`}
           aria-label="穴位目录"
         >
-          {mode==='anatomy'&&atlas?<AnatomyCatalogue atlas={atlas} visible={anatomySystems} onVisible={systems=>{setAnatomySystems(systems);setChosenPart(null);setIsolate(false);}} onSelect={part=>{setChosenPart(part);setIsolate(false);setSidebarOpen(false);}} selected={chosenPart?.id??''}/>:<>
+          {mode==='anatomy'&&atlas?<AnatomyCatalogue atlas={atlas} visible={anatomySystems} onVisible={systems=>{setAnatomySystems(systems);setChosenPart(null);setIsolate(false);}} onSelect={part=>{setChosenPart(part);setIsolate(false);setSidebarOpen(false);}} onClose={()=>setSidebarOpen(false)} selected={chosenPart?.id??''}/>:<>
           <div className="sidebar-title">
             <span>经络与腧穴</span>
             <button

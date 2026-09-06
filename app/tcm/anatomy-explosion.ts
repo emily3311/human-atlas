@@ -23,6 +23,15 @@ export function sceneDecorVisibility(amount: number, isolate: boolean) {
   return { overlays: overlaysAllowed(amount), stage: !isolate && amount < 0.5 };
 }
 
+export function shouldUpdateExplosionTransforms(
+  previousAmount: number,
+  amount: number,
+  optionsChanged: boolean,
+  layoutChanged: boolean,
+): boolean {
+  return amount !== previousAmount || optionsChanged || layoutChanged;
+}
+
 export function translatedBounds(
   bounds: [number[], number[]],
   offset: Vec3Tuple,

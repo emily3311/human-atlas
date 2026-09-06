@@ -1,10 +1,10 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Search, Layers, ChevronRight, Focus, RotateCcw } from 'lucide-react';
+import { Search, Layers, ChevronRight, Focus, RotateCcw, X } from 'lucide-react';
 import { SYSTEMS, type Atlas, type Part, type SystemId } from '../anatomy';
 import { anatomyZh, SYSTEM_ZH } from './anatomy-zh';
 
-export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,selected}: {
-  atlas:Atlas; visible:SystemId[]; onVisible:(ids:SystemId[])=>void; onSelect:(p:Part)=>void; selected:string;
+export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,onClose,selected}: {
+  atlas:Atlas; visible:SystemId[]; onVisible:(ids:SystemId[])=>void; onSelect:(p:Part)=>void; onClose:()=>void; selected:string;
 }) {
   const [query,setQuery]=useState(''),[page,setPage]=useState(0);
   const matches=useMemo(()=>atlas.parts.filter(p=>
@@ -13,7 +13,10 @@ export function AnatomyCatalogue({atlas,visible,onVisible,onSelect,selected}: {
   useEffect(()=>setPage(0),[query,visible]);
   const totalPages=Math.max(1,Math.ceil(matches.length/40));
   return <div className="anatomy-catalogue">
-    <div className="section-kicker">HUMAN ATLAS · 原版解剖能力</div>
+    <div className="anatomy-catalogue-header">
+      <div className="section-kicker">HUMAN ATLAS · 原版解剖能力</div>
+      <button className="mobile-close icon-button" aria-label="关闭目录" onClick={onClose}><X size={18}/></button>
+    </div>
     <h3>从整体，到每一处。</h3>
     <p className="mini-note">{atlas.parts.length.toLocaleString()} 个可选结构 · 可散开、缩放与单独查看</p>
     <div className="anatomy-system-actions">

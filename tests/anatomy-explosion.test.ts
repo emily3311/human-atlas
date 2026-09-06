@@ -6,6 +6,7 @@ import {
   explosionOffset,
   overlaysAllowed,
   sceneDecorVisibility,
+  shouldUpdateExplosionTransforms,
   translatedBounds,
 } from "../app/tcm/anatomy-explosion.ts";
 
@@ -52,4 +53,9 @@ test("selected-part bounds translate with its rendered offset", () => {
     translatedBounds([[0, 1, -2], [2, 4, 3]], [0.5, -1, 2]),
     [[0.5, 0, 0], [2.5, 3, 5]],
   );
+});
+
+test("a settled explosion updates transforms when its packed layout changes", () => {
+  assert.equal(shouldUpdateExplosionTransforms(1, 1, false, false), false);
+  assert.equal(shouldUpdateExplosionTransforms(1, 1, false, true), true);
 });
