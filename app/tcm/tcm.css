@@ -2627,3 +2627,23 @@
     padding: 16px;
   }
 }
+.placement-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:8px 20px; flex-shrink:0; font-size:12px; z-index:2; }
+.placement-controls > small, .placement-controls > p { flex-basis:100%; margin:0; }
+.placement-controls label { display:flex; align-items:center; gap:8px; min-height:44px; cursor:pointer; }
+.tcm-app .acu-marker.acu-marker--pending > i { background:transparent; border:2px dashed var(--point-color); box-shadow:none; }
+.tcm-app .acu-marker.acu-marker--pending.selected > i { background:transparent; border:3px dashed var(--point-color); box-shadow:0 0 0 4px #fff9; }
+.calibration-marker { position:absolute; z-index:8; color:#fff; background:#345f83; border:2px solid #fff; border-radius:4px; padding:4px 8px; transform:translate(-50%,-50%); pointer-events:none; font-size:12px; }
+.calibration-marker[hidden], .tcm-app .calibration-panel[hidden] { display:none!important; }
+.tcm-app .calibration-panel { padding:20px; min-width:0; overflow:auto; overscroll-behavior:auto; }
+.calibration-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.calibration-heading h2 { font-size:20px; margin:0; }
+.calibration-panel p { line-height:1.7; overflow-wrap:anywhere; }
+.calibration-panel label { display:flex; flex-direction:column; gap:6px; margin:14px 0; }
+.calibration-panel input, .calibration-panel select, .calibration-panel textarea { width:100%; min-width:0; max-width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; background:#fff; font:inherit; }
+.calibration-panel textarea { min-height:90px; resize:vertical; }
+.calibration-panel small { display:block; margin-top:12px; line-height:1.7; }
+.calibration-nudge { display:grid; gap:8px; margin:12px 0; }
+.calibration-nudge > div { display:grid; grid-template-columns:16px minmax(0,1fr) minmax(0,1fr); gap:6px; align-items:center; }
+.calibration-nudge button { padding:6px; font-size:12px; }
+.calibration-open .model-stage { min-height:360px; }
+.calibration-open .model-workspace { overflow:auto; }

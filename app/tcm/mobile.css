@@ -105,3 +105,11 @@
   .tcm-app .anatomy-selection strong { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; overflow-wrap:normal; }
   .tcm-app .anatomy-selection > button { flex:0 0 auto; white-space:nowrap; padding:4px 8px; }
 }
+
+@media(max-width:680px) {
+  .tcm-app.calibration-open .calibration-panel { position:static; width:100%; max-width:100%; height:auto; max-height:none; min-height:0; margin:0; overflow:visible; border-top:1px solid var(--line); border-radius:0; padding:20px 16px; }
+  .tcm-app:not(.anatomy-focus) .model-stage { min-height:360px; }
+  .tcm-app .placement-controls { padding:8px 16px; max-width:100%; }
+  .tcm-app .calibration-panel button, .tcm-app .calibration-panel input, .tcm-app .calibration-panel select { min-height:44px; }
+  .tcm-app.calibration-open .model-workspace { min-height:0; height:auto; overflow:visible; }
+}

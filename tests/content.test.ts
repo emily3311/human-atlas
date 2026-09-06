@@ -5,6 +5,56 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ExamAbout } from '../app/tcm/exam-about.ts';
 import { CURATED_ACUPOINTS as ACUPOINTS, CASES, MERIDIANS } from '../app/tcm/data.ts';
+import * as calibration from '../app/tcm/calibration.ts';
+import * as T from 'three';
+
+test('surface picking returns model coordinates and a front-facing normal, without anatomy selection', async () => {
+  const pick = await import('../app/tcm/calibration-pick.ts');
+  assert.equal(typeof pick.dispatchSceneTap, 'function');
+  const mesh = new T.Mesh(new T.PlaneGeometry(2, 2), new T.MeshBasicMaterial({ side: T.DoubleSide }));
+  mesh.position.z = 1; mesh.updateMatrixWorld(true);
+  const ray = new T.Raycaster(new T.Vector3(0, 0, 3), new T.Vector3(0, 0, -1));
+  let anatomy = 0; let result;
+  pick.dispatchSceneTap({ enabled: true, pointId: 'ST36', side: 'left' }, mesh, ray, 'fixture-v2', hit => { result = hit; }, () => { anatomy++; });
+  assert.equal(anatomy, 0);
+  assert.deepEqual(result, { pointId: 'ST36', side: 'left', position: [0, 0, 0], normal: [0, 0, 1], surfaceDistance: 0, modelVersion: 'fixture-v2' });
+  pick.dispatchSceneTap({ enabled: true, pointId: 'ST36', side: 'left' }, undefined, ray, 'fixture-v2', () => assert.fail('missing surface'), () => { anatomy++; });
+  assert.equal(anatomy, 0);
+  pick.dispatchSceneTap(undefined, mesh, ray, 'fixture-v2', () => assert.fail('inactive pick'), () => { anatomy++; });
+  assert.equal(anatomy, 1);
+  mesh.geometry.dispose(); mesh.material.dispose();
+});
+
+test('calibration Escape exits picking before closing and failed storage preserves validated drafts', async () => {
+  const ui = await import('../app/tcm/calibration-ui.ts');
+  assert.equal(typeof ui.calibrationEscape, 'function');
+  assert.deepEqual(ui.calibrationEscape({ open: true, enabled: true }), { open: true, enabled: false });
+  assert.deepEqual(ui.calibrationEscape({ open: true, enabled: false }), { open: false, enabled: false });
+  const store: calibration.CalibrationDraftStore = { version: 1, drafts: [] };
+  const context = { knownPointIds: new Set(['ST36']), bilateralPointIds: new Set(['ST36']), atlasVersion: 'fixture' };
+  const result = ui.persistCalibrationDrafts(store, context, { setItem() { throw new Error('quota'); } });
+  assert.equal(result.store, store);
+  assert.match(result.warning, /当前会话/);
+});
+
+test('review export requires evidence and reviewer in the shared domain validator', () => {
+  const context = { knownPointIds: new Set(['ST36']), bilateralPointIds: new Set(['ST36']), atlasVersion: 'fixture' };
+  const draft = { id: 'ST36-left', pointId: 'ST36', side: 'left', status: 'pending-review', position: [0, 0, 0], normal: [0, 0, 1], evidence: '', reviewer: '', modelVersion: 'fixture', updatedAt: '2026-09-06T00:00:00.000Z' };
+  const store = calibration.parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [draft] }), context);
+  assert.throws(() => calibration.exportCalibrationDraftPackage(store, context, { requireReviewDetails: true }), /evidence/);
+  store.drafts[0].evidence = 'surface photograph';
+  assert.throws(() => calibration.exportCalibrationDraftPackage(store, context, { requireReviewDetails: true }), /reviewer/);
+  store.drafts[0].reviewer = 'Reviewer';
+  assert.equal(JSON.parse(calibration.exportCalibrationDraftPackage(store, context, { requireReviewDetails: true })).drafts[0].status, 'pending-review');
+});
+
+test('metadata edits do not consume coordinate undo history', () => {
+  const context = { knownPointIds: new Set(['ST36']), bilateralPointIds: new Set(['ST36']), atlasVersion: 'fixture' };
+  let store = calibration.parseCalibrationDrafts(JSON.stringify({ version: 1, drafts: [{ id: 'ST36-left', pointId: 'ST36', side: 'left', status: 'pending-review', position: [0, 0, 0], normal: [0, 0, 1], evidence: '', reviewer: '', modelVersion: 'fixture', updatedAt: '2026-09-06T00:00:00.000Z' }] }), context);
+  store = calibration.upsertCalibrationDraft(store, store.drafts[0], { position: [.001, 0, 0], normal: [0, 0, 1], surfaceDistance: .001 }, context);
+  for (let i = 0; i < 12; i++) store = calibration.upsertCalibrationDraft(store, { ...store.drafts[0], evidence: `Evidence ${i}` }, { position: [.001, 0, 0], normal: [0, 0, 1], surfaceDistance: .001 }, context);
+  assert.deepEqual(calibration.undoCalibrationDraft(store, 'ST36-left').drafts[0].position, [0, 0, 0]);
+});
 
 const REQUIRED = 'LU1 LU5 LU7 LU9 LI4 LI10 LI11 LI20 ST25 ST36 ST40 ST44 SP6 SP9 SP10 HT7 SI3 SI11 BL13 BL20 BL23 BL40 BL60 KI1 KI3 PC6 PC7 TE5 TE14 GB20 GB21 GB34 LR3 GV14 GV20 CV4 CV6 CV12 CV17'.split(' ');
 

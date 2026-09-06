@@ -65,3 +65,29 @@ export function visiblePlacementIds(ids: readonly string[], displayMode: Placeme
 export function hasPlacement(id: string, displayMode: PlacementDisplayMode): boolean {
   return visiblePlacementIds([id], displayMode).length === 1;
 }
+
+export function placementDisplayControl(ids: readonly string[], mode: PlacementDisplayMode = 'calibrated-only') {
+  const counts = placementCounts(ids);
+  return { mode, counts, label: `显示教学示意（${counts['pending-review']}）`, pointIds: visiblePlacementIds(ids, mode) };
+}
+
+export function markerPresentation(record: PlacementRecord, pointName: string) {
+  const pending = record.status === 'pending-review';
+  return {
+    className: pending ? 'acu-marker--pending' : 'acu-marker--calibrated',
+    label: `${pointName} · ${pending ? '待专业校准·教学示意' : record.status === 'calibrated' ? '已校准' : '未登记三维坐标'}`,
+  };
+}
+
+/** Input is the full ordered catalogue path, including its unregistered entries. */
+export function placementRouteSegments(ids: readonly string[], mode: PlacementDisplayMode, visibleIds: readonly string[] = ids): string[][] {
+  const visible = new Set(visiblePlacementIds(visibleIds, mode));
+  const segments: string[][] = [];
+  let current: string[] = [];
+  for (const id of ids) {
+    if (visible.has(id)) current.push(id);
+    else { if (current.length > 1) segments.push(current); current = []; }
+  }
+  if (current.length > 1) segments.push(current);
+  return segments;
+}

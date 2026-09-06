@@ -262,10 +262,10 @@ export function upsertCalibrationDraft(
   }
   const history = cloneHistory(histories.get(store));
   const existing = store.drafts.find((item) => item.id === draft.id);
-  if (existing) {
+  if (existing && existing.position.some((value, axis) => value !== hit.position[axis])) {
     const positions = history.get(draft.id) ?? [];
     history.set(draft.id, [...positions, cloneVec3(existing.position)].slice(-10));
-  } else {
+  } else if (!existing) {
     history.delete(draft.id);
   }
   const updated: CalibrationDraft = { ...draft, position: cloneVec3(hit.position), normal: cloneVec3(hit.normal) };
@@ -333,9 +333,16 @@ const snapshotDraftStoreForExport = (store: unknown): unknown => {
   }
 };
 
-export function exportCalibrationDraftPackage(store: CalibrationDraftStore, context: CalibrationContext): string {
+export function exportCalibrationDraftPackage(store: CalibrationDraftStore, context: CalibrationContext, options: { requireReviewDetails?: boolean } = {}): string {
   checkedContext(context);
   const verified = parseDraftStoreValue(snapshotDraftStoreForExport(store), context);
+  if (options.requireReviewDetails) {
+    if (!verified.drafts.length) throw new Error('请先拾取表面点并保存草稿');
+    for (const draft of verified.drafts) {
+      validateString(draft.evidence, 'evidence（定位依据）', MAX_EVIDENCE_LENGTH, { required: true });
+      validateString(draft.reviewer, 'reviewer（复核人）', MAX_REVIEWER_LENGTH, { required: true });
+    }
+  }
   return JSON.stringify({ version: verified.version, drafts: verified.drafts.map(cloneDraft) });
 }
 

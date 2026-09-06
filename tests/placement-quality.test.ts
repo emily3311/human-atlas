@@ -8,6 +8,30 @@ import {
   visiblePlacementIds,
 } from '../app/tcm/placement-quality.ts';
 import { questionAvailable } from '../app/tcm/catalogue.ts';
+import * as quality from '../app/tcm/placement-quality.ts';
+
+test('display controls require explicit opt-in before ST36 can enter scene IDs', () => {
+  assert.equal(typeof quality.placementDisplayControl, 'function');
+  const control = quality.placementDisplayControl(ACUPOINTS.map(p => p.id));
+  assert.equal(control.mode, 'calibrated-only');
+  assert.equal(control.label, '显示教学示意（39）');
+  assert.deepEqual(control.pointIds, []);
+  assert.equal(quality.placementDisplayControl(['ST36', 'ST37'], 'include-pending').pointIds.includes('ST36'), true);
+});
+
+test('pending marker presentation exposes quality to sighted and screen reader users', () => {
+  assert.equal(typeof quality.markerPresentation, 'function');
+  const view = quality.markerPresentation({ pointId: 'ST36', status: 'pending-review', source: 'fixture', modelVersion: 'fixture' }, '足三里 ST36');
+  assert.equal(view.className, 'acu-marker--pending');
+  assert.equal(view.label, '足三里 ST36 · 待专业校准·教学示意');
+});
+
+test('route segments stop at unregistered or hidden catalogue entries', () => {
+  assert.equal(typeof quality.placementRouteSegments, 'function');
+  assert.deepEqual(quality.placementRouteSegments(['ST25', 'ST26', 'ST36', 'ST37', 'ST40'], 'include-pending'), []);
+  assert.deepEqual(quality.placementRouteSegments(['LU1', 'LU5', 'LU7', 'LU9'], 'include-pending'), [['LU1', 'LU5', 'LU7', 'LU9']]);
+  assert.deepEqual(quality.placementRouteSegments(['LU1', 'LU5'], 'calibrated-only'), []);
+});
 
 test('all catalogue entries have exactly one honest placement state', () => {
   const records = ACUPOINTS.map((point) => placementRecord(point.id));
