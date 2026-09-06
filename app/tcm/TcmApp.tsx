@@ -57,7 +57,7 @@ import ExamPanel from "./ExamPanel";
 import { EmilyAboutSection, EmilyProjectLink } from "./EmilyLinks";
 import "./tcm.css";
 import "./mobile.css";
-import { workspacePolicy, type LearningMode } from "./mobile-layout";
+import { workspacePolicy, workspaceUiState, type LearningMode } from "./mobile-layout";
 
 type Mode = LearningMode;
 type Scope = "all" | "favorites" | "review" | "course";
@@ -116,13 +116,6 @@ export default function TcmApp() {
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, []);
-  useEffect(() => {
-    if (!modelFocus) return;
-    const x = window.scrollX, y = window.scrollY;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = overflow; window.scrollTo(x, y); };
-  }, [modelFocus]);
   const [atlas, setAtlas] = useState<Atlas | null>(null),
     [progress, setProgress] = useState(0),
     [error, setError] = useState("");
@@ -420,6 +413,15 @@ export default function TcmApp() {
     ],
   );
   const policy = workspacePolicy(mode, mobile, modelExpanded);
+  const ui = workspaceUiState(policy.showModel, mobile, modelFocus, controlsOpen);
+  useEffect(() => { if (!policy.showModel) setModelFocus(false); }, [policy.showModel]);
+  useEffect(() => {
+    if (!ui.focused) return;
+    const x = window.scrollX, y = window.scrollY;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = overflow; window.scrollTo(x, y); };
+  }, [ui.focused]);
   const reportProgress = useCallback((n: number) => setProgress(n), []);
   const partResults = useMemo(
     () =>
@@ -455,6 +457,48 @@ export default function TcmApp() {
       ),
     [],
   );
+  const cameraControls = (<div className="view-bar" role="group" aria-label="相机视角">
+              {(
+                [
+                  ["front", "正面"],
+                  ["back", "背面"],
+                  ["side", "侧面"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  className={view === id ? "active" : ""}
+                  onClick={() => {
+                    setView(id);
+                    setReset((v) => v + 1);
+                    setRotate(false);
+                    setIsolate(false);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+              <span />
+              <button
+                aria-label={rotate ? "暂停旋转" : "自动旋转"}
+                onClick={() => setRotate((v) => !v)}
+              >
+                {rotate ? <Pause size={16} /> : <RotateCw size={16} />}
+              </button>
+              <button
+                aria-label="复位模型"
+                onClick={() => {
+                  setReset((v) => v + 1);
+                  setChosenPart(null);
+                  setIsolate(false);
+                  setRotate(false);
+                  setExplosionAmount(0);
+                }}
+              >
+                <RotateCcw size={16} />
+              </button>
+            </div>);
+  const focusControl = (<button className="outline-button model-focus-button" aria-pressed={ui.focused} onClick={()=>{setModelFocus(v=>!v);setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>{ui.focused?"退出专注":"专注模型"}</button>);
   const modelPanel = (
         <main key="model" id="model-workspace" tabIndex={-1} className="model-workspace" hidden={!policy.showModel}>
           {policy.taskFirst && <button className="outline-button model-expand-button" onClick={()=>{setModelExpanded(false);setModelFocus(false);taskRef.current?.focus();}}>收起模型，返回学习</button>}
@@ -485,12 +529,13 @@ export default function TcmApp() {
               <Info size={18} />
             </button>
           </div>
-          <button className="outline-button model-focus-button" aria-pressed={modelFocus} onClick={()=>{setModelFocus(v=>!v);setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>{modelFocus?"退出模型专注":"专注模型"}</button>
+          {mode!=="anatomy" && focusControl}
           {mode==="explore" && mobile && <button className="outline-button" onClick={()=>{taskRef.current?.scrollIntoView({block:"start"});taskRef.current?.focus({preventScroll:true});}}>查看「{point.name}」详情 ↓</button>}
           <div className="model-controls">
             {mode==='anatomy'?<div className="anatomy-explode-controls">
-              <button className="outline-button" aria-expanded={sidebarOpen} onClick={()=>{setSidebarOpen(v=>!v);if(mobile)setAnatomyDetailsOpen(false);}}><Layers size={16}/>{sidebarOpen?'收起目录':'结构目录'}</button>
-              <button className="outline-button" aria-expanded={anatomyDetailsOpen} onClick={()=>{setAnatomyDetailsOpen(v=>!v);if(mobile)setSidebarOpen(false);}}><BookOpen size={16}/>{anatomyDetailsOpen?'收起详情':'结构详情'}</button>
+              {focusControl}
+              <button className="outline-button" aria-expanded={sidebarOpen} onClick={()=>{setModelFocus(false);setSidebarOpen(v=>!v);if(mobile)setAnatomyDetailsOpen(false);}}><Layers size={16}/>{sidebarOpen?'收起目录':'结构目录'}</button>
+              <button className="outline-button" aria-expanded={anatomyDetailsOpen} onClick={()=>{setModelFocus(false);setAnatomyDetailsOpen(v=>!v);if(mobile)setSidebarOpen(false);}}><BookOpen size={16}/>{anatomyDetailsOpen?'收起详情':'结构详情'}</button>
               {(sidebarOpen||anatomyDetailsOpen)&&<button className="text-button" onClick={()=>{setSidebarOpen(false);setAnatomyDetailsOpen(false);}}>隐藏全部面板</button>}
             </div>:
             <div className="layer-switch" role="group" aria-label="人体图层">
@@ -510,7 +555,7 @@ export default function TcmApp() {
             </div>}
             {mode!=='anatomy'&&<button
               className="mobile-catalogue outline-button"
-              onClick={() => setSidebarOpen(true)}
+              onClick={() => {setModelFocus(false);setSidebarOpen(true);}}
             >
               <Menu size={15} />
               目录
@@ -595,55 +640,17 @@ export default function TcmApp() {
                 </button>
               </div>
             )}
-            <div className="view-bar" role="group" aria-label="相机视角">
-              {(
-                [
-                  ["front", "正面"],
-                  ["back", "背面"],
-                  ["side", "侧面"],
-                ] as const
-              ).map(([id, label]) => (
-                <button
-                  key={id}
-                  className={view === id ? "active" : ""}
-                  onClick={() => {
-                    setView(id);
-                    setReset((v) => v + 1);
-                    setRotate(false);
-                    setIsolate(false);
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-              <span />
-              <button
-                aria-label={rotate ? "暂停旋转" : "自动旋转"}
-                onClick={() => setRotate((v) => !v)}
-              >
-                {rotate ? <Pause size={16} /> : <RotateCw size={16} />}
-              </button>
-              <button
-                aria-label="复位模型"
-                onClick={() => {
-                  setReset((v) => v + 1);
-                  setChosenPart(null);
-                  setIsolate(false);
-                  setRotate(false);
-                  setExplosionAmount(0);
-                }}
-              >
-                <RotateCcw size={16} />
-              </button>
-            </div>
+            {!mobile && cameraControls}
           </div>
+          {mobile && cameraControls}
           <div className="model-bottom">
-            {mode==="anatomy" && <button className="outline-button controls-toggle" aria-expanded={controlsOpen} onClick={()=>setControlsOpen(v=>!v)}>{controlsOpen?"收起散开控制":"展开散开控制"}</button>}
-            {mode==='anatomy'?<div className="anatomy-slider-dock" hidden={!controlsOpen}>
-              <div className="explode-label"><label id="tcm-explode-label">结构散开</label><output>{Math.round(explosionAmount*100)}%</output></div>
+            {mode==='anatomy'?<div className="anatomy-slider-dock">
+              <div className="explode-label"><label id="tcm-explode-label">结构散开</label><output>{Math.round(explosionAmount*100)}%</output><button className="text-button controls-toggle" aria-expanded={ui.controlsVisible} onClick={()=>setControlsOpen(v=>!v)}>{controlsOpen?"收起":"展开"}</button></div>
+              <div hidden={!ui.controlsVisible}>
               <Slider aria-labelledby="tcm-explode-label" min={0} max={100} step={1} value={[explosionAmount*100]} onValueChange={value=>{setExplosionAmount((Array.isArray(value)?value[0]:value)/100);setIsolate(false);setRotate(false);}}/>
               <div className="slider-endpoints"><span>完整人体</span><span>逐个结构</span></div>
               <button className="text-button" onClick={()=>{setExplosionAmount(0);setIsolate(false);setRotate(false);setReset(v=>v+1);}}>复原模型</button>
+              </div>
             </div>:<>
             <div className="display-toggles">
               <button
@@ -1018,7 +1025,7 @@ export default function TcmApp() {
         </aside>
   );
   return (
-    <div className={`tcm-app ${modelFocus?'model-focus':''} ${policy.taskFirst?'task-first':''} ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
+    <div className={`tcm-app ${ui.focused?'model-focus':''} ${policy.taskFirst?'task-first':''} ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
       <header className="app-header">
         <a className="brand" href="/">
           <span className="brand-seal">经</span>

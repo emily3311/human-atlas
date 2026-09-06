@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { workspacePolicy } from '../app/tcm/mobile-layout.ts';
+import { workspacePolicy, workspaceUiState } from '../app/tcm/mobile-layout.ts';
 
 test('task modes mount the phone model only when requested, and exam never mounts it', () => {
   assert.deepEqual(workspacePolicy('cards', true, false), {taskFirst:true, showModel:false});
@@ -13,4 +13,13 @@ test('task modes mount the phone model only when requested, and exam never mount
   assert.deepEqual(workspacePolicy('cards', false, false), {taskFirst:false, showModel:true});
   assert.deepEqual(workspacePolicy('exam', false, true), {taskFirst:false, showModel:false});
   assert.deepEqual(workspacePolicy('exam', true, true), {taskFirst:false, showModel:false});
+});
+
+test('resizing focused task modes to a hidden phone model exits focus', () => {
+  assert.deepEqual(workspaceUiState(false, true, true, false), { focused:false, controlsVisible:false });
+  assert.deepEqual(workspaceUiState(true, true, true, true), { focused:true, controlsVisible:true });
+});
+
+test('a collapsed phone slider is always available on desktop', () => {
+  assert.deepEqual(workspaceUiState(true, false, false, false), { focused:false, controlsVisible:true });
 });
