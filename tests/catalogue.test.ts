@@ -28,13 +28,13 @@ test('official named scope maps without confusing name entries, groups, and stan
   for(const name of new Set([...PRACTICAL_NAMES,...WRITTEN_NAMES])) assert.equal(ACUPOINTS.filter(p=>p.name===name).length,1,name);
   const group=ACUPOINTS.find(p=>p.name==='夹脊')!;
   assert.match(group.groupNote??'',/34/);
-  assert.equal(questionAvailable(group,'identify'),false);
+  assert.equal(questionAvailable(group,'identify','include-pending'),false);
   const pending=ACUPOINTS.find(p=>p.name==='三角灸')!;
-  assert.equal(questionAvailable(pending,'location'),false);
+  assert.equal(questionAvailable(pending,'location','include-pending'),false);
   assert.equal(pending.displayCode,'定位待核验');
   const unassigned=ACUPOINTS.find(p=>p.name==='安眠')!;
   assert.equal(unassigned.displayCode,'未赋标准码');
-  assert.equal(questionAvailable(ACUPOINTS.find(p=>p.id==='LU9')!,'tags'),false);
+  assert.equal(questionAvailable(ACUPOINTS.find(p=>p.id==='LU9')!,'tags','include-pending'),false);
 });
 
 test('merged library preserves annotated content but adds factual records without invented 3D or answers',()=>{
@@ -45,11 +45,11 @@ test('merged library preserves annotated content but adds factual records withou
     assert.deepEqual(point.classificationEvidence,existing.classificationEvidence);
   }
   const missing=ACUPOINTS.find(p=>p.id==='LU6')!;
-  assert.equal(hasPlacement('LU6'),false);
-  assert.equal(questionAvailable(missing,'location'),true);
-  assert.equal(questionAvailable(missing,'identify'),false);
-  assert.equal(questionAvailable(missing,'tags'),false);
-  assert.equal(questionAvailable(ACUPOINTS.find(p=>p.id==='ST36')!,'identify'),true);
+  assert.equal(hasPlacement('LU6','include-pending'),false);
+  assert.equal(questionAvailable(missing,'location','include-pending'),true);
+  assert.equal(questionAvailable(missing,'identify','include-pending'),false);
+  assert.equal(questionAvailable(missing,'tags','include-pending'),false);
+  assert.equal(questionAvailable(ACUPOINTS.find(p=>p.id==='ST36')!,'identify','include-pending'),true);
 });
 
 test('each location is a clean point-specific fact with a traceable source section and page', () => {

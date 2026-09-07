@@ -38,6 +38,17 @@ test('strict core lookup leaves unknown and malformed inputs unchanged',()=>{
   assert.equal(anatomyZh('Imaginary branch of left platysma'),'Imaginary branch of left platysma');
   assert.equal(anatomyZh('Left  platysma'),'Left  platysma');
 });
+test('Fudan batch keeps literal vessel evidence while unknown names remain unresolved',()=>{
+  assert.equal(anatomyZh('Accessory hemiazygos vein'), '副半奇静脉');
+  assert.equal(anatomyZh('invented posterior branch'), 'invented posterior branch');
+  assert.equal(anatomyNameEvidence('Accessory hemiazygos vein')?.sourceTerm.includes('05.1144'), true);
+});
+test('Fudan generated labels preserve the corrected source pages across systems',()=>{
+  assert.equal(anatomyZh('Left costocervical trunk'), '左肋颈干');
+  assert.equal(anatomyNameEvidence('Right lateral ventricle')?.source, 'https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf#page=446');
+  assert.equal(anatomyZh('Left serratus anterior'), '左前锯肌');
+  assert.equal(anatomyNameEvidence('Right serratus anterior')?.sourceTerm, '大陆术语 02.1566: 前锯肌 / serratus anterior');
+});
 test('source-backed expansion covers unambiguous muscle, bone, sensory, and nervous cores',()=>{
   assert.equal(anatomyZh('Left abductor pollicis longus'),'\u5de6\u62c7\u957f\u5c55\u808c');
   assert.equal(anatomyZh('Left maxilla'),'\u5de6\u4e0a\u988c\u9aa8');

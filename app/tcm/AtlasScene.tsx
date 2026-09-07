@@ -7,13 +7,14 @@ import { decodeModelResponse, loadModelChunks } from "../model-download";
 import { SYSTEMS, type Atlas, type Part, type SystemId } from "../anatomy";
 import { PointerTap } from "../pointer-tap";
 import { createExplosionLayout } from "../explosion-layout";
-import { PLACEMENTS } from "./placements";
+import { markerPresentation, placementRecord, placementRouteSegments, visiblePlacementIds } from './placement-quality';
+import { dispatchSceneTap, type CalibrationPick, type CalibrationSelection } from './calibration-pick';
 import { MERIDIANS } from "./data";
 import { createGuide } from "./guide";
 import { anatomyLabel } from "./anatomy-zh";
 import { teachingSystems } from "./teaching-display";
 import { explosionOffset, explosionCameraPose, overlaysAllowed, sceneDecorVisibility, shouldUpdateExplosionTransforms, translatedBounds, type Vec3Tuple } from "./anatomy-explosion";
-import type { Acupoint } from "./types";
+import type { Acupoint, PlacementDisplayMode } from "./types";
 import { renderableViewport } from "./scene-viewport";
 
 export type Layer = "surface" | "transparent" | "muscle" | "skeleton" | "neuro";
@@ -21,6 +22,7 @@ export interface SceneOptions {
   layer: Layer;
   activeId: string;
   pointIds: string[];
+  placementDisplayMode?: PlacementDisplayMode;
   labels: boolean;
   routes: boolean;
   guide: boolean;
@@ -44,7 +46,10 @@ interface Props {
   onPart: (part: Part) => void;
   onProgress: (n: number) => void;
   onError: (s: string) => void;
+  calibration?: CalibrationSelection;
+  onCalibrationPick?: (pick: CalibrationPick) => void;
 }
+export type { CalibrationPick } from './calibration-pick';
 type Marker = {
   id: string;
   side: number;
@@ -73,6 +78,7 @@ export default function AtlasScene(props: Props) {
       dirty = true,
       ready = false,
       lastOptions: SceneOptions | undefined;
+    let lastCalibration: CalibrationSelection | undefined;
     let amount = 0,
       layoutKey = "",
       packingWidth = 1,
@@ -205,14 +211,22 @@ export default function AtlasScene(props: Props) {
     anatomyHover.hidden = true;
     el.appendChild(anatomyHover);
     const proportionGuide=createGuide(el);
+    const calibrationMarker = document.createElement('div');
+    calibrationMarker.className = 'calibration-marker';
+    calibrationMarker.textContent = '＋ 校准草稿';
+    calibrationMarker.setAttribute('role', 'status');
+    calibrationMarker.hidden = true;
+    el.appendChild(calibrationMarker);
     const markers: Marker[] = [];
     for (const point of props.points) {
-      const placement = PLACEMENTS[point.id];
+      const record = placementRecord(point.id);
+      const placement = record.placement;
       if (!placement) continue;
       for (const side of point.bilateral ? [1, -1] : [1]) {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "acu-marker";
+        button.className = `acu-marker ${markerPresentation(record, point.name).className}`;
+        button.hidden = true;
         button.dataset.point = point.id;
         button.dataset.side = side === 1 ? "left" : "right";
         button.style.setProperty(
@@ -226,7 +240,7 @@ export default function AtlasScene(props: Props) {
         button.appendChild(label);
         button.addEventListener("click", (e) => {
           e.stopPropagation();
-          latest.current.onPoint(point.id);
+          if (!latest.current.calibration?.enabled) latest.current.onPoint(point.id);
         });
         overlay.appendChild(button);
         markers.push({
@@ -268,11 +282,16 @@ export default function AtlasScene(props: Props) {
           );
         if (hits[0]) marker.position.copy(hits[0].point).addScaledVector(marker.normal, 0.003);
       }
+    };
+    const rebuildRoutes = () => {
+      lineGroup.clear();
+      lineResources.splice(0).forEach(r => { r.geometry.dispose(); r.material.dispose(); });
+      const o = latest.current.options;
       for (const meridian of MERIDIANS)
         for (const side of [1, -1]) {
-          const path = markers
-            .filter((m) => m.point.meridian === meridian.id && m.side === side)
-            .sort((a, b) => Number(a.id.replace(/\D/g, "")) - Number(b.id.replace(/\D/g, "")));
+          const orderedIds = props.points.filter(p => p.meridian === meridian.id).sort((a,b) => Number(a.id.replace(/\D/g, '')) - Number(b.id.replace(/\D/g, ''))).map(p => p.id);
+          for (const segment of placementRouteSegments(orderedIds, o.placementDisplayMode ?? 'calibrated-only', o.pointIds)) {
+          const path = segment.map(id => markers.find(m => m.id === id && m.side === side)).filter((m): m is Marker => !!m);
           if (path.length < 2) continue;
           const geometry = new T.BufferGeometry().setFromPoints(path.map((m) => m.position));
           const material = new T.LineDashedMaterial({
@@ -288,6 +307,7 @@ export default function AtlasScene(props: Props) {
           line.userData.ids = path.map((m) => m.id);
           lineGroup.add(line);
           lineResources.push({ geometry, material });
+          }
         }
     };
     const fit = () => {
@@ -449,7 +469,6 @@ export default function AtlasScene(props: Props) {
       if (!tap.up(e.pointerId, e.clientX, e.clientY) || !ready) return;
       const rect = renderer.domElement.getBoundingClientRect(),
         o = latest.current.options;
-      if (o.quiz) return;
       ray.setFromCamera(
         new T.Vector2(
           ((e.clientX - rect.left) / rect.width) * 2 - 1,
@@ -457,6 +476,8 @@ export default function AtlasScene(props: Props) {
         ),
         camera,
       );
+      dispatchSceneTap(latest.current.calibration, surfaceProjection, ray, props.atlas.version, pick => latest.current.onCalibrationPick?.(pick), () => {
+      if (o.quiz) return;
       const systems = new Set(teachingSystems(o.visibleSystems ?? layers[o.layer]));
       const hasSolid = props.atlas.parts.some((part, index) => part.system !== "integumentary" && partData[index * 4 + 3] > 0.5);
       const meshes = [...pickers.values()].filter((mesh) => {
@@ -473,6 +494,7 @@ export default function AtlasScene(props: Props) {
         anatomyHover.hidden = true;
         latest.current.onPart(part);
       }
+      });
     };
     renderer.domElement.addEventListener("pointerdown", down);
     renderer.domElement.addEventListener("pointermove", move);
@@ -487,6 +509,12 @@ export default function AtlasScene(props: Props) {
       frame = requestAnimationFrame(render);
       if (!renderableViewport(el.clientWidth, el.clientHeight)) return;
       const o = latest.current.options;
+      const calibration = latest.current.calibration;
+      if (calibration !== lastCalibration) {
+        dirty = true;
+        lastCalibration = calibration;
+        renderer.domElement.style.cursor = calibration?.enabled ? 'crosshair' : 'grab';
+      }
       const targetAmount = Math.max(0, Math.min(1, o.explode ?? 0));
       const previousAmount = amount;
       amount = reducedMotion.matches ? targetAmount : T.MathUtils.damp(amount, targetAmount, 8, Math.min(clock.getDelta(), 0.05));
@@ -531,6 +559,7 @@ export default function AtlasScene(props: Props) {
         dirty = true;
       }
       if (o !== lastOptions) {
+        if (!lastOptions || o.pointIds !== lastOptions.pointIds || o.placementDisplayMode !== lastOptions.placementDisplayMode) rebuildRoutes();
         if (
           !lastOptions ||
           o.layer !== lastOptions.layer ||
@@ -575,13 +604,10 @@ export default function AtlasScene(props: Props) {
           );
           marker.button.classList.toggle("guide-point", active && o.guide);
           const caption = o.hiddenNames ? "待辨认穴位" : `${marker.point.name} ${marker.id}`;
-          marker.button.setAttribute(
-            "aria-label",
-            o.hiddenNames
-              ? "选择模型穴位"
-              : `${marker.point.name} ${marker.id}${marker.point.bilateral ? (marker.side === 1 ? " 左侧" : " 右侧") : ""}`,
-          );
-          marker.button.querySelector("span")!.textContent = caption;
+          const presentation = markerPresentation(placementRecord(marker.id), `${caption}${marker.point.bilateral ? (marker.side === 1 ? ' 左侧' : ' 右侧') : ''}`);
+          marker.button.setAttribute('aria-label', presentation.label);
+          marker.button.title = presentation.label;
+          marker.button.querySelector('span')!.textContent = presentation.label;
         }
         lastOptions = o;
         dirty = true;
@@ -589,7 +615,7 @@ export default function AtlasScene(props: Props) {
       controls.enableRotate = amount < 0.8;
       controls.mouseButtons.LEFT = amount < 0.8 ? T.MOUSE.ROTATE : T.MOUSE.PAN;
       controls.touches.ONE = amount < 0.8 ? T.TOUCH.ROTATE : T.TOUCH.PAN;
-      controls.autoRotate = o.rotate && !o.isolate && amount < 0.4;
+      controls.autoRotate = o.rotate && !o.isolate && amount < 0.4 && !latest.current.calibration?.enabled;
       const decor = sceneDecorVisibility(amount, o.isolate);
       lineGroup.visible = decor.overlays;
       for (const line of lineGroup.children)
@@ -607,6 +633,17 @@ export default function AtlasScene(props: Props) {
         proportionGuide.update(props.points.find(p=>p.id===o.activeId),camera,o.guide&&!o.quiz&&!o.isolate&&overlaysAllowed(amount),el.clientWidth,el.clientHeight);
         const now = performance.now();
         if (now - lastProjection > 30) {
+          const visibleIds = new Set(visiblePlacementIds(o.pointIds, o.placementDisplayMode ?? 'calibrated-only'));
+          const preview = latest.current.calibration?.preview;
+          calibrationMarker.hidden = !preview;
+          if (preview) {
+            projected.fromArray(preview.position);
+            if (surfaceProjection) surfaceProjection.localToWorld(projected);
+            projected.project(camera);
+            calibrationMarker.hidden = projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1 || Math.abs(projected.y) > 1;
+            calibrationMarker.style.left = `${(projected.x + 1) * el.clientWidth / 2}px`;
+            calibrationMarker.style.top = `${(1 - projected.y) * el.clientHeight / 2}px`;
+          }
           for (const marker of markers) {
             projected.copy(marker.position).project(camera);
             toCamera.copy(camera.position).sub(marker.position).normalize();
@@ -614,7 +651,8 @@ export default function AtlasScene(props: Props) {
               ready &&
               !o.isolate &&
               overlaysAllowed(amount) &&
-              o.pointIds.includes(marker.id) &&
+              !latest.current.calibration?.enabled &&
+              visibleIds.has(marker.id) &&
               projected.z > -1 &&
               projected.z < 1 &&
               Math.abs(projected.x) < 1 &&
@@ -682,6 +720,7 @@ export default function AtlasScene(props: Props) {
       renderer.dispose();
       overlay.remove();
       anatomyHover.remove();
+      calibrationMarker.remove();
       proportionGuide.dispose();
       renderer.domElement.remove();
     };

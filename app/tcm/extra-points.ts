@@ -25,7 +25,7 @@ const seeds:ExtraSeed[]=[
 ];
 export const EXTRA_POINTS:Acupoint[]=seeds.map(([id,name,pinyin,region,location,section,page,groupNote])=>({
  id,name,pinyin,meridian:'EX',region,location,groupNote,bilateral:!['EX-HN1','EX-HN12','EX-HN13','EX-B8'].includes(id),
- catalogueKind:'extra',annotationsReady:false,landmarks:[],traditional:'',anatomy:[],
+ catalogueKind:'extra',annotationsReady:false,landmarks:[],traditional:'',anatomy:[],traditionalEvidence:[],
  caution:'多点穴组、口内穴及个体体表标志不能用一个随意的三维坐标代替。此条目不提供针刺或施灸操作方案。',
  tags:['经外奇穴',region],classificationEvidence:[],pendingClassificationTags:[],
  ...(id.startsWith('LOCAL-')?{displayCode:'未赋标准码',codeNote:'所引标准文本没有为本穴赋英文代码；内部条目ID不是国标编码。'}:{}),
@@ -35,7 +35,7 @@ EXTRA_POINTS.push({
  id:'LOCAL-SANJIAOJIU',name:'三角灸',pinyin:'Sānjiǎojiǔ',meridian:'EX',region:'胸腹',location:'',bilateral:false,
  catalogueKind:'extra',annotationsReady:false,displayCode:'定位待核验',groupNote:'考纲明列条目 · 未开放定位练习',
  codeNote:'当前仅核实考试大纲收录。未核实标准代码与定位依据，不编造国标编码或模型坐标。',
- landmarks:[],traditional:'',anatomy:[],caution:'请依据考试指定教材并在教师指导下核对本条目，不以资料占位条目作为操作依据。',
+ landmarks:[],traditional:'',anatomy:[],traditionalEvidence:[],caution:'请依据考试指定教材并在教师指导下核对本条目，不以资料占位条目作为操作依据。',
  tags:['经外奇穴','胸腹'],classificationEvidence:[],pendingClassificationTags:[],
  sources:[{title:'中医执业医师2025版医学综合考试大纲',url:'https://www.tcmtest.org.cn/ueditor/jsp/upload/file/20250122/1737513338350050128.pdf#page=64',section:'印刷第56页奇穴名单；仅支持考纲收录，不支持定位或操作答案。'}],
 });

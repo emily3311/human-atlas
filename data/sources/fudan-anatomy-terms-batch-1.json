@@ -1,0 +1,856 @@
+[
+  {
+    "core": "accessory hemiazygos vein",
+    "zh": "副半奇静脉",
+    "sourceEntry": "05.1144",
+    "pdfPage": 405,
+    "sourceEnglish": "accessory hemiazygos vein"
+  },
+  {
+    "core": "anconeus",
+    "zh": "肘肌",
+    "sourceEntry": "02.1646",
+    "pdfPage": 407,
+    "sourceEnglish": "anconeus"
+  },
+  {
+    "core": "anterior cardiac vein",
+    "zh": "心前静脉",
+    "sourceEntry": "05.0855",
+    "pdfPage": 408,
+    "sourceEnglish": "anterior cardiac vein"
+  },
+  {
+    "core": "anterior cecal artery",
+    "zh": "盲肠前动脉",
+    "sourceEntry": "05.0632",
+    "pdfPage": 408,
+    "sourceEnglish": "anterior cecal artery"
+  },
+  {
+    "core": "anterior cerebral artery",
+    "zh": "大脑前动脉",
+    "sourceEntry": "05.0376",
+    "pdfPage": 408,
+    "sourceEnglish": "anterior cerebral artery"
+  },
+  {
+    "core": "anterior choroidal artery",
+    "zh": "脉络丛前动脉",
+    "sourceEntry": "05.0362",
+    "pdfPage": 408,
+    "sourceEnglish": "anterior choroidal artery"
+  },
+  {
+    "core": "anterior commissure",
+    "zh": "前连合",
+    "sourceEntry": "06.0756",
+    "pdfPage": 408,
+    "sourceEnglish": "anterior commissure"
+  },
+  {
+    "core": "anterior tibial recurrent artery",
+    "zh": "胫前返动脉",
+    "sourceEntry": "05.0770",
+    "pdfPage": 410,
+    "sourceEnglish": "anterior tibial recurrent artery"
+  },
+  {
+    "core": "anterior segmental artery",
+    "zh": "前段动脉",
+    "sourceEntry": "05.0593",
+    "pdfPage": 410,
+    "sourceEnglish": "anterior segmental artery"
+  },
+  {
+    "core": "anterior spinal artery",
+    "zh": "脊髓前动脉",
+    "sourceEntry": "05.0419",
+    "pdfPage": 410,
+    "sourceEnglish": "anterior spinal artery"
+  },
+  {
+    "core": "anterior temporal artery",
+    "zh": "颞叶前动脉",
+    "sourceEntry": "05.0400",
+    "pdfPage": 410,
+    "sourceEnglish": "anterior temporal artery"
+  },
+  {
+    "core": "artery of central sulcus",
+    "zh": "中央沟动脉",
+    "sourceEntry": "05.0404",
+    "pdfPage": 412,
+    "sourceEnglish": "artery of central sulcus"
+  },
+  {
+    "core": "arytenoid cartilage",
+    "zh": "杓状软骨",
+    "sourceEntry": "03.0486",
+    "pdfPage": 412,
+    "sourceEnglish": "arytenoid cartilage"
+  },
+  {
+    "core": "ascending lumbar vein",
+    "zh": "腰升静脉",
+    "sourceEntry": "05.1146",
+    "pdfPage": 413,
+    "sourceEnglish": "ascending lumbar vein"
+  },
+  {
+    "core": "axis",
+    "zh": "枢椎",
+    "sourceEntry": "02.0472",
+    "pdfPage": 413,
+    "sourceEnglish": "axis"
+  },
+  {
+    "core": "azygos vein",
+    "zh": "奇静脉",
+    "sourceEntry": "05.1140",
+    "pdfPage": 413,
+    "sourceEnglish": "azygos vein"
+  },
+  {
+    "core": "basilar artery",
+    "zh": "基底动脉",
+    "sourceEntry": "05.0426",
+    "pdfPage": 414,
+    "sourceEnglish": "basilar artery"
+  },
+  {
+    "core": "basilic vein",
+    "zh": "贵要静脉",
+    "sourceEntry": "05.1119",
+    "pdfPage": 414,
+    "sourceEnglish": "basilic vein"
+  },
+  {
+    "core": "callosomarginal artery",
+    "zh": "胼胝体缘动脉",
+    "sourceEntry": "05.0384",
+    "pdfPage": 416,
+    "sourceEnglish": "callosomarginal artery"
+  },
+  {
+    "core": "caudal pancreatic artery",
+    "zh": "胰尾动脉",
+    "sourceEntry": "05.0618",
+    "pdfPage": 417,
+    "sourceEnglish": "caudal pancreatic artery"
+  },
+  {
+    "core": "celiac trunk",
+    "zh": "腹腔干",
+    "sourceEntry": "05.0584",
+    "pdfPage": 418,
+    "sourceEnglish": "celiac trunk"
+  },
+  {
+    "core": "circumflex scapular artery",
+    "zh": "旋肩胛动脉",
+    "sourceEntry": "05.0509",
+    "pdfPage": 419,
+    "sourceEnglish": "circumflex scapular artery"
+  },
+  {
+    "core": "circumflex scapular vein",
+    "zh": "旋肩胛静脉",
+    "sourceEntry": "05.1108",
+    "pdfPage": 419,
+    "sourceEnglish": "circumflex scapular vein"
+  },
+  {
+    "core": "costocervical trunk",
+    "zh": "肋颈干",
+    "sourceEntry": "05.0489",
+    "pdfPage": 422,
+    "sourceEnglish": "costocervical trunk"
+  },
+  {
+    "core": "cricoid cartilage",
+    "zh": "环状软骨",
+    "sourceEntry": "03.0476",
+    "pdfPage": 422,
+    "sourceEnglish": "cricoid cartilage"
+  },
+  {
+    "core": "cuboid bone",
+    "zh": "骰骨",
+    "sourceEntry": "02.0859",
+    "pdfPage": 423,
+    "sourceEnglish": "cuboid bone"
+  },
+  {
+    "core": "digastric",
+    "zh": "二腹肌",
+    "sourceEntry": "02.1482",
+    "pdfPage": 425,
+    "sourceEnglish": "digastric"
+  },
+  {
+    "core": "dorsal metacarpal vein",
+    "zh": "掌背静脉",
+    "sourceEntry": "05.1128",
+    "pdfPage": 426,
+    "sourceEnglish": "dorsal metacarpal vein"
+  },
+  {
+    "core": "dorsal pancreatic artery",
+    "zh": "胰背动脉",
+    "sourceEntry": "05.0614",
+    "pdfPage": 426,
+    "sourceEnglish": "dorsal pancreatic artery"
+  },
+  {
+    "core": "dorsal scapular artery",
+    "zh": "肩胛背动脉",
+    "sourceEntry": "05.0488",
+    "pdfPage": 426,
+    "sourceEnglish": "dorsal scapular artery"
+  },
+  {
+    "core": "external iliac artery",
+    "zh": "髂外动脉",
+    "sourceEntry": "05.0722",
+    "pdfPage": 428,
+    "sourceEnglish": "external iliac artery"
+  },
+  {
+    "core": "external iliac vein",
+    "zh": "髂外静脉",
+    "sourceEntry": "05.1264",
+    "pdfPage": 428,
+    "sourceEnglish": "external iliac vein"
+  },
+  {
+    "core": "extensor digitorum",
+    "zh": "指伸肌",
+    "sourceEntry": "02.1665",
+    "pdfPage": 428,
+    "sourceEnglish": "extensor digitorum"
+  },
+  {
+    "core": "extensor indicis",
+    "zh": "示指伸肌",
+    "sourceEntry": "02.1675",
+    "pdfPage": 428,
+    "sourceEnglish": "extensor indicis"
+  },
+  {
+    "core": "fibular vein",
+    "zh": "腓静脉",
+    "sourceEntry": "05.1305",
+    "pdfPage": 430,
+    "sourceEnglish": "fibular vein"
+  },
+  {
+    "core": "fourth ventricle",
+    "zh": "第四脑室",
+    "sourceEntry": "06.0304",
+    "pdfPage": 430,
+    "sourceEnglish": "fourth ventricle"
+  },
+  {
+    "core": "great cardiac vein",
+    "zh": "心大静脉",
+    "sourceEntry": "05.0853",
+    "pdfPage": 433,
+    "sourceEnglish": "great cardiac vein"
+  },
+  {
+    "core": "great pancreatic artery",
+    "zh": "胰大动脉",
+    "sourceEntry": "05.0617",
+    "pdfPage": 433,
+    "sourceEnglish": "great pancreatic artery"
+  },
+  {
+    "core": "hemiazygos vein",
+    "zh": "半奇静脉",
+    "sourceEntry": "05.1143",
+    "pdfPage": 433,
+    "sourceEnglish": "hemiazygos vein"
+  },
+  {
+    "core": "hepatic portal vein",
+    "zh": "肝门静脉",
+    "sourceEntry": "05.1186",
+    "pdfPage": 434,
+    "sourceEnglish": "hepatic portal vein"
+  },
+  {
+    "core": "hepatic vein",
+    "zh": "肝静脉",
+    "sourceEntry": "05.1167",
+    "pdfPage": 434,
+    "sourceEnglish": "hepatic vein"
+  },
+  {
+    "core": "ileocolic artery",
+    "zh": "回结肠动脉",
+    "sourceEntry": "05.0631",
+    "pdfPage": 435,
+    "sourceEnglish": "ileocolic artery"
+  },
+  {
+    "core": "inferior epigastric artery",
+    "zh": "腹壁下动脉",
+    "sourceEntry": "05.0723",
+    "pdfPage": 436,
+    "sourceEnglish": "inferior epigastric artery"
+  },
+  {
+    "core": "inferior epigastric vein",
+    "zh": "腹壁下静脉",
+    "sourceEntry": "05.1265",
+    "pdfPage": 436,
+    "sourceEnglish": "inferior epigastric vein"
+  },
+  {
+    "core": "inferior gluteal vein",
+    "zh": "臀下静脉",
+    "sourceEntry": "05.1240",
+    "pdfPage": 436,
+    "sourceEnglish": "inferior gluteal vein"
+  },
+  {
+    "core": "inferior colliculus",
+    "zh": "下丘",
+    "sourceEntry": "06.0337",
+    "pdfPage": 436,
+    "sourceEnglish": "inferior colliculus"
+  },
+  {
+    "core": "inferior pancreatic artery",
+    "zh": "胰下动脉",
+    "sourceEntry": "05.0615",
+    "pdfPage": 437,
+    "sourceEnglish": "inferior pancreatic artery"
+  },
+  {
+    "core": "inferior phrenic artery",
+    "zh": "膈下动脉",
+    "sourceEntry": "05.0575",
+    "pdfPage": 437,
+    "sourceEnglish": "inferior phrenic artery"
+  },
+  {
+    "core": "inferior phrenic vein",
+    "zh": "膈下静脉",
+    "sourceEntry": "05.1166",
+    "pdfPage": 437,
+    "sourceEnglish": "inferior phrenic vein"
+  },
+  {
+    "core": "inferior mesenteric vein",
+    "zh": "肠系膜下静脉",
+    "sourceEntry": "05.1231",
+    "pdfPage": 437,
+    "sourceEnglish": "inferior mesenteric vein"
+  },
+  {
+    "core": "inferior nasal concha",
+    "zh": "下鼻甲",
+    "sourceEntry": "03.0430",
+    "pdfPage": 437,
+    "sourceEnglish": "inferior nasal concha"
+  },
+  {
+    "core": "inferior suprarenal artery",
+    "zh": "肾上腺下动脉",
+    "sourceEntry": "05.0649",
+    "pdfPage": 438,
+    "sourceEnglish": "inferior suprarenal artery"
+  },
+  {
+    "core": "inferior thyroid artery",
+    "zh": "甲状腺下动脉",
+    "sourceEntry": "05.0473",
+    "pdfPage": 438,
+    "sourceEnglish": "inferior thyroid artery"
+  },
+  {
+    "core": "inferior ulnar collateral artery",
+    "zh": "尺侧下副动脉",
+    "sourceEntry": "05.0520",
+    "pdfPage": 438,
+    "sourceEnglish": "inferior ulnar collateral artery"
+  },
+  {
+    "core": "lateral cuneiform bone",
+    "zh": "外侧楔骨",
+    "sourceEntry": "02.0858",
+    "pdfPage": 444,
+    "sourceEnglish": "lateral cuneiform bone"
+  },
+  {
+    "core": "lateral occipital artery",
+    "zh": "枕叶外侧动脉",
+    "sourceEntry": "05.0445",
+    "pdfPage": 445,
+    "sourceEnglish": "lateral occipital artery"
+  },
+  {
+    "core": "lateral plantar artery",
+    "zh": "足底外侧动脉",
+    "sourceEntry": "05.0798",
+    "pdfPage": 445,
+    "sourceEnglish": "lateral plantar artery"
+  },
+  {
+    "core": "lateral ventricle",
+    "zh": "侧脑室",
+    "sourceEntry": "06.0779",
+    "pdfPage": 446,
+    "sourceEnglish": "lateral ventricle"
+  },
+  {
+    "core": "lateral sacral vein",
+    "zh": "骶外侧静脉",
+    "sourceEntry": "05.1242",
+    "pdfPage": 446,
+    "sourceEnglish": "lateral sacral vein"
+  },
+  {
+    "core": "lateral tarsal artery",
+    "zh": "跗外侧动脉",
+    "sourceEntry": "05.0776",
+    "pdfPage": 446,
+    "sourceEnglish": "lateral tarsal artery"
+  },
+  {
+    "core": "lateral thoracic artery",
+    "zh": "胸外侧动脉",
+    "sourceEntry": "05.0505",
+    "pdfPage": 446,
+    "sourceEnglish": "lateral thoracic artery"
+  },
+  {
+    "core": "lateral thoracic vein",
+    "zh": "胸外侧静脉",
+    "sourceEntry": "05.1112",
+    "pdfPage": 446,
+    "sourceEnglish": "lateral thoracic vein"
+  },
+  {
+    "core": "lumbar artery",
+    "zh": "腰动脉",
+    "sourceEntry": "05.0577",
+    "pdfPage": 449,
+    "sourceEnglish": "lumbar artery"
+  },
+  {
+    "core": "lumbar vein",
+    "zh": "腰静脉",
+    "sourceEntry": "05.1147",
+    "pdfPage": 449,
+    "sourceEnglish": "lumbar vein"
+  },
+  {
+    "core": "major alar cartilage",
+    "zh": "鼻翼大软骨",
+    "sourceEntry": "03.0407",
+    "pdfPage": 449,
+    "sourceEnglish": "major alar cartilage"
+  },
+  {
+    "core": "medial cuneiform bone",
+    "zh": "内侧楔骨",
+    "sourceEntry": "02.0856",
+    "pdfPage": 451,
+    "sourceEnglish": "medial cuneiform bone"
+  },
+  {
+    "core": "medial occipital artery",
+    "zh": "枕叶内侧动脉",
+    "sourceEntry": "05.0449",
+    "pdfPage": 451,
+    "sourceEnglish": "medial occipital artery"
+  },
+  {
+    "core": "medial plantar artery",
+    "zh": "足底内侧动脉",
+    "sourceEntry": "05.0795",
+    "pdfPage": 452,
+    "sourceEnglish": "medial plantar artery"
+  },
+  {
+    "core": "middle suprarenal artery",
+    "zh": "肾上腺中动脉",
+    "sourceEntry": "05.0646",
+    "pdfPage": 454,
+    "sourceEnglish": "middle suprarenal artery"
+  },
+  {
+    "core": "middle cardiac vein",
+    "zh": "心中静脉",
+    "sourceEntry": "05.0858",
+    "pdfPage": 454,
+    "sourceEnglish": "middle cardiac vein"
+  },
+  {
+    "core": "middle colic vein",
+    "zh": "中结肠静脉",
+    "sourceEntry": "05.1226",
+    "pdfPage": 454,
+    "sourceEnglish": "middle colic vein"
+  },
+  {
+    "core": "middle genicular artery",
+    "zh": "膝中动脉",
+    "sourceEntry": "05.0762",
+    "pdfPage": 454,
+    "sourceEnglish": "middle genicular artery"
+  },
+  {
+    "core": "musculophrenic artery",
+    "zh": "肌膈动脉",
+    "sourceEntry": "05.0470",
+    "pdfPage": 455,
+    "sourceEnglish": "musculophrenic artery"
+  },
+  {
+    "core": "musculophrenic vein",
+    "zh": "肌膈静脉",
+    "sourceEntry": "05.0887",
+    "pdfPage": 455,
+    "sourceEnglish": "musculophrenic vein"
+  },
+  {
+    "core": "oblique arytenoid",
+    "zh": "杓斜肌",
+    "sourceEntry": "03.0520",
+    "pdfPage": 457,
+    "sourceEnglish": "oblique arytenoid"
+  },
+  {
+    "core": "obliquus capitis inferior",
+    "zh": "头下斜肌",
+    "sourceEntry": "02.1479",
+    "pdfPage": 457,
+    "sourceEnglish": "obliquus capitis inferior"
+  },
+  {
+    "core": "obliquus capitis superior",
+    "zh": "头上斜肌",
+    "sourceEntry": "02.1478",
+    "pdfPage": 457,
+    "sourceEnglish": "obliquus capitis superior"
+  },
+  {
+    "core": "obturator vein",
+    "zh": "闭孔静脉",
+    "sourceEntry": "05.1241",
+    "pdfPage": 458,
+    "sourceEnglish": "obturator vein"
+  },
+  {
+    "core": "palmar metacarpal artery",
+    "zh": "掌心动脉",
+    "sourceEntry": "05.0532",
+    "pdfPage": 460,
+    "sourceEnglish": "palmar metacarpal artery"
+  },
+  {
+    "core": "palmar metacarpal vein",
+    "zh": "掌心静脉",
+    "sourceEntry": "05.1138",
+    "pdfPage": 460,
+    "sourceEnglish": "palmar metacarpal vein"
+  },
+  {
+    "core": "palatopharyngeus",
+    "zh": "腭咽肌",
+    "sourceEntry": "03.0163",
+    "pdfPage": 460,
+    "sourceEnglish": "palatopharyngeus"
+  },
+  {
+    "core": "pancreatic duct",
+    "zh": "胰管",
+    "sourceEntry": "03.0395",
+    "pdfPage": 460,
+    "sourceEnglish": "pancreatic duct"
+  },
+  {
+    "core": "pancreaticoduodenal vein",
+    "zh": "胰十二指肠静脉",
+    "sourceEntry": "05.1217",
+    "pdfPage": 460,
+    "sourceEnglish": "pancreaticoduodenal vein"
+  },
+  {
+    "core": "pineal body",
+    "zh": "松果体",
+    "sourceEntry": "06.0460",
+    "pdfPage": 464,
+    "sourceEnglish": "pineal body"
+  },
+  {
+    "core": "pituitary gland",
+    "zh": "垂体",
+    "sourceEntry": "04.0014",
+    "pdfPage": 464,
+    "sourceEnglish": "pituitary gland"
+  },
+  {
+    "core": "plantar arch",
+    "zh": "足底弓",
+    "sourceEntry": "05.0799",
+    "pdfPage": 464,
+    "sourceEnglish": "plantar arch"
+  },
+  {
+    "core": "plantar metatarsal artery",
+    "zh": "足心动脉",
+    "sourceEntry": "05.0800",
+    "pdfPage": 464,
+    "sourceEnglish": "plantar metatarsal artery"
+  },
+  {
+    "core": "plantar metatarsal vein",
+    "zh": "足心静脉",
+    "sourceEntry": "05.1289",
+    "pdfPage": 464,
+    "sourceEnglish": "plantar metatarsal vein"
+  },
+  {
+    "core": "posterior cecal artery",
+    "zh": "盲肠后动脉",
+    "sourceEntry": "05.0633",
+    "pdfPage": 465,
+    "sourceEnglish": "posterior cecal artery"
+  },
+  {
+    "core": "posterior commissure",
+    "zh": "后连合",
+    "sourceEntry": "06.0461",
+    "pdfPage": 465,
+    "sourceEnglish": "posterior commissure"
+  },
+  {
+    "core": "posterior segmental artery",
+    "zh": "后段动脉",
+    "sourceEntry": "05.0594",
+    "pdfPage": 467,
+    "sourceEnglish": "posterior segmental artery"
+  },
+  {
+    "core": "posterior parietal artery",
+    "zh": "顶叶后动脉",
+    "sourceEntry": "05.0408",
+    "pdfPage": 467,
+    "sourceEnglish": "posterior parietal artery"
+  },
+  {
+    "core": "posterior vein of left ventricle",
+    "zh": "左室后静脉",
+    "sourceEntry": "05.0859",
+    "pdfPage": 468,
+    "sourceEnglish": "posterior vein of left ventricle"
+  },
+  {
+    "core": "pubococcygeus",
+    "zh": "耻尾肌",
+    "sourceEntry": "03.0906",
+    "pdfPage": 470,
+    "sourceEnglish": "pubococcygeus"
+  },
+  {
+    "core": "radial vein",
+    "zh": "桡静脉",
+    "sourceEntry": "05.1134",
+    "pdfPage": 471,
+    "sourceEnglish": "radial vein"
+  },
+  {
+    "core": "rectus capitis anterior",
+    "zh": "头前直肌",
+    "sourceEntry": "02.1474",
+    "pdfPage": 471,
+    "sourceEnglish": "rectus capitis anterior"
+  },
+  {
+    "core": "rectus capitis posterior major",
+    "zh": "头后大直肌",
+    "sourceEntry": "02.1476",
+    "pdfPage": 471,
+    "sourceEnglish": "rectus capitis posterior major"
+  },
+  {
+    "core": "rectus capitis posterior minor",
+    "zh": "头后小直肌",
+    "sourceEntry": "02.1477",
+    "pdfPage": 471,
+    "sourceEnglish": "rectus capitis posterior minor"
+  },
+  {
+    "core": "recurrent interosseous artery",
+    "zh": "骨间返动脉",
+    "sourceEntry": "05.0541",
+    "pdfPage": 471,
+    "sourceEnglish": "recurrent interosseous artery"
+  },
+  {
+    "core": "salpingopharyngeus",
+    "zh": "咽鼓管咽肌",
+    "sourceEntry": "03.0193",
+    "pdfPage": 474,
+    "sourceEnglish": "salpingopharyngeus"
+  },
+  {
+    "core": "scalenus anterior",
+    "zh": "前斜角肌",
+    "sourceEntry": "02.1469",
+    "pdfPage": 474,
+    "sourceEnglish": "scalenus anterior"
+  },
+  {
+    "core": "scalenus posterior",
+    "zh": "后斜角肌",
+    "sourceEntry": "02.1471",
+    "pdfPage": 474,
+    "sourceEnglish": "scalenus posterior"
+  },
+  {
+    "core": "seminal vesicle",
+    "zh": "精囊",
+    "sourceEntry": "03.0734",
+    "pdfPage": 475,
+    "sourceEnglish": "seminal vesicle"
+  },
+  {
+    "core": "serratus anterior",
+    "zh": "前锯肌",
+    "sourceEntry": "02.1566",
+    "pdfPage": 476,
+    "sourceEnglish": "serratus anterior"
+  },
+  {
+    "core": "sigmoid vein",
+    "zh": "乙状结肠静脉",
+    "sourceEntry": "05.1233",
+    "pdfPage": 476,
+    "sourceEnglish": "sigmoid vein"
+  },
+  {
+    "core": "small cardiac vein",
+    "zh": "心小静脉",
+    "sourceEntry": "05.0861",
+    "pdfPage": 476,
+    "sourceEnglish": "small cardiac vein"
+  },
+  {
+    "core": "sigmoid artery",
+    "zh": "乙状结肠动脉",
+    "sourceEntry": "05.0644",
+    "pdfPage": 476,
+    "sourceEnglish": "sigmoid artery"
+  },
+  {
+    "core": "splenic vein",
+    "zh": "脾静脉",
+    "sourceEntry": "05.1227",
+    "pdfPage": 478,
+    "sourceEnglish": "splenic vein"
+  },
+  {
+    "core": "subcostal vein",
+    "zh": "肋下静脉",
+    "sourceEntry": "05.1148",
+    "pdfPage": 479,
+    "sourceEnglish": "subcostal vein"
+  },
+  {
+    "core": "stylopharyngeus",
+    "zh": "茎突咽肌",
+    "sourceEntry": "03.0192",
+    "pdfPage": 479,
+    "sourceEnglish": "stylopharyngeus"
+  },
+  {
+    "core": "sublingual gland",
+    "zh": "舌下腺",
+    "sourceEntry": "03.0039",
+    "pdfPage": 479,
+    "sourceEnglish": "sublingual gland"
+  },
+  {
+    "core": "submandibular gland",
+    "zh": "下颌下腺",
+    "sourceEntry": "03.0042",
+    "pdfPage": 480,
+    "sourceEnglish": "submandibular gland"
+  },
+  {
+    "core": "subscapular vein",
+    "zh": "肩胛下静脉",
+    "sourceEntry": "05.1107",
+    "pdfPage": 480,
+    "sourceEnglish": "subscapular vein"
+  },
+  {
+    "core": "superficial palmar venous arch",
+    "zh": "掌浅静脉弓",
+    "sourceEntry": "05.1126",
+    "pdfPage": 481,
+    "sourceEnglish": "superficial palmar venous arch"
+  },
+  {
+    "core": "superficial epigastric artery",
+    "zh": "腹壁浅动脉",
+    "sourceEntry": "05.0732",
+    "pdfPage": 481,
+    "sourceEnglish": "superficial epigastric artery"
+  },
+  {
+    "core": "superficial epigastric vein",
+    "zh": "腹壁浅静脉",
+    "sourceEntry": "05.1273",
+    "pdfPage": 481,
+    "sourceEnglish": "superficial epigastric vein"
+  },
+  {
+    "core": "superior phrenic vein",
+    "zh": "膈上静脉",
+    "sourceEntry": "05.1145",
+    "pdfPage": 483,
+    "sourceEnglish": "superior phrenic vein"
+  },
+  {
+    "core": "superior rectal artery",
+    "zh": "直肠上动脉",
+    "sourceEntry": "05.0645",
+    "pdfPage": 483,
+    "sourceEnglish": "superior rectal artery"
+  },
+  {
+    "core": "superior mesenteric vein",
+    "zh": "肠系膜上静脉",
+    "sourceEntry": "05.1212",
+    "pdfPage": 483,
+    "sourceEnglish": "superior mesenteric vein"
+  },
+  {
+    "core": "superior rectal vein",
+    "zh": "直肠上静脉",
+    "sourceEntry": "05.1234",
+    "pdfPage": 483,
+    "sourceEnglish": "superior rectal vein"
+  },
+  {
+    "core": "suprascapular vein",
+    "zh": "肩胛上静脉",
+    "sourceEntry": "05.0939",
+    "pdfPage": 485,
+    "sourceEnglish": "suprascapular vein"
+  },
+  {
+    "core": "supraspinatus",
+    "zh": "冈上肌",
+    "sourceEntry": "02.1628",
+    "pdfPage": 485,
+    "sourceEnglish": "supraspinatus"
+  }
+]

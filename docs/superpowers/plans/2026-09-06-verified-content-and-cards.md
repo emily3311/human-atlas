@@ -108,11 +108,11 @@ The JSON must contain literal evidence, for example:
 ```json
 [
   {
-    "core": "levator scapulae",
-    "zh": "肩胛提肌",
-    "sourceEntry": "02.1514",
-    "pdfPage": 116,
-    "sourceEnglish": "levator scapulae"
+    "core": "accessory hemiazygos vein",
+    "zh": "副半奇静脉",
+    "sourceEntry": "05.1144",
+    "pdfPage": 405,
+    "sourceEnglish": "accessory hemiazygos vein"
   }
 ]
 ```
@@ -168,10 +168,9 @@ Do not add a generic suffix translator to `anatomyZh`; unresolved English names 
 - [ ] **Step 7: Add literal regression assertions for representative systems and unknown names**
 
 ```ts
-assert.equal(anatomyZh('Left levator scapulae'), '左肩胛提肌');
-assert.equal(anatomyZh('Right levator scapulae'), '右肩胛提肌');
+assert.equal(anatomyZh('Accessory hemiazygos vein'), '副半奇静脉');
 assert.equal(anatomyZh('invented posterior branch'), 'invented posterior branch');
-assert.equal(anatomyNameEvidence('Left levator scapulae')?.sourceTerm.includes('02.1514'), true);
+assert.equal(anatomyNameEvidence('Accessory hemiazygos vein')?.sourceTerm.includes('05.1144'), true);
 ```
 
 - [ ] **Step 8: Commit the terminology batch only**
@@ -299,9 +298,9 @@ git commit -m "feat: add strict CMB reference explanations"
 - Consumes: `parseExamExplanationBank(payload, bank.questions)` and `explanationIndex(parsed)` from Task 2.
 - Produces: non-blocking explanation load state with `ready | unavailable`; submitted cards render only `参考解析` or `暂无解析` / `解析暂不可用`.
 
-- [ ] **Step 1: Add failing source-level UI contract tests**
+- [ ] **Step 1: Add failing feedback-state behavior tests**
 
-Assert that `ExamPanel.tsx` fetches `/data/cmb-tcmle-explanations.json` only after the CMB bank is parsed, calls `parseExamExplanationBank`, and contains `参考解析`, `暂无解析`, and `解析暂不可用`. Also assert that the submitted feedback block does not contain `TCMLE`, `来源答案`, or `未经医学逐题复核`.
+Extract `examFeedback(question, explanationState, explanation)` as a pure view-model function. With literal fixtures, assert that an accepted explanation returns heading `参考解析` and its text, a ready state without a match returns `暂无解析`, and a failed explanation load returns `解析暂不可用`. Assert the returned question-card view model has no provenance/source-label field. Exercise `loadExamExplanations(fetcher, questions)` with a controlled fetcher to prove parsing occurs after the CMB questions are supplied and that failure resolves to the non-blocking unavailable state.
 
 - [ ] **Step 2: Run tests and verify the new assertions fail**
 
@@ -517,7 +516,7 @@ git commit -m "feat: validate acupoint calibration drafts"
 
 - [ ] **Step 1: Add failing UI and scene-policy tests**
 
-Assert that the default `TcmApp` state is `calibrated-only`, that the opt-in button says `显示教学示意（39）`, and that switching to `include-pending` is the only route by which ST36 enters `sceneOptions.pointIds`. Add a source contract asserting pending markers receive the CSS class `acu-marker--pending` and accessible label suffix `待专业校准·教学示意`.
+Exercise the real pure policy functions with literal fixtures: the default display policy is `calibrated-only`, the opt-in control view model returns label `显示教学示意（39）`, and switching to `include-pending` is the only route by which ST36 enters scene point IDs. Add `markerPresentation(record, pointName)` and assert that a pending record returns CSS class `acu-marker--pending` and accessible label suffix `待专业校准·教学示意`; the `AtlasScene` renderer consumes this returned presentation object.
 
 - [ ] **Step 2: Run tests and verify failure**
 
@@ -643,10 +642,16 @@ Use:
 export const KNOWLEDGE_REVIEW_KEY = 'jingwei-knowledge-cards:v1';
 export type KnowledgeReviewStore = { version: 1; reviews: Record<string, Review> };
 export function parseKnowledgeReviewStore(raw: string | null, availableCardIds: readonly string[]): KnowledgeReviewStore;
-export function rateKnowledgeCard(store: KnowledgeReviewStore, cardId: string, rating: Rating, now?: number): KnowledgeReviewStore;
+export function rateKnowledgeCard(
+  store: KnowledgeReviewStore,
+  cardId: string,
+  rating: Rating,
+  availableCardIds: ReadonlySet<string>,
+  now?: number,
+): KnowledgeReviewStore;
 ```
 
-Reuse `scheduleReview` but accept only namespaced IDs present in `availableCardIds`. Do not read from or write to `human-atlas-tcm:v1`; point location/meridian/tags/identify ratings continue through the existing `ratePoint` behavior.
+Reuse `scheduleReview` but accept only structurally valid namespaced IDs present in `availableCardIds` at both parse and rating boundaries. `knowledgeReviewQueue` also drops malformed IDs from its supplied current-card list. Do not read from or write to `human-atlas-tcm:v1`; point location/meridian/tags/identify ratings continue through the existing `ratePoint` behavior.
 
 - [ ] **Step 6: Run tests and commit the card domain**
 
@@ -677,7 +682,7 @@ git commit -m "feat: add verified knowledge card decks"
 
 - [ ] **Step 1: Add failing render-contract tests**
 
-Assert all four deck labels exist; counters are computed from builder array lengths rather than constants; `KnowledgeCardsPanel` conditionally renders exactly one of `card.front` and `card.back`; key handling accepts Enter/Space only when focus is on the card; and the effect-card back contains `传统功用提要` plus caution but no `治疗保证`, `疗效`, `针刺深度` or individual prescription language.
+Exercise exported UI view-model functions against literal card arrays: `knowledgeDeckOptions(cardsByDeck)` returns all four deck labels with array-derived counts; `visibleCardFace(card, false)` returns only the front payload and `visibleCardFace(card, true)` returns only the back payload; `flipKeyAction(key, cardFocused)` accepts Enter/Space only when the card itself is focused. Render the pure effect-card back payload and assert it contains `传统功用提要` plus caution but no `治疗保证`, `疗效`, `针刺深度` or individual prescription language. `KnowledgeCardsPanel` must consume these functions rather than reimplementing the decisions.
 
 - [ ] **Step 2: Run focused tests and verify failure**
 
@@ -710,7 +715,7 @@ Do not keep the hidden answer face in the DOM with only CSS transforms or `aria-
 
 - [ ] **Step 6: Connect ratings and next-card behavior**
 
-Existing point-card ratings continue to call `ratePoint`. Anatomy, wrong-exam and effect cards call `rateKnowledgeCard`; after a rating, compute the next due ID from the current deck. A user may always click `下一张` without rating. If the currently displayed wrong card disappears because its exam record is now correct, move to the first remaining card without deleting its historical attempts.
+Existing point-card ratings continue to call `ratePoint`. Anatomy, wrong-exam and effect cards call `rateKnowledgeCard` with a `ReadonlySet` built from the current available cards; after a rating, compute the next due ID from the current deck. A user may always click `下一张` without rating. If the currently displayed wrong card disappears because its exam record is now correct, move to the first remaining card without deleting its historical attempts.
 
 - [ ] **Step 7: Add responsive layout**
 
@@ -825,4 +830,6 @@ git commit -m "test: verify content and card integrity"
 - Spec coverage: Tasks 1–3 cover sourced terminology and 336 explanation attachment; Tasks 4–6 cover all coordinate states, opt-in teaching markers and the calibration workflow; Tasks 7–8 cover all four card decks and separate review storage; Task 9 covers mismatch prevention, responsive acceptance and honest remaining counts.
 - Completeness scan: every implementation step names its files, concrete validation rule, command and expected outcome.
 - Type consistency: `PlacementDisplayMode`, `CalibrationDraft`, `ExamExplanationBank`, `KnowledgeCard`, `KnowledgeDeck`, storage keys and card ID namespaces are defined once and reused by later tasks with the same spelling.
+- Approved plan corrections: Task 1 examples use a genuinely unresolved source term and Tasks 3/6/8 verify pure view-model and rendered behavior rather than searching source text.
+- Approved plan correction: Task 7/8 rating calls must supply the current available-card ID set, so malformed, expired or unavailable IDs cannot enter the new review store.
 - Existing dirty files: do not stage or modify `docs/Claude-Design-界面改版交接.md`, `design-handoff/`, `docs/cmb-question-bank-verification-2026-09-06.md`, or `docs/site-qa-mobile-2026-09-06.md` unless the user explicitly brings them into this implementation.

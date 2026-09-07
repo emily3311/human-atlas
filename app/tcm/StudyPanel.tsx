@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, RotateCcw, Check, Eye, BookOpen, Brain } from "lucide-react";
-import type { Acupoint, Meridian } from "./types";
+import type { Acupoint, Meridian, PlacementDisplayMode } from "./types";
 import type { Rating, Review } from "./study";
 import { questionAvailable } from './catalogue';
+import { flipKeyAction } from './knowledge-card-ui';
 export type CardType = "location" | "meridian" | "tags" | "identify";
 export default function StudyPanel({
   point,
@@ -16,6 +17,7 @@ export default function StudyPanel({
   onType,
   onReveal,
   onExplore,
+  placementDisplayMode = 'calibrated-only',
 }: {
   point: Acupoint;
   meridian: Meridian;
@@ -28,6 +30,7 @@ export default function StudyPanel({
   onType: (type: CardType) => void;
   onReveal: (revealed: boolean) => void;
   onExplore: () => void;
+  placementDisplayMode?: PlacementDisplayMode;
 }) {
   const [flipped, setFlipped] = useState(false);
   useEffect(() => {
@@ -70,12 +73,13 @@ export default function StudyPanel({
             ["identify", "认穴"],
           ] as const
         ).map(([id, name]) => (
-          <button key={id} disabled={!questionAvailable(point,id)} title={!questionAvailable(point,id)?'此题型的资料或三维定位尚未就绪':undefined} className={type === id ? "active" : ""} onClick={() => onType(id)}>
+          <button key={id} disabled={!questionAvailable(point,id,placementDisplayMode)} title={!questionAvailable(point,id,placementDisplayMode)?'此题型的资料或当前显示范围的三维定位尚未就绪':undefined} className={type === id ? "active" : ""} onClick={() => onType(id)}>
             {name}
           </button>
         ))}
       </div>
       <p className="quiet-note">灰色题型尚未具备可核对答案或三维示意；不会作为考试答案练习。</p>
+      {!questionAvailable(point, 'identify', placementDisplayMode) && <p className="quiet-note">当前显示范围没有可用于认穴的三维坐标；仍可练习文字定位。</p>}
       <div className="card-counter">
         <span>
           学习卡 {index + 1} / {total}
@@ -87,9 +91,10 @@ export default function StudyPanel({
         onClick={flip}
         aria-label={flipped ? "翻回题目" : "翻面查看答案"}
         aria-pressed={flipped}
+        onKeyDown={event => { if (flipKeyAction(event.key, event.currentTarget === event.target)) { event.preventDefault(); flip(); } }}
       >
         <span className="flip-inner">
-          <span className="card-face front" aria-hidden={flipped}>
+          {!flipped ? <span className="card-face front">
             <span className="flashcard-eyebrow">
               {type === "identify"
                 ? "辨认练习"
@@ -107,15 +112,14 @@ export default function StudyPanel({
             <span className="flip-instruction">
               <RotateCcw size={14} /> 点击翻面 · Enter / 空格
             </span>
-          </span>
-          <span className="card-face back" aria-hidden={!flipped}>
+          </span> : <span className="card-face back">
             <span className="flashcard-eyebrow">参考答案</span>
             <strong>{answer}</strong>
             <span className="card-hint">
               {type === "identify" ? point.location : point.landmarks[0]}
             </span>
             <span className="flip-instruction">点击返回题目</span>
-          </span>
+          </span>}
         </span>
       </button>
       {flipped ? (

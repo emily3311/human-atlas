@@ -30,7 +30,13 @@ import {
 import { DEFAULT_VISIBLE, type Atlas, type Part, type SystemId } from "../anatomy";
 import { ACUPOINTS, MERIDIANS } from "./data";
 import AtlasScene, { type Layer, type SceneOptions } from "./AtlasScene";
+import CalibrationPanel from './CalibrationPanel';
+import { placementDisplayControl, visiblePlacementIds } from './placement-quality';
+import { calibrationEscape } from './calibration-ui';
+import type { CalibrationPick, CalibrationSelection } from './calibration-pick';
 import StudyPanel, { type CardType } from "./StudyPanel";
+import KnowledgeCardsPanel from './KnowledgeCardsPanel';
+import type { KnowledgeDeck } from './knowledge-cards';
 import CoursePanel from "./CoursePanel";
 import CasesPanel from "./CasesPanel";
 import { anatomyZh, anatomyLabel, SYSTEM_ZH } from "./anatomy-zh";
@@ -52,8 +58,9 @@ import {
   type StudyStore,
   type Rating,
 } from "./study";
-import type { Acupoint } from "./types";
+import type { Acupoint, PlacementDisplayMode } from "./types";
 import ExamPanel from "./ExamPanel";
+import { ExamAbout } from './exam-about';
 import { EmilyAboutSection, EmilyProjectLink } from "./EmilyLinks";
 import "./tcm.css";
 import "./mobile.css";
@@ -102,6 +109,11 @@ function Sources({ point }: { point: Acupoint }) {
   );
 }
 export default function TcmApp() {
+  const [placementDisplayMode, setPlacementDisplayMode] = useState<PlacementDisplayMode>(() => placementDisplayControl(ids).mode);
+  const placementControl = placementDisplayControl(ids, placementDisplayMode);
+  const [calibrationOpen, setCalibrationOpen] = useState(false);
+  const [calibration, setCalibration] = useState<CalibrationSelection>({ enabled: false, pointId: 'ST36', side: 'left' });
+  const [calibrationPick, setCalibrationPick] = useState<CalibrationPick>();
   const taskRef = useRef<HTMLElement>(null);
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 680px)").matches);
   const [modelExpanded, setModelExpanded] = useState(false);
@@ -147,6 +159,7 @@ export default function TcmApp() {
     [sidebarOpen, setSidebarOpen] = useState(false),
     [notice, setNotice] = useState(""),
     [storageError, setStorageError] = useState("");
+  const [knowledgeDeck, setKnowledgeDeck] = useState<KnowledgeDeck>('point');
   const [filtersOpen,setFiltersOpen]=useState(false),
     [catalogueExpanded,setCatalogueExpanded]=useState(false),
     [sidebarWidth,setSidebarWidth]=useState(320);
@@ -204,6 +217,11 @@ export default function TcmApp() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        if (calibrationOpen) {
+          const next = calibrationEscape({ open: calibrationOpen, enabled: calibration.enabled });
+          setCalibrationOpen(next.open); setCalibration(s => ({ ...s, enabled: next.enabled }));
+          return;
+        }
         setModelFocus(false);
         setAnatomyDetailsOpen(false);
         setComparisonOpen(false);
@@ -222,7 +240,7 @@ export default function TcmApp() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, []);
+  }, [calibrationOpen, calibration.enabled]);
   useEffect(()=>{
     const clamp=()=>setSidebarWidth(width=>catalogueWidth(width,window.innerWidth));
     clamp();
@@ -234,10 +252,10 @@ export default function TcmApp() {
   },[layer]);
   const point = ACUPOINTS.find((p) => p.id === activeId) ?? ACUPOINTS[0],
     currentMeridian = MERIDIANS.find((m) => m.id === point.meridian)!;
-  const hasModel=hasPlacement(point.id);
+  const hasModel=hasPlacement(point.id,placementDisplayMode);
   useEffect(()=>{
-    if(!questionAvailable(point,cardType)) {setCardType('location');setRevealed(false);}
-  },[point.id,cardType]);
+    if(!questionAvailable(point,cardType,placementDisplayMode)) {setCardType('location');setRevealed(false);}
+  },[point.id,cardType,placementDisplayMode]);
   const dueIds = useMemo(() => reviewQueue(studyIds, store.reviews, now), [store.reviews, now]);
   const reviewedCount = Object.keys(store.reviews).length,
     masteredCount = Object.values(store.reviews).filter((r) => r.lastRating === "good").length;
@@ -256,8 +274,8 @@ export default function TcmApp() {
             ].join(" "),
           ).includes(normalize(query));
         return (
-          inCatalogue(p,catalogueScope) &&
-          (mode!=='quiz'||hasPlacement(p.id)) &&
+          (catalogueScope === 'model' ? hasPlacement(p.id, placementDisplayMode) : inCatalogue(p,catalogueScope)) &&
+          (mode!=='quiz'||hasPlacement(p.id,placementDisplayMode)) &&
           (mode!=='cards'||!!p.location) &&
           matches &&
           (meridian === "all" || p.meridian === meridian) &&
@@ -269,7 +287,7 @@ export default function TcmApp() {
             (scope === "course" && store.course.pointIds.includes(p.id)))
         );
       }),
-    [query, meridian, region, tag, scope, catalogueScope, mode, store.favorites, store.course.pointIds, dueIds],
+    [query, meridian, region, tag, scope, catalogueScope, mode, placementDisplayMode, store.favorites, store.course.pointIds, dueIds],
   );
   const filteredIds = useMemo(() => filtered.map((p) => p.id), [filtered]);
   const displayedIds = useMemo(
@@ -284,7 +302,7 @@ export default function TcmApp() {
     }
   }, [displayedIds]);
   const concealed =
-    mode === "cards" && (cardType === "identify" || cardType === "meridian") && !revealed;
+    mode === "cards" && knowledgeDeck === 'point' && (cardType === "identify" || cardType === "meridian") && !revealed;
   useEffect(()=>{if(concealed){setFocus(v=>v+1);setRotate(false);}},[concealed,activeId]);
   const quizPending = mode === "quiz" && !quizAnswer;
   const selectPoint = (id: string) => {
@@ -326,7 +344,8 @@ export default function TcmApp() {
     else if (mode === "quiz") setQuizAnswer(null);
   };
   const rate = (rating: Rating) => {
-    setStore((s) => ratePoint(s, activeId, rating));
+    const updated = ratePoint(store, activeId, rating);
+    setStore(updated);
     setNotice(
       rating === "again"
         ? "已加入复习 · 10 分钟后再练"
@@ -334,9 +353,12 @@ export default function TcmApp() {
           ? "已安排明天复习"
           : "已记录掌握程度",
     );
-    showNext();
+    const next = reviewQueue(filteredIds, updated.reviews)[0] ?? nextId(filteredIds, activeId);
+    if (next) selectPoint(next);
   };
   const changeMode = (next: Mode) => {
+    setCalibrationOpen(false);
+    setCalibration(s => ({ ...s, enabled: false }));
     setModelExpanded(false);
     setModelFocus(false);
     setControlsOpen(true);
@@ -369,14 +391,15 @@ export default function TcmApp() {
       setNotice("最多比较三个穴位，请先移除一个。");
   };
   const sceneIds = useMemo(
-    () => mode==='anatomy'||!hasModel ? [] : (concealed ? [activeId] : displayedIds),
-    [mode,hasModel,concealed, activeId, displayedIds],
+    () => mode==='anatomy' ? [] : visiblePlacementIds(concealed ? [activeId] : displayedIds, placementDisplayMode),
+    [mode,placementDisplayMode,concealed, activeId, displayedIds],
   );
   const sceneOptions = useMemo<SceneOptions>(
     () => ({
       layer,
       activeId,
       pointIds: sceneIds,
+      placementDisplayMode,
       labels: mode === "quiz" ? !!quizAnswer : labels,
       routes,
       guide,
@@ -396,6 +419,7 @@ export default function TcmApp() {
       layer,
       activeId,
       sceneIds,
+      placementDisplayMode,
       labels,
       mode,
       quizAnswer,
@@ -412,7 +436,7 @@ export default function TcmApp() {
       explosionAmount,anatomySystems,
     ],
   );
-  const policy = workspacePolicy(mode, mobile, modelExpanded);
+  const policy = workspacePolicy(mode, mobile, modelExpanded || calibrationOpen);
   const ui = workspaceUiState(policy.showModel, mobile, modelFocus, controlsOpen);
   useEffect(() => { if (!policy.showModel) setModelFocus(false); }, [policy.showModel]);
   useEffect(() => {
@@ -562,6 +586,12 @@ export default function TcmApp() {
             </button>}
           </div>
           {mode==="quiz" && mobile && <p className="mobile-quiz-prompt">找到「{point.name}」· 点击候选点作答</p>}
+          {mode !== 'anatomy' && <div className="placement-controls">
+            <small>已校准 {placementControl.counts.calibrated} · 待专业校准 {placementControl.counts['pending-review']} · 未登记 {placementControl.counts.unregistered}</small>
+            <label><input type="checkbox" checked={placementDisplayMode === 'include-pending'} onChange={e => { setPlacementDisplayMode(e.target.checked ? 'include-pending' : 'calibrated-only'); setQuizAnswer(null); }}/>{placementControl.label}</label>
+            <button type="button" className="outline-button" aria-expanded={calibrationOpen} aria-controls="calibration-panel" disabled={!atlas} onClick={() => { setCalibrationOpen(v => !v); setCalibration(s => ({ ...s, enabled: false })); setModelFocus(false); }}>坐标校准工具</button>
+            {placementDisplayMode === 'calibrated-only' && placementControl.counts.calibrated === 0 && <p role="status">当前无已校准三维穴位；可主动查看 {placementControl.counts['pending-review']} 个教学示意点。</p>}
+          </div>}
           <div className="model-stage">
             {atlas && policy.showModel && (
               <AtlasScene
@@ -569,6 +599,8 @@ export default function TcmApp() {
                 atlas={atlas}
                 points={ACUPOINTS}
                 options={sceneOptions}
+                calibration={calibrationOpen ? calibration : undefined}
+                onCalibrationPick={pick => { setCalibrationPick(pick); setCalibration(s => ({ ...s, enabled: false })); }}
                 onPoint={onPoint}
                 onPart={(part) => {
                   setChosenPart(part);
@@ -611,7 +643,7 @@ export default function TcmApp() {
                 </button>
               </div>
             )}
-            {!concealed && !hasModel && mode!=='anatomy' && mode!=='quiz' && filtered.length>0 && <div className="unmapped-caption" role="status">
+            {!calibrationOpen && !concealed && !hasModel && mode!=='anatomy' && mode!=='quiz' && filtered.length>0 && <div className="unmapped-caption" role="status">
               <span className="section-kicker">{point.location?'定位资料已收录 · 三维定位待校准':'考纲已收录 · 定位资料待核验'}</span>
               <strong>{point.name}</strong><p>{point.location?'此穴暂不显示三维标记，避免误导定位。可在右侧查看文字来源、练习记忆卡。':'已核实考纲包含此条目，尚未开放定位练习。不会用猜测的位置补点。'}</p>
             </div>}
@@ -722,11 +754,11 @@ export default function TcmApp() {
         <aside key="task" ref={taskRef} tabIndex={-1} id="learning-content" className={`detail-panel ${mode==='anatomy'&&anatomyDetailsOpen?'anatomy-panel-open':''}`} aria-label="学习内容">
           {policy.taskFirst && <button className="outline-button model-expand-button" aria-expanded={modelExpanded} onClick={()=>{setModelExpanded(v=>!v);if(!modelExpanded)requestAnimationFrame(()=>document.getElementById('model-workspace')?.focus());}}>{modelExpanded?"收起三维模型":"展开三维模型"}</button>}
           {mode==='anatomy'&&<button className="anatomy-detail-close icon-button" aria-label="关闭结构详情" onClick={()=>setAnatomyDetailsOpen(false)}><X size={18}/></button>}
-          {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'course' && mode !== 'cases' ? (
+          {mode==='anatomy'?<AnatomyDetails part={chosenPart} isolate={isolate} onIsolate={()=>setIsolate(v=>!v)} onTcm={()=>changeMode('explore')}/>:!displayedIds.length && mode !== 'cards' && mode !== 'course' && mode !== 'cases' ? (
             <div className="empty-detail">
               <BookOpen size={32} />
               <h2>{mode === "quiz" && scope === "review" ? "本轮待复习已完成" : "调整筛选，开始学习"}</h2>
-              <p>{mode === "quiz" && scope === "review" ? "可以切换到全部题目继续练习，或稍后回来复习。" : "学习卡与人体标记会同步到左侧目录。"}</p>
+              <p>{mode === 'quiz' ? '当前显示范围没有可用于取穴自测的三维坐标。可主动显示教学示意，或返回目录学习文字定位。' : "学习卡与人体标记会同步到左侧目录。"}</p>
               {mode === "quiz" && scope === "review" && (
                 <button
                   className="primary-button"
@@ -740,7 +772,9 @@ export default function TcmApp() {
               )}
             </div>
           ) : mode === "cards" ? (
+            <KnowledgeCardsPanel points={filtered} cataloguePoints={ACUPOINTS} meridians={MERIDIANS} parts={atlas?.parts ?? null} placementDisplayMode={placementDisplayMode} deck={knowledgeDeck} onDeck={deck => { setKnowledgeDeck(deck); setRevealed(false); }} pointPanel={
             <StudyPanel
+              placementDisplayMode={placementDisplayMode}
               key={point.id}
               point={point}
               meridian={currentMeridian}
@@ -754,6 +788,7 @@ export default function TcmApp() {
               onReveal={setRevealed}
               onExplore={() => changeMode("explore")}
             />
+            } />
           ) : mode === "course" ? (
             <CoursePanel
               store={store}
@@ -1025,7 +1060,7 @@ export default function TcmApp() {
         </aside>
   );
   return (
-    <div className={`tcm-app ${ui.focused?'model-focus':''} ${policy.taskFirst?'task-first':''} ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
+    <div className={`tcm-app ${calibrationOpen?'calibration-open':''} ${ui.focused?'model-focus':''} ${policy.taskFirst?'task-first':''} ${mode==='anatomy'?'anatomy-focus':''} ${mode==='exam'?'exam-mode':''} ${catalogueExpanded?'catalogue-expanded':''}`}>
       <header className="app-header">
         <a className="brand" href="/">
           <span className="brand-seal">经</span>
@@ -1141,7 +1176,7 @@ export default function TcmApp() {
                   <option value="standard">十四经穴 · 362</option>
                   <option value="practical">实践技能明列 · {PRACTICAL_NAMES.length}</option>
                   <option value="written">医学综合明列 · {WRITTEN_NAMES.length}</option>
-                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id)).length}</option>
+                  <option value="model">三维示意点 · {ACUPOINTS.filter(p=>hasPlacement(p.id,placementDisplayMode)).length}</option>
                 </select>
                 <a href={`${EXAM_SOURCE.url}#page=${catalogueScope==='written'?63:13}`} target="_blank" rel="noreferrer">2025版大纲 · 2026沿用 ↗</a>
                 <p>明列清单不是考试全部知识；穴位条目数不等于左右或穴组点数。</p>
@@ -1303,7 +1338,8 @@ export default function TcmApp() {
         {mode!=='anatomy'&&(
           <CatalogueResizeHandle width={sidebarWidth} onWidth={setSidebarWidth}/>
         )}
-        {policy.taskFirst ? [taskPanel, modelPanel] : [modelPanel, taskPanel]}
+        {calibrationOpen ? modelPanel : policy.taskFirst ? [taskPanel, modelPanel] : [modelPanel, taskPanel]}
+        {atlas && <CalibrationPanel open={calibrationOpen} modelVersion={atlas.version} selection={calibration} pick={calibrationPick} onSelection={next => { setCalibration(next); if (next.enabled) { setExplosionAmount(0); setIsolate(false); setChosenPart(null); setRotate(false); } }} onClose={() => { setCalibrationOpen(false); setCalibration(s => ({ ...s, enabled: false })); }}/>}
 
       </div>
       {mode === 'exam' && <ExamPanel onAbout={() => setAbout(true)} />}
@@ -1445,10 +1481,7 @@ export default function TcmApp() {
               收藏、复习与个人课程保存在本浏览器。课程可以通过 JSON
               导出、导入；清除浏览器数据会删除本地记录。教师可使用笔记与课程文件组织教学，但系统不替代专业内容审校。
             </p>
-            <h3>执医题库</h3>
-            <p>
-              题库从 CMB（Chinese Medical Benchmark）训练数据中按“医师考试 · 执业医师 · 中医执业医师 · 单项选择题”严格筛选，当前包含 4086 题。它不是官方或当年完整题库，也未做逐题医学审定。源数据没有解析字段，因此页面只显示原答案和“暂无解析”。答题记录仅保存在本浏览器，与穴位学习记录分开。
-            </p>
+            <ExamAbout />
             <h3>来源与署名</h3>
             <a href="https://github.com/ashemag/human-atlas" target="_blank" rel="noreferrer">
               Human Atlas · ashemag · MIT

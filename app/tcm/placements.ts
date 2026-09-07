@@ -1,17 +1,17 @@
 // Approximate seeds for this fixed BodyParts3D adult male mesh, in model metres.
 // Surface projection only corrects depth. It does NOT validate clinical location.
-export type Vec3 = [number, number, number];
-export interface Placement {
-  position: Vec3;
-  normal: Vec3;
-}
+import type { Placement, PlacementRecord, Vec3 } from './types.ts';
+
+export { type Placement, type Vec3 } from './types.ts';
+export const BODY_PARTS_3D_MODEL_VERSION = 'BodyParts3D 4.0';
+export const PENDING_PLACEMENT_SOURCE = 'BodyParts3D adult male approximate teaching seed';
 const front: Vec3 = [0, 0, 1],
   back: Vec3 = [0, 0, -1];
 const p = (x: number, y: number, z: number, normal: Vec3 = front): Placement => ({
   position: [x, y, z],
   normal,
 });
-export const PLACEMENTS: Record<string, Placement> = {
+const placementSeeds: Record<string, Placement> = {
   LU1: p(0.14, 1.37, 0.07),
   LU5: p(0.23, 1.115, 0.015),
   LU7: p(0.276, 0.925, 0.032),
@@ -52,3 +52,17 @@ export const PLACEMENTS: Record<string, Placement> = {
   CV12: p(0, 1.176, 0.106),
   CV17: p(0, 1.315, 0.11),
 };
+
+const pendingRecord = (pointId: string, placement: Placement): PlacementRecord => ({
+  pointId,
+  status: 'pending-review',
+  placement,
+  source: PENDING_PLACEMENT_SOURCE,
+  modelVersion: BODY_PARTS_3D_MODEL_VERSION,
+});
+
+export const PENDING_PLACEMENTS: Record<string, PlacementRecord> = Object.fromEntries(
+  Object.entries(placementSeeds).map(([pointId, placement]) => [pointId, pendingRecord(pointId, placement)]),
+);
+
+export const CALIBRATED_PLACEMENTS: Record<string, PlacementRecord> = {};

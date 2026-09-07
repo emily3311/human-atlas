@@ -282,11 +282,10 @@ export type CatalogueScope = 'all'|'standard'|'practical'|'written'|'model';
 export function inCatalogue(point:Acupoint,scope:CatalogueScope):boolean {
  if(scope==='practical') return PRACTICAL_NAMES.includes(point.name);
  if(scope==='written') return WRITTEN_NAMES.includes(point.name);
- if(scope==='model') return hasPlacement(point.id);
+ if(scope==='model') return hasPlacement(point.id,'include-pending');
  if(scope==='standard') return point.catalogueKind==='standard';
  return true;
 }
 export function examBadges(point:Acupoint):string[] {
  return [...(PRACTICAL_NAMES.includes(point.name)?['技能大纲明列']:[]),...(WRITTEN_NAMES.includes(point.name)?['综合大纲明列']:[])];
 }
-

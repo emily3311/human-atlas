@@ -128,6 +128,7 @@ export const CURATED_ACUPOINTS: Acupoint[] = seeds.map(([id,name,pinyin,meridian
   caution: `${sensitive.has(id) ? '邻近重要深部结构，仅作体表定位学习；' : ''}${pregnancy.has(id) ? '孕期相关操作须先由合格专业人员评估；' : ''}本资料不提供针刺深度或操作建议，请勿自行针刺。`,
   tags: [MERIDIANS.find((m)=>m.id===meridian)!.shortName,region,...(classes[id] ?? [])],
   anatomy: anatomy[id],
+  traditionalEvidence: traditionalSources[id] ?? [],
   classificationEvidence,
   pendingClassificationTags: (classes[id] ?? []).filter((item) => !supportedClassifications.has(item)),
   sources: [
@@ -150,6 +151,7 @@ export const ACUPOINTS: Acupoint[] = STANDARD_POINTS.map(record=>{
     caution:annotated?.caution??'此条目当前提供标准定位事实；针灸操作、禁忌及邻近危险结构须结合指定教材和带教指导学习，不能由三维示意推断。',
     tags:[shortName,record.region,...(annotated?.tags.slice(2)??[])],
     anatomy:annotated?.anatomy??[],classificationEvidence:annotated?.classificationEvidence??[],
+    traditionalEvidence:annotated?.traditionalEvidence??[],
     pendingClassificationTags:annotated?.pendingClassificationTags??[],
     catalogueKind:'standard',annotationsReady:!!annotated,
     sources:[{title:GB.title,url:`${GB_URL}#page=${record.page}`,section:`第${record.section}条 ${record.id} ${record.name}；PDF第${record.page}页`},...(annotated?.sources.slice(1)??[])],
