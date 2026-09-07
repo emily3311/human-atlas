@@ -15,7 +15,7 @@ export function EmilyProjectLink({ placement }: { placement: "header" | "footer"
       href: EMILY_AI_URL,
       ...EXTERNAL_LINK_PROPS,
     },
-    placement === "header" ? "更多 AI 项目 ↗" : "更多项目 · Emily AI ↗",
+    placement === "header" ? "Emily AI 出品 ↗" : "更多项目 · Emily AI ↗",
   );
 }
 

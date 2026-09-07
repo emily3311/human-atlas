@@ -33,7 +33,7 @@ test("project links lead to Emily AI without replacing the learning session", ()
   );
 
   assert.equal(header.length, 1);
-  assertSafeExternalLink(header[0], "更多 AI 项目 ↗", "https://emilyailab.com/");
+  assertSafeExternalLink(header[0], "Emily AI 出品 ↗", "https://emilyailab.com/");
   assert.equal(footer.length, 1);
   assertSafeExternalLink(footer[0], "更多项目 · Emily AI ↗", "https://emilyailab.com/");
 });

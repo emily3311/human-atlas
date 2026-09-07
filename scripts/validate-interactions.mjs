@@ -477,7 +477,7 @@ try {
       else await page.getByRole('button', { name: '复原模型', exact: true }).click();
       assert.equal(await slider.getAttribute('aria-valuenow'), '0');
       await page.waitForFunction(() => window.__releaseScene.rendered?.movedParts === 0);
-      const project = page.getByRole('link', { name: '更多 AI 项目 ↗', exact: true });
+      const project = page.getByRole('link', { name: 'Emily AI 出品 ↗', exact: true });
       assert.equal(await project.getAttribute('href'), 'https://emilyailab.com/');
       await page.context().route('https://emilyailab.com/', route => route.fulfill({ contentType: 'text/html', body: '<title>Project destination fixture</title>' }));
       const popupPromise = page.waitForEvent('popup');
